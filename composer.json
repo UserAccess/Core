@@ -1,6 +1,6 @@
 {
     "name": "UserAccess/Core",
-    "description": "",
+    "description": "UserAccess Core",
     "keywords": ["php"],
     "license": "MIT",
     "authors": [
@@ -11,7 +11,7 @@
     ],
 	"type": "project",
     "require": {
-        "php": ">=7.1"
+        "php": ">=7.2"
     },
     "require-dev": {
 		"phpunit/phpunit": "7.*"
