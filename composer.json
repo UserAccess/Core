@@ -1,0 +1,24 @@
+{
+    "name": "UserAccess/Core",
+    "description": "",
+    "keywords": ["php"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jannis Rondorf",
+            "email": "github@jrondorf.de"
+        }
+    ],
+	"type": "project",
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+		"phpunit/phpunit": "7.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "UserAccess\\Core\\": "src/"
+        }
+    }
+}
