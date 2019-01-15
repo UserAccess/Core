@@ -1,4 +1,8 @@
-<?php namespace UserAccess\Core;
+<?php
+
+namespace UserAccess\Core;
+
+use UserAccess\Core\Password;
 
 class User {
 
@@ -13,12 +17,12 @@ class User {
         return $this->userId;
     }
 
-    public function setPassword($password) {
-        $this->passwordHash = \password_hash($password, PASSWORD_DEFAULT);
+    public function setPassword(string $password) {
+        $this->passwordHash = Password::hash($password);
     }
 
     public function verifyPassword($password) {
-        return \password_verify($password, $this->passwordHash);
+        return Password::verify($password, $this->passwordHash);
     }
 
     public function getAttributes() {
