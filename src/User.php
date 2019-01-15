@@ -9,7 +9,7 @@ class User {
     private $userId = '';
     private $passwordHash = '';
 
-    public function __construct($userId) {
+    public function __construct(string $userId) {
         $this->userId = trim($userId);
     }
 
@@ -21,7 +21,11 @@ class User {
         $this->passwordHash = Password::hash($password);
     }
 
-    public function verifyPassword($password) {
+    public function setPasswordHash(string $passwordHash) {
+        $this->passwordHash = $passwordHash;
+    }
+
+    public function verifyPassword(string $password) {
         return Password::verify($password, $this->passwordHash);
     }
 
