@@ -8,6 +8,9 @@ class User {
 
     private $userId = '';
     private $passwordHash = '';
+    private $displayName = '';
+    private $email = '';
+    private $locked = false;
 
     public function __construct(string $userId) {
         $this->userId = trim($userId);
@@ -25,8 +28,8 @@ class User {
         $this->passwordHash = $passwordHash;
     }
 
-    public function verifyPassword(string $password) {
-        return Password::verify($password, $this->passwordHash);
+    public function authenticate($secret) {
+        return Password::verify($secret, $this->passwordHash);
     }
 
     public function getAttributes() {
