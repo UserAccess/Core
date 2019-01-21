@@ -63,18 +63,22 @@ class User implements UserInterface {
         $this->locked = $locked;
     }
 
-    public function hasRole(string $role): bool {
-        return in_array($role, $roles);
-    }
-
     public function addRole(string $role) {
         $this->roles[] = $role;
     }
 
     public function removeRole(string $role) {
-        if (($key = array_search($role, $roles)) !== false) {
-            unset($roles[$key]);
+        if (($key = array_search($role, $this->roles)) !== false) {
+            unset($this->roles[$key]);
         }
+    }
+
+    public function getRoles() {
+        return $this->roles;
+    }
+
+    public function hasRole(string $role): bool {
+        return in_array($role, $this->roles);
     }
 
     public function getAttributes(): array {
