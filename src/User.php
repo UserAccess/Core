@@ -63,6 +63,14 @@ class User implements UserInterface {
         $this->locked = $locked;
     }
 
+    public function getFailedLoginAttempts(): int {
+        return $this->failedLoginAttempts;
+    }
+
+    public function setFailedLoginAttempts(int $failedLoginAttempts) {
+        $this->failedLoginAttempts = $failedLoginAttempts;
+    }
+
     public function addRole(string $role) {
         $this->roles[] = $role;
     }

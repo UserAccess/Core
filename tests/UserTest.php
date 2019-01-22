@@ -33,7 +33,10 @@ class UserTest extends TestCase
         $user->setPassword('password');
         $this->assertTrue($user->authenticate('password'));
         $this->assertFalse($user->authenticate('wrong_password'));
-        print_r($user->getAttributes());
+        $user->setFailedLoginAttempts(5);
+        $this->assertEquals(5, $user->getFailedLoginAttempts());
+        $this->assertFalse($user->authenticate('wrong_password'));
+        //print_r($user->getAttributes());
 
         $user = new User('userid2');
         $this->assertNotEmpty($user);

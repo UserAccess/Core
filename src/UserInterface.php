@@ -16,6 +16,8 @@ interface UserInterface {
 
     public function isLocked(): bool;
 
+    public function getFailedLoginAttempts(): int;
+
     public function hasRole(string $role): bool;
 
     public function getAttributes(): array;
