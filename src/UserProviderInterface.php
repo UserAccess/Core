@@ -6,6 +6,6 @@ use UserAccess\Core\UserInterface;
 
 interface UserProviderInterface {
 
-    public function getUserById(string $id): UserInterface;
+    public function getUserById(string $id): ?UserInterface;
 
 }
