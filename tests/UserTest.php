@@ -1,11 +1,10 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use UserAccess\Core\User;
-use UserAccess\Core\Password;
+use UserAccess\Core\Entry\User;
+use UserAccess\Core\Util\Password;
 
-class UserTest extends TestCase
-{
+class UserTest extends TestCase {
 
     public function test() {
         $user = new User('userid1');
@@ -15,8 +14,8 @@ class UserTest extends TestCase
         $this->assertEquals('userid1', $userAttributes['id']);
         $user->setDisplayName('User 1');
         $this->assertEquals('User 1', $user->getDisplayName());
-        $user->setEmail('user.1@test.com');
-        $this->assertEquals('user.1@test.com', $user->getEmail());
+        $user->setEmail('userid1.test@test.com');
+        $this->assertEquals('userid1.test@test.com', $user->getEmail());
         $user->setLocked(false);
         $this->assertFalse($user->isLocked());
         $user->setLocked(true);
@@ -30,20 +29,13 @@ class UserTest extends TestCase
         $user->removeRole('Administrator');
         $this->assertTrue($user->hasRole('Everyone'));
         $this->assertFalse($user->hasRole('Administrator'));
-        $user->setPassword('password');
+        $user->setPasswordHash(Password::hash('password'));
         $this->assertTrue($user->authenticate('password'));
         $this->assertFalse($user->authenticate('wrong_password'));
         $user->setFailedLoginAttempts(5);
         $this->assertEquals(5, $user->getFailedLoginAttempts());
         $this->assertFalse($user->authenticate('wrong_password'));
         //print_r($user->getAttributes());
-
-        $user = new User('userid2');
-        $this->assertNotEmpty($user);
-
-        $user->setPasswordHash(Password::hash('password'));
-        $this->assertTrue($user->authenticate('password'));
-        $this->assertFalse($user->authenticate('wrong_password'));
 
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace UserAccess\Core;
+namespace UserAccess\Core\Entry;
 
 interface UserInterface {
 
@@ -10,7 +10,7 @@ interface UserInterface {
 
     public function getDisplayName(): string;
 
-    public function authenticate($secret): bool;
+    public function authenticate(string $secret): bool;
 
     public function getEmail(): string;
 

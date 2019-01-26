@@ -1,9 +1,9 @@
 <?php
 
-namespace UserAccess\Core;
+namespace UserAccess\Core\Entry;
 
-use UserAccess\Core\UserInterface;
-use UserAccess\Core\Password;
+use UserAccess\Core\Entry\UserInterface;
+use UserAccess\Core\Util\Password;
 
 class User implements UserInterface {
 
@@ -16,6 +16,9 @@ class User implements UserInterface {
     private $roles = [];
 
     public function __construct(string $id) {
+        if (empty($id)) {
+            throw new \Exception('ID mandatory');
+        }
         $this->id = $id;
     }
 
@@ -39,12 +42,8 @@ class User implements UserInterface {
         $this->passwordHash = $passwordHash;
     }
 
-    public function authenticate($secret): bool {
+    public function authenticate(string $secret): bool {
         return Password::verify($secret, $this->passwordHash);
-    }
-
-    public function setPassword(string $password) {
-        $this->passwordHash = Password::hash($password);
     }
 
     public function getEmail(): string {
@@ -52,6 +51,9 @@ class User implements UserInterface {
     }
 
     public function setEmail(string $email) {
+        if (!empty($email) && !filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
+            throw new \Exception('E-Mail validation failed');
+        }
         $this->email = $email;
     }
 
@@ -99,6 +101,23 @@ class User implements UserInterface {
             'failedLoginAttempts' => $this->failedLoginAttempts,
             'roles' => $this->roles
         ];
+    }
+
+    public function setAttributes($attributes) {
+        //id
+        // $this->displayName = array_key_exists('displayName', $attributes) ? $attributes['displayName'] : '';
+        // $this->passwordHash = array_key_exists('passwordHash', $attributes) ? $attributes['passwordHash'] : '';
+        // $this->email = array_key_exists('email', $attributes) ? $attributes['email'] : '';
+        // $this->locked = array_key_exists('locked', $attributes) ? $attributes['locked'] : '';
+        // $this->failedLoginAttempts = array_key_exists('failedLoginAttempts', $attributes) ? $attributes['failedLoginAttempts'] : '';
+        // $this->roles = array_key_exists('roles', $attributes) ? $attributes['roles'] : '';
+
+        $this->displayName = $attributes['displayName'];
+        $this->passwordHash = $attributes['passwordHash'];
+        $this->email = $attributes['email'];
+        $this->locked = $attributes['locked'];
+        $this->failedLoginAttempts = $attributes['failedLoginAttempts'];
+        $this->roles = $attributes['roles'];
     }
 
 }

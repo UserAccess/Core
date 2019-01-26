@@ -11,7 +11,9 @@
     ],
 	"type": "project",
     "require": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "filebase/filebase": "^1.0",
+        "symfony/yaml": "^4.2"
     },
     "require-dev": {
 		"phpunit/phpunit": "7.*"

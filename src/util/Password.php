@@ -1,6 +1,6 @@
 <?php
 
-namespace UserAccess\Core;
+namespace UserAccess\Core\Util;
 
 class Password {
 

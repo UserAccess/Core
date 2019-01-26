@@ -1,10 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use UserAccess\Core\Password;
+use UserAccess\Core\Util\Password;
 
-class PasswordTest extends TestCase
-{
+class PasswordTest extends TestCase {
 
     public function test() {
     	$passwordHash = Password::hash('password');
