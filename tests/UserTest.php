@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+
 use UserAccess\Core\Entry\User;
 use UserAccess\Core\Util\Password;
 
