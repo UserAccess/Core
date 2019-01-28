@@ -9,7 +9,7 @@ use UserAccess\Core\Util\Password;
 class FilebaseProviderTest extends TestCase {
 
     public function test() {
-        $provider = new FilebaseProvider('tests/data');
+        $provider = new FilebaseProvider('testdata');
 
         if ($provider->isUserExisting('userid1')) {
             $provider->deleteUser('userid1');
