@@ -2,13 +2,13 @@
 
 namespace UserAccess\Core\Provider;
 
-use UserAccess\Core\Provider\ProviderInterface;
-use UserAccess\Core\Entry\UserInterface;
-use UserAccess\Core\Entry\User;
+use \UserAccess\Core\Provider\ProviderInterface;
+use \UserAccess\Core\Entry\UserInterface;
+use \UserAccess\Core\Entry\User;
 
-use Filebase\Database;
-use Filebase\Format\Yaml;
-use Filebase\Format\Json;
+use \Filebase\Database;
+use \Filebase\Format\Yaml;
+use \Filebase\Format\Json;
 
 class FilebaseProvider implements ProviderInterface {
 

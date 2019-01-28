@@ -1,8 +1,8 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+use \PHPUnit\Framework\TestCase;
 
-use UserAccess\Core\Util\Password;
+use \UserAccess\Core\Util\Password;
 
 class PasswordTest extends TestCase {
 

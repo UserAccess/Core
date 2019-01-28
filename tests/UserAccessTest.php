@@ -1,9 +1,9 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+use \PHPUnit\Framework\TestCase;
 
-use UserAccess\Core\UserAccess;
-use UserAccess\Core\Provider\StaticProvider;
+use \UserAccess\Core\UserAccess;
+use \UserAccess\Core\Provider\StaticProvider;
 
 class UserAccessTest extends TestCase {
 

@@ -2,7 +2,7 @@
 
 namespace UserAccess\Core\Provider;
 
-use UserAccess\Core\Entry\UserInterface;
+use \UserAccess\Core\Entry\UserInterface;
 
 interface ProviderInterface {
 

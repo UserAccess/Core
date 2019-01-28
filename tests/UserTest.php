@@ -1,9 +1,9 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+use \PHPUnit\Framework\TestCase;
 
-use UserAccess\Core\Entry\User;
-use UserAccess\Core\Util\Password;
+use \UserAccess\Core\Entry\User;
+use \UserAccess\Core\Util\Password;
 
 class UserTest extends TestCase {
 

@@ -2,8 +2,8 @@
 
 namespace UserAccess\Core\Entry;
 
-use UserAccess\Core\Entry\UserInterface;
-use UserAccess\Core\Util\Password;
+use \UserAccess\Core\Entry\UserInterface;
+use \UserAccess\Core\Util\Password;
 
 class User implements UserInterface {
 

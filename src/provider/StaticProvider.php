@@ -2,9 +2,9 @@
 
 namespace UserAccess\Core\Provider;
 
-use UserAccess\Core\Provider\ProviderInterface;
-use UserAccess\Core\Entry\UserInterface;
-use UserAccess\Core\Entry\User;
+use \UserAccess\Core\Provider\ProviderInterface;
+use \UserAccess\Core\Entry\UserInterface;
+use \UserAccess\Core\Entry\User;
 
 class StaticProvider implements ProviderInterface {
 

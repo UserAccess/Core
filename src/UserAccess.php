@@ -2,8 +2,8 @@
 
 namespace UserAccess\Core;
 
-use UserAccess\Core\Entry\UserInterface;
-use UserAccess\Core\Provider\ProviderInterface;
+use \UserAccess\Core\Entry\UserInterface;
+use \UserAccess\Core\Provider\ProviderInterface;
 
 class UserAccess {
 
