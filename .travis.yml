@@ -1,7 +1,15 @@
 language: php
+
 php:
     - 7.1
 
 before_script:
     - travis_retry composer self-update
     - travis_retry composer install --no-interaction --prefer-source
+
+script:
+  - php vendor/bin/phpunit -v
+
+after_success:
+  - travis_retry php vendor/bin/coveralls
+  - travis_retry php tests/bin/coveralls.phar
