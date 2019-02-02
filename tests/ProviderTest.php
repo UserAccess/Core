@@ -2,15 +2,20 @@
 
 use \PHPUnit\Framework\TestCase;
 
+use \UserAccess\Core\Provider\ProviderInterface;
 use \UserAccess\Core\Provider\FilebaseProvider;
+use \UserAccess\Core\Provider\StaticProvider;
 use \UserAccess\Core\Entry\User;
 use \UserAccess\Core\Util\Password;
 
-class FilebaseProviderTest extends TestCase {
+class ProviderTest extends TestCase {
 
     public function test() {
-        $provider = new FilebaseProvider('testdata');
+        $this->performTest(new FilebaseProvider('testdata'));
+        $this->performTest(new StaticProvider());
+    }
 
+    public function performTest(ProviderInterface $provider) {
         if ($provider->isUserExisting('userid1')) {
             $provider->deleteUser('userid1');
         }

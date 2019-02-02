@@ -87,6 +87,10 @@ class User implements UserInterface {
         return $this->roles;
     }
 
+    public function setRoles(array $roles) {
+        $this->roles = $roles;
+    }
+
     public function hasRole(string $role): bool {
         return in_array($role, $this->roles);
     }
@@ -105,12 +109,26 @@ class User implements UserInterface {
 
     public function setAttributes($attributes) {
         // id is read only
-        $this->displayName = array_key_exists('displayName', $attributes) ? $attributes['displayName'] : '';
-        $this->passwordHash = array_key_exists('passwordHash', $attributes) ? $attributes['passwordHash'] : '';
-        $this->email = array_key_exists('email', $attributes) ? $attributes['email'] : '';
-        $this->locked = array_key_exists('locked', $attributes) ? $attributes['locked'] : '';
-        $this->failedLoginAttempts = array_key_exists('failedLoginAttempts', $attributes) ? $attributes['failedLoginAttempts'] : '';
-        $this->roles = array_key_exists('roles', $attributes) ? $attributes['roles'] : '';
+        if (!empty($attributes['displayName'])) {
+            $this->setDisplayName($attributes['displayName']);
+        }
+        if (!empty($attributes['passwordHash'])) {
+            $this->setPasswordHash($attributes['passwordHash']);
+        } else if (!empty($attributes['password'])) {
+            $this->setPasswordHash(Password::hash($attributes['password']));
+        }
+        if (!empty($attributes['email'])) {
+            $this->setEmail($attributes['email']);
+        }
+        if (!empty($attributes['locked'])) {
+            $this->setLocked($attributes['locked']);
+        }
+        if (!empty($attributes['failedLoginAttempts'])) {
+            $this->setFailedLoginAttempts($attributes['failedLoginAttempts']);
+        }
+        if (!empty($attributes['roles'])) {
+            $this->setRoles($attributes['roles']);
+        }
     }
 
 }
