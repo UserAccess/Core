@@ -19,22 +19,34 @@ class FilebaseProvider implements ProviderInterface {
             'dir' => $directory,
             'format' => $format == 'YAML' ? Yaml::class : Json::class,
             'validate' => [
-                'email' => [
+                'id' => [
                     'valid.type' => 'string',
                     'valid.required' => true
                 ],
-                'firstname' => [
+                'displayName' => [
                     'valid.type' => 'string',
-                    'valid.required' => false
-                ],
-                'lastname' => [
-                    'valid.type'     => 'string',
                     'valid.required' => false
                 ],
                 'passwordHash' => [
                     'valid.type'     => 'string',
                     'valid.required' => false
-                ]
+                ],
+                'email' => [
+                    'valid.type' => 'string',
+                    'valid.required' => false
+                ],
+                // 'locked' => [
+                //     'valid.type' => 'integer',
+                //     'valid.required' => false
+                // ],
+                // 'failedLoginAttempts' => [
+                //     'valid.type'     => 'integer',
+                //     'valid.required' => false
+                // ],
+                // 'roles' => [
+                //     'valid.type'     => 'array',
+                //     'valid.required' => false
+                // ],
             ]
         ]);
     }
@@ -53,7 +65,7 @@ class FilebaseProvider implements ProviderInterface {
         }
     }
 
-    public function readUser(string $id): UserInterface {
+    public function getUser(string $id): UserInterface {
         if ($this->isUserExisting($id)) {
             $user = new User($id);
             $user->setAttributes($this->db->get($id)->toArray());
@@ -61,6 +73,17 @@ class FilebaseProvider implements ProviderInterface {
         } else {
             throw new \Exception('User with ' . $id . ' not available');
         }
+    }
+
+    public function getAllUsers(): array {
+        $result = [];
+        $items = $this->db->findAll();
+        foreach($items as $item){
+            $user = new User($item->id);
+            $user->setAttributes($item->toArray());
+            $result[] = $user;
+        }
+        return $result;
     }
 
     public function updateUser(UserInterface $user) {

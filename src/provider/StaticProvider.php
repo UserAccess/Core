@@ -30,12 +30,16 @@ class StaticProvider implements ProviderInterface {
         }
     }
 
-    public function readUser(string $id): UserInterface {
+    public function getUser(string $id): UserInterface {
         if ($this->isUserExisting($id)) {
             return $this->users[$id];
         } else {
             throw new \Exception('User with ' . $id . ' not available');
         }
+    }
+
+    public function getAllUsers(): array {
+        return $this->users;
     }
 
     public function updateUser(UserInterface $user) {

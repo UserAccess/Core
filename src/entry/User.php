@@ -19,7 +19,7 @@ class User implements UserInterface {
         if (empty($id)) {
             throw new \Exception('ID mandatory');
         }
-        $this->id = $id;
+        $this->id = strtolower($id);
     }
 
     public function getId(): string {

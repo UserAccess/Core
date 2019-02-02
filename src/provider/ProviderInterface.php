@@ -10,7 +10,9 @@ interface ProviderInterface {
 
     public function createUser(UserInterface $user);
 
-    public function readUser(string $id): ?UserInterface;
+    public function getUser(string $id): ?UserInterface;
+
+    public function getAllUsers(): ?array;
 
     public function updateUser(UserInterface $user);
 
