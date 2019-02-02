@@ -104,20 +104,13 @@ class User implements UserInterface {
     }
 
     public function setAttributes($attributes) {
-        //id
-        // $this->displayName = array_key_exists('displayName', $attributes) ? $attributes['displayName'] : '';
-        // $this->passwordHash = array_key_exists('passwordHash', $attributes) ? $attributes['passwordHash'] : '';
-        // $this->email = array_key_exists('email', $attributes) ? $attributes['email'] : '';
-        // $this->locked = array_key_exists('locked', $attributes) ? $attributes['locked'] : '';
-        // $this->failedLoginAttempts = array_key_exists('failedLoginAttempts', $attributes) ? $attributes['failedLoginAttempts'] : '';
-        // $this->roles = array_key_exists('roles', $attributes) ? $attributes['roles'] : '';
-
-        $this->displayName = $attributes['displayName'];
-        $this->passwordHash = $attributes['passwordHash'];
-        $this->email = $attributes['email'];
-        $this->locked = $attributes['locked'];
-        $this->failedLoginAttempts = $attributes['failedLoginAttempts'];
-        $this->roles = $attributes['roles'];
+        // id is read only
+        $this->displayName = array_key_exists('displayName', $attributes) ? $attributes['displayName'] : '';
+        $this->passwordHash = array_key_exists('passwordHash', $attributes) ? $attributes['passwordHash'] : '';
+        $this->email = array_key_exists('email', $attributes) ? $attributes['email'] : '';
+        $this->locked = array_key_exists('locked', $attributes) ? $attributes['locked'] : '';
+        $this->failedLoginAttempts = array_key_exists('failedLoginAttempts', $attributes) ? $attributes['failedLoginAttempts'] : '';
+        $this->roles = array_key_exists('roles', $attributes) ? $attributes['roles'] : '';
     }
 
 }
