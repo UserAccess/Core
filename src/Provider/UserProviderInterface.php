@@ -3,10 +3,9 @@
 namespace UserAccess\Core\Provider;
 
 use \UserAccess\Core\Entry\UserInterface;
+use \UserAccess\Core\Provider\EntryProviderInterface;
 
-interface ProviderInterface {
-
-    public function isUserExisting(string $id): bool;
+interface UserProviderInterface extends EntryProviderInterface {
 
     public function createUser(UserInterface $user);
 

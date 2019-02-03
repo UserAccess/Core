@@ -3,21 +3,40 @@
 namespace UserAccess\Core;
 
 use \UserAccess\Core\Entry\UserInterface;
-use \UserAccess\Core\Provider\ProviderInterface;
+use \UserAccess\Core\Provider\UserProviderInterface;
+use \UserAccess\Core\Provider\RoleProviderInterface;
 
 class UserAccess {
 
-    private $provider;
+    private $userProvider;
+    private $fallbackUserProvider;
+    private $roleProvider;
 
-    public function __construct(ProviderInterface $provider) {
-        if (empty($provider)) {
-            throw new \Exception('Provider mandatory');
+    public function __construct(UserProviderInterface $userProvider) {
+        if (empty($userProvider)) {
+            throw new \Exception('User provider mandatory');
         }
-        $this->provider = $provider;
+        $this->userProvider = $userProvider;
     }
 
-    public function getProvider(): ProviderInterface {
-        return $this->provider;
+    public function getUserProvider(): UserProviderInterface {
+        return $this->userProvider;
+    }
+
+    public function getFallbackUserProvider(): UserProviderInterface {
+        return $this->fallbackUserProvider;
+    }
+
+    public function setFallbackUserProvider(UserProviderInterface $fallbackUserProvider) {
+        return $this->fallbackUserProvider = $fallbackUserProvider;
+    }
+
+    public function getRoleProvider(): RoleProviderInterface {
+        return $this->roleProvider;
+    }
+
+    public function setRoleProvider(RoleProviderInterface $roleProvider) {
+        return $this->roleProvider = $roleProvider;
     }
 
 }

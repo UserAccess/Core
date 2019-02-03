@@ -2,42 +2,45 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\Core\Provider\ProviderInterface;
-use \UserAccess\Core\Provider\FilebaseProvider;
-use \UserAccess\Core\Provider\StaticProvider;
+use \UserAccess\Core\Provider\UserProviderInterface;
+use \UserAccess\Core\Provider\FilebaseUserProvider;
+use \UserAccess\Core\Provider\StaticUserProvider;
 use \UserAccess\Core\Entry\User;
 use \UserAccess\Core\Util\Password;
 
-class ProviderTest extends TestCase {
+class UserProviderTest extends TestCase {
 
     public function test() {
-        $this->performTest(new FilebaseProvider('testdata'));
-        $this->performTest(new StaticProvider());
+        $this->performTest(new FilebaseUserProvider('testdata/users'));
+        $this->performTest(new StaticUserProvider());
     }
 
-    public function performTest(ProviderInterface $provider) {
-        if ($provider->isUserExisting('userid1')) {
+    public function performTest(UserProviderInterface $provider) {
+        if ($provider->isExisting('userid1')) {
             $provider->deleteUser('userid1');
         }
-        if ($provider->isUserExisting('userid2')) {
+        if ($provider->isExisting('userid2')) {
             $provider->deleteUser('userid2');
         }
-        $this->assertFalse($provider->isUserExisting('userid1'));
-        $this->assertFalse($provider->isUserExisting('userid2'));
+        $this->assertFalse($provider->isExisting('userid1'));
+        $this->assertFalse($provider->isExisting('userid2'));
 
         $user1 = new User('userid1');
-        $user1->setDisplayName = 'userid1 test';
+        $user1->setDisplayName('userid1 test');
         $user1->setPasswordHash(Password::hash('password1'));
         $user1->setEmail('userid1.test@test.com');
+        $user1->setRoles(array('Everyone', 'Administrators'));
         $user2 = new User('userid2');
-        $user2->setDisplayName = 'userid2 test';
+        $user2->setDisplayName('userid2 test');
         $user2->setPasswordHash(Password::hash('password2'));
         $user2->setEmail('userid2.test@test.com');
+        $user2->addRole('Everyone');
+        $user2->addRole('Administrators');
         $provider->createUser($user1);
         $provider->createUser($user2);
 
-        $this->assertTrue($provider->isUserExisting('userid1'));
-        $this->assertTrue($provider->isUserExisting('userid2'));
+        $this->assertTrue($provider->isExisting('userid1'));
+        $this->assertTrue($provider->isExisting('userid2'));
         $user_test1 = $provider->getUser('userid1');
         $user_test2 = $provider->getUser('userid2');
         $this->assertNotEmpty($user_test1);
@@ -45,12 +48,16 @@ class ProviderTest extends TestCase {
 
         $this->assertEquals('userid1', $user_test1->getId());
         $this->assertEquals('userid1.test@test.com', $user_test1->getEmail());
+        $this->assertTrue($user_test1->hasRole('Administrators'));
+        $this->assertFalse($user_test1->hasRole('Guests'));
         $this->assertEquals('userid2', $user_test2->getId());
         $this->assertEquals('userid2.test@test.com', $user_test2->getEmail());
+        $this->assertTrue($user_test2->hasRole('Administrators'));
+        $this->assertFalse($user_test2->hasRole('Guests'));
         $this->assertTrue($user_test1->authenticate('password1'));
         $this->assertTrue($user_test2->authenticate('password2'));
 
-        $this->assertFalse($provider->isUserExisting('userid3'));
+        $this->assertFalse($provider->isExisting('userid3'));
         try {
             $provider->getUser('userid3');
         } catch (\Exception $e) {
@@ -61,6 +68,7 @@ class ProviderTest extends TestCase {
         $user_test1->setDisplayName('userid1 test update');
         $user_test1->setPasswordHash(Password::hash('password1_update'));
         $user_test1->setEmail('userid1.test_update@test.com');
+        $user_test1->removeRole('Administrators');
         $provider->updateUser($user_test1);
         $user_test1 = $provider->getUser('userid1');
         $this->assertEquals('userid1', $user_test1->getId());
@@ -69,6 +77,8 @@ class ProviderTest extends TestCase {
         $this->assertTrue($user_test1->authenticate('password1_update'));
         $this->assertEquals('userid1 test update', $user_test1->getDisplayName());
         $this->assertEquals('userid1.test_update@test.com', $user_test1->getEmail());
+        $this->assertTrue($user_test1->hasRole('Everyone'));
+        $this->assertFalse($user_test1->hasRole('Administrators'));
 
         $users = $provider->getAllUsers();
         $this->assertNotEmpty($users);

@@ -2,37 +2,18 @@
 
 namespace UserAccess\Core\Entry;
 
+use \UserAccess\Core\Entry\Entry;
 use \UserAccess\Core\Entry\UserInterface;
 use \UserAccess\Core\Util\Password;
 
-class User implements UserInterface {
+class User extends AbstractEntry implements UserInterface {
 
-    private $id = '';
-    private $displayName = '';
+    protected $type = 'User';
     private $passwordHash = '';
     private $email = '';
     private $locked = false;
     private $failedLoginAttempts = 0;
     private $roles = [];
-
-    public function __construct(string $id) {
-        if (empty($id)) {
-            throw new \Exception('ID mandatory');
-        }
-        $this->id = strtolower($id);
-    }
-
-    public function getId(): string {
-        return $this->id;
-    }
-
-    public function getDisplayName(): string {
-        return $this->displayName;
-    }
-
-    public function setDisplayName(string $displayName) {
-        $this->displayName = $displayName;
-    }
 
     public function getPasswordHash(): string {
         return $this->passwordHash;
@@ -96,22 +77,17 @@ class User implements UserInterface {
     }
 
     public function getAttributes(): array {
-        return $array = [
-            'id' => $this->id,
-            'displayName' => $this->displayName,
-            'passwordHash' => $this->passwordHash,
-            'email' => $this->email,
-            'locked' => $this->locked,
-            'failedLoginAttempts' => $this->failedLoginAttempts,
-            'roles' => $this->roles
-        ];
+        $attributes = parent::getAttributes();
+        $attributes['passwordHash'] = $this->passwordHash;
+        $attributes['email'] = $this->email;
+        $attributes['locked'] = $this->locked;
+        $attributes['failedLoginAttempts'] = $this->failedLoginAttempts;
+        $attributes['roles'] = $this->roles;
+        return $attributes;
     }
 
-    public function setAttributes($attributes) {
-        // id is read only
-        if (!empty($attributes['displayName'])) {
-            $this->setDisplayName($attributes['displayName']);
-        }
+    public function setAttributes(array $attributes) {
+        parent::setAttributes($attributes);
         if (!empty($attributes['passwordHash'])) {
             $this->setPasswordHash($attributes['passwordHash']);
         } else if (!empty($attributes['password'])) {
