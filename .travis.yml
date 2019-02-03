@@ -4,11 +4,9 @@ php:
     - 7.1
 
 install:
+    - travis_retry composer self-update
+    - travis_retry composer clear-cache
     - travis_retry composer install --no-interaction --no-suggest
 
-before_script:
-    - travis_retry composer self-update
-    - travis_retry composer install --no-interaction --prefer-source
-
 script:
-  - phpunit
+  - ./vendor/bin/phpunit --bootstrap vendor/autoload.php
