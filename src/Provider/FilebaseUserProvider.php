@@ -12,14 +12,8 @@ use \Filebase\Format\Json;
 
 class FilebaseUserProvider extends AbstractFilebaseEntryProvider implements UserProviderInterface {
 
-    public function createUser(UserInterface $user) {
-        $id = $user->getId();
-        if ($this->isExisting($id)) {
-            throw new \Exception('User with ' . $id . ' already available');
-        } else {
-            $item = $this->db->get($id);
-            $item->set($user->getAttributes())->save();
-        }
+    public function createUser(UserInterface $entry) {
+        parent::createEntry($entry);
     }
 
     public function getUser(string $id): UserInterface {
@@ -43,22 +37,12 @@ class FilebaseUserProvider extends AbstractFilebaseEntryProvider implements User
         return $result;
     }
 
-    public function updateUser(UserInterface $user) {
-        $id = $user->getId();
-        if ($this->isExisting($id)) {
-            $item = $this->db->get($id);
-            $item->set($user->getAttributes())->save();
-        } else {
-            throw new \Exception('User with ' . $id . ' not available');
-        }
+    public function updateUser(UserInterface $entry) {
+        parent::updateEntry($entry);
     }
 
     public function deleteUser(string $id) {
-        if ($this->isExisting($id)) {
-            $this->db->delete($this->db->get($id));
-        } else {
-            throw new \Exception('User with ' . $id . ' not available');
-        }
+        parent::deleteEntry($id);
     }
 
 }

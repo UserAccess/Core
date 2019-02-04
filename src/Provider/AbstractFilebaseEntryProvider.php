@@ -58,4 +58,34 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
         return $this->db->has($id);
     }
 
+    public function createEntry(EntryInterface $entry) {
+        $id = $entry->getId();
+        $type = $entry->getType();
+        if ($this->isExisting($id)) {
+            throw new \Exception($type . ' with ' . $id . ' already existing');
+        } else {
+            $item = $this->db->get($id);
+            $item->set($entry->getAttributes())->save();
+        }
+    }
+
+    public function updateEntry(EntryInterface $entry) {
+        $id = $entry->getId();
+        $type = $entry->getType();
+        if ($this->isExisting($id)) {
+            $item = $this->db->get($id);
+            $item->set($entry->getAttributes())->save();
+        } else {
+            throw new \Exception($type . ' with ' . $id . ' not available');
+        }
+    }
+
+    public function deleteEntry(string $id) {
+        if ($this->isExisting($id)) {
+            $this->db->delete($this->db->get($id));
+        } else {
+            throw new \Exception('Entry with ' . $id . ' not available');
+        }
+    }
+
 }

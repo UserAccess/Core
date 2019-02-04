@@ -12,14 +12,8 @@ use \Filebase\Format\Json;
 
 class FilebaseRoleProvider extends AbstractFilebaseEntryProvider implements RoleProviderInterface {
 
-    public function createRole(RoleInterface $role) {
-        $id = $role->getId();
-        if ($this->isExisting($id)) {
-            throw new \Exception('Role with ' . $id . ' already available');
-        } else {
-            $item = $this->db->get($id);
-            $item->set($role->getAttributes())->save();
-        }
+    public function createRole(RoleInterface $entry) {
+        parent::createEntry($entry);
     }
 
     public function getRole(string $id): RoleInterface {
@@ -43,22 +37,12 @@ class FilebaseRoleProvider extends AbstractFilebaseEntryProvider implements Role
         return $result;
     }
 
-    public function updateRole(RoleInterface $role) {
-        $id = $role->getId();
-        if ($this->isExisting($id)) {
-            $item = $this->db->get($id);
-            $item->set($role->getAttributes())->save();
-        } else {
-            throw new \Exception('Role with ' . $id . ' not available');
-        }
+    public function updateRole(RoleInterface $entry) {
+        parent::updateEntry($entry);
     }
 
     public function deleteRole(string $id) {
-        if ($this->isExisting($id)) {
-            $this->db->delete($this->db->get($id));
-        } else {
-            throw new \Exception('Role with ' . $id . ' not available');
-        }
+        parent::deleteEntry($id);
     }
 
 }

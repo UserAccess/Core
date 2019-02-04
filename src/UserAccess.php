@@ -12,11 +12,17 @@ class UserAccess {
     private $fallbackUserProvider;
     private $roleProvider;
 
-    public function __construct(UserProviderInterface $userProvider) {
+    public function __construct(UserProviderInterface $userProvider, UserProviderInterface $fallbackUserProvider = null, RoleProviderInterface $roleProvider = null) {
         if (empty($userProvider)) {
             throw new \Exception('User provider mandatory');
         }
         $this->userProvider = $userProvider;
+        if ($fallbackUserProvider) {
+            $this->fallbackUserProvider = $fallbackUserProvider;
+        }
+        if ($roleProvider) {
+            $this->roleProvider = $roleProvider;
+        }
     }
 
     public function getUserProvider(): UserProviderInterface {
@@ -27,16 +33,8 @@ class UserAccess {
         return $this->fallbackUserProvider;
     }
 
-    public function setFallbackUserProvider(UserProviderInterface $fallbackUserProvider) {
-        return $this->fallbackUserProvider = $fallbackUserProvider;
-    }
-
     public function getRoleProvider(): RoleProviderInterface {
         return $this->roleProvider;
-    }
-
-    public function setRoleProvider(RoleProviderInterface $roleProvider) {
-        return $this->roleProvider = $roleProvider;
     }
 
 }

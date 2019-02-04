@@ -73,10 +73,9 @@ class UserProviderTest extends TestCase {
         $user_test1 = $provider->getUser('userid1');
         $this->assertEquals('userid1', $user_test1->getId());
         $this->assertEquals('userid1 test update', $user_test1->getDisplayName());
+        $this->assertEquals('userid1.test_update@test.com', $user_test1->getEmail());
         $this->assertFalse($user_test1->authenticate('password1'));
         $this->assertTrue($user_test1->authenticate('password1_update'));
-        $this->assertEquals('userid1 test update', $user_test1->getDisplayName());
-        $this->assertEquals('userid1.test_update@test.com', $user_test1->getEmail());
         $this->assertTrue($user_test1->hasRole('Everyone'));
         $this->assertFalse($user_test1->hasRole('Administrators'));
 
