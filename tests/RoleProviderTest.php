@@ -4,7 +4,7 @@ use \PHPUnit\Framework\TestCase;
 
 use \UserAccess\Core\Provider\RoleProviderInterface;
 use \UserAccess\Core\Provider\FilebaseRoleProvider;
-use \UserAccess\Core\Entry\role;
+use \UserAccess\Core\Entry\Role;
 use \UserAccess\Core\Util\Password;
 
 class RoleProviderTest extends TestCase {
