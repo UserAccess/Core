@@ -30,11 +30,20 @@ class UserAccess {
     }
 
     public function getFallbackUserProvider(): UserProviderInterface {
-        return $this->fallbackUserProvider;
+        if ($this->fallbackUserProvider) {
+            return $this->fallbackUserProvider;
+        } else {
+            throw new \Exception('Fallback user provider not available');
+        }
     }
 
     public function getRoleProvider(): RoleProviderInterface {
         return $this->roleProvider;
+        if ($this->roleProvider) {
+            return $this->roleProvider;
+        } else {
+            throw new \Exception('Role provider not available');
+        }
     }
 
 }
