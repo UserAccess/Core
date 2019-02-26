@@ -15,7 +15,7 @@ class Role extends AbstractEntry implements RoleInterface {
     }
 
     public function setDescription(string $description) {
-        $this->description = $description;
+        $this->description = trim($description);
     }
 
     public function getAttributes(): array {
@@ -26,7 +26,7 @@ class Role extends AbstractEntry implements RoleInterface {
 
     public function setAttributes(array $attributes) {
         parent::setAttributes($attributes);
-        if (!empty($attributes['description'])) {
+        if (array_key_exists('description', $attributes)) {
             $this->setDescription($attributes['description']);
         }
     }

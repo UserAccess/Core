@@ -2,7 +2,7 @@
 
 namespace UserAccess\Core\Entry;
 
-interface UserInterface {
+interface UserInterface extends EntryInterface {
 
     public function authenticate(string $secret): bool;
 

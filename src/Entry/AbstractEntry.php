@@ -9,6 +9,7 @@ abstract class AbstractEntry implements EntryInterface {
     protected $id = '';
     protected $type = '';
     protected $displayName = '';
+    protected $readOnly = false;
 
     public function __construct(string $id) {
         if (empty($id)) {
@@ -30,7 +31,15 @@ abstract class AbstractEntry implements EntryInterface {
     }
 
     public function setDisplayName(string $displayName) {
-        $this->displayName = $displayName;
+        $this->displayName = trim($displayName);
+    }
+
+    public function isReadOnly(): bool {
+        return $this->readOnly;
+    }
+
+    public function setReadOnly(bool $readOnly) {
+        $this->readOnly = $readOnly;
     }
 
     public function getAttributes(): array {
@@ -44,7 +53,7 @@ abstract class AbstractEntry implements EntryInterface {
     public function setAttributes(array $attributes) {
         // id is read only
         // type is read only
-        if (!empty($attributes['displayName'])) {
+        if (array_key_exists('displayName', $attributes)) {
             $this->setDisplayName($attributes['displayName']);
         }
     }

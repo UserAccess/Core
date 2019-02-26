@@ -79,6 +79,20 @@ class UserProviderTest extends TestCase {
         $this->assertTrue($user_test1->hasRole('Everyone'));
         $this->assertFalse($user_test1->hasRole('Administrators'));
 
+        // delete attribute test
+        $user_test1->setDisplayName('');
+        $provider->updateUser($user_test1);
+        $user_test1 = $provider->getUser('userid1');
+        $this->assertEquals('', $user_test1->getDisplayName());
+        $user_test1->setDisplayName('userid1 test');
+        $provider->updateUser($user_test1);
+        $user_test1 = $provider->getUser('userid1');
+        $this->assertEquals('userid1 test', $user_test1->getDisplayName());
+        $user_test1->setAttributes(array('displayName' => ''));
+        $provider->updateUser($user_test1);
+        $user_test1 = $provider->getUser('userid1');
+        $this->assertEquals('', $user_test1->getDisplayName());
+
         $users = $provider->getAllUsers();
         $this->assertNotEmpty($users);
         $this->assertEquals(2, count($users));

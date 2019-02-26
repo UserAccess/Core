@@ -10,6 +10,8 @@ interface EntryInterface {
 
     public function getDisplayName(): string;
 
+    public function isReadOnly(): bool;
+
     public function getAttributes(): array;
 
 }

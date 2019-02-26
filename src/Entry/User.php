@@ -20,7 +20,7 @@ class User extends AbstractEntry implements UserInterface {
     }
 
     public function setPasswordHash(string $passwordHash) {
-        $this->passwordHash = $passwordHash;
+        $this->passwordHash = trim($passwordHash);
     }
 
     public function authenticate(string $secret): bool {
@@ -35,7 +35,7 @@ class User extends AbstractEntry implements UserInterface {
         if (!empty($email) && !filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
             throw new \Exception('E-Mail validation failed');
         }
-        $this->email = $email;
+        $this->email = trim(strtolower($email));
     }
 
     public function isLocked(): bool {
@@ -91,18 +91,18 @@ class User extends AbstractEntry implements UserInterface {
         if (!empty($attributes['passwordHash'])) {
             $this->setPasswordHash($attributes['passwordHash']);
         } else if (!empty($attributes['password'])) {
-            $this->setPasswordHash(Password::hash($attributes['password']));
+            $this->setPasswordHash(Password::hash(trim($attributes['password'])));
         }
-        if (!empty($attributes['email'])) {
+        if (array_key_exists('email', $attributes)) {
             $this->setEmail($attributes['email']);
         }
-        if (!empty($attributes['locked'])) {
+        if (array_key_exists('locked', $attributes)) {
             $this->setLocked($attributes['locked']);
         }
-        if (!empty($attributes['failedLoginAttempts'])) {
+        if (array_key_exists('failedLoginAttempts', $attributes)) {
             $this->setFailedLoginAttempts($attributes['failedLoginAttempts']);
         }
-        if (!empty($attributes['roles'])) {
+        if (array_key_exists('roles', $attributes)) {
             $this->setRoles($attributes['roles']);
         }
     }

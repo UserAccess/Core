@@ -5,6 +5,7 @@ namespace UserAccess\Core;
 use \UserAccess\Core\Entry\UserInterface;
 use \UserAccess\Core\Provider\UserProviderInterface;
 use \UserAccess\Core\Provider\RoleProviderInterface;
+use \UserAccess\Core\Util\AuditLog;
 
 class UserAccess {
 
@@ -12,7 +13,11 @@ class UserAccess {
     private $fallbackUserProvider;
     private $roleProvider;
 
-    public function __construct(UserProviderInterface $userProvider, UserProviderInterface $fallbackUserProvider = null, RoleProviderInterface $roleProvider = null) {
+    public function __construct(
+        UserProviderInterface $userProvider, 
+        UserProviderInterface $fallbackUserProvider = null, 
+        RoleProviderInterface $roleProvider = null,
+        AuditLog $logger = null) {
         if (empty($userProvider)) {
             throw new \Exception('User provider mandatory');
         }
