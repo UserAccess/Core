@@ -13,13 +13,17 @@ class UserAccess {
     private $fallbackUserProvider;
     private $roleProvider;
 
+    const EXCEPTION_MISSING_ID = '1';
+    const EXCEPTION_INVALID_ID = '2';
+    const EXCEPTION_INVALID_EMAIL = '3';
+
     public function __construct(
         UserProviderInterface $userProvider, 
         UserProviderInterface $fallbackUserProvider = null, 
         RoleProviderInterface $roleProvider = null,
         AuditLog $logger = null) {
         if (empty($userProvider)) {
-            throw new \Exception('User provider mandatory');
+            throw new \Exception('User provider missing');
         }
         $this->userProvider = $userProvider;
         if ($fallbackUserProvider) {

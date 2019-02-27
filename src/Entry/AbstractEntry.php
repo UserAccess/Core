@@ -2,6 +2,7 @@
 
 namespace UserAccess\Core\Entry;
 
+use \UserAccess\Core\UserAccess;
 use \UserAccess\Core\Entry\EntryInterface;
 
 abstract class AbstractEntry implements EntryInterface {
@@ -13,9 +14,13 @@ abstract class AbstractEntry implements EntryInterface {
 
     public function __construct(string $id) {
         if (empty($id)) {
-            throw new \Exception('ID mandatory');
+            throw new \Exception('ID missing', UserAccess::EXCEPTION_MISSING_ID);
         }
-        $this->id = trim(strtolower($id));
+        $id = trim(strtolower($id));
+        if(!ctype_alnum($id)){
+            throw new \Exception('ID invalid', UserAccess::EXCEPTION_INVALID_ID);
+        }
+        $this->id = $id;
     }
 
     public function getId(): string {

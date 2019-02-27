@@ -2,6 +2,7 @@
 
 namespace UserAccess\Core\Entry;
 
+use \UserAccess\Core\UserAccess;
 use \UserAccess\Core\Entry\Entry;
 use \UserAccess\Core\Entry\UserInterface;
 use \UserAccess\Core\Util\Password;
@@ -33,7 +34,7 @@ class User extends AbstractEntry implements UserInterface {
 
     public function setEmail(string $email) {
         if (!empty($email) && !filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
-            throw new \Exception('E-Mail validation failed');
+            throw new \Exception('E-Mail invalid', UserAccess::EXCEPTION_INVALID_EMAIL);
         }
         $this->email = trim(strtolower($email));
     }
