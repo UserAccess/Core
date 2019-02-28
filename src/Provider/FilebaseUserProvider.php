@@ -2,6 +2,8 @@
 
 namespace UserAccess\Core\Provider;
 
+use \UserAccess\Core\UserAccess;
+use \UserAccess\Core\Provider\AbstractFilebaseEntryProvider;
 use \UserAccess\Core\Provider\UserProviderInterface;
 use \UserAccess\Core\Entry\UserInterface;
 use \UserAccess\Core\Entry\User;
@@ -22,7 +24,7 @@ class FilebaseUserProvider extends AbstractFilebaseEntryProvider implements User
             $user->setAttributes($this->db->get($id)->toArray());
             return $user;
         } else {
-            throw new \Exception('User with ' . $id . ' not available');
+            throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
         }
     }
 

@@ -2,62 +2,44 @@
 
 namespace UserAccess\Core\Provider;
 
+use \UserAccess\Core\UserAccess;
+use \UserAccess\Core\Provider\AbstractStaticEntryProvider;
 use \UserAccess\Core\Provider\UserProviderInterface;
 use \UserAccess\Core\Entry\UserInterface;
 use \UserAccess\Core\Entry\User;
 
-class StaticUserProvider implements UserProviderInterface {
+class StaticUserProvider extends AbstractStaticEntryProvider implements UserProviderInterface {
 
-    private $users = [];
-
-    public function __construct() {
+    public function createUser(UserInterface $entry) {
+        parent::createEntry($entry);
     }
 
     public function isExisting(string $id): bool {
-        if (isset($this->users[$id])) {
+        if (isset($this->entries[$id])) {
             return true;        
         } else {
             return false;
         }
     }
 
-    public function createUser(UserInterface $user) {
-        $id = $user->getId();
-        if ($this->isExisting($id)) {
-            throw new \Exception('User with ' . $id . ' already available');
-        } else {
-            $this->users[$id] = $user;
-        }
-    }
-
     public function getUser(string $id): UserInterface {
         if ($this->isExisting($id)) {
-            return $this->users[$id];
+            return $this->entries[$id];
         } else {
-            throw new \Exception('User with ' . $id . ' not available');
+            throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
         }
     }
 
     public function getAllUsers(): array {
-        return $this->users;
+        return $this->entries;
     }
 
-    public function updateUser(UserInterface $user) {
-        $id = $user->getId();
-        if ($this->isExisting($id)) {
-            $this->users[$id] = $user;
-        } else {
-            throw new \Exception('User with ' . $id . ' not available');
-        }
+    public function updateUser(UserInterface $entry) {
+        parent::updateEntry($entry);
     }
 
     public function deleteUser(string $id) {
-        $id = $user->getId();
-        if ($this->isExisting($id)) {
-            unset($this->users[$id]);
-        } else {
-            throw new \Exception('User with ' . $id . ' not available');
-        }
+        parent::deleteEntry($id);
     }
 
 }

@@ -45,6 +45,8 @@ class UserProviderTest extends TestCase {
         $user_test2 = $provider->getUser('userid2');
         $this->assertNotEmpty($user_test1);
         $this->assertNotEmpty($user_test2);
+        $this->assertEquals($provider->isReadOnly(), $user_test1->isReadOnly());
+        $this->assertEquals($provider->isReadOnly(), $user_test2->isReadOnly());
 
         $this->assertEquals('userid1', $user_test1->getId());
         $this->assertEquals('userid1.test@test.com', $user_test1->getEmail());
@@ -69,29 +71,33 @@ class UserProviderTest extends TestCase {
         $user_test1->setPasswordHash(Password::hash('password1_update'));
         $user_test1->setEmail('userid1.test_update@test.com');
         $user_test1->removeRole('Administrators');
-        $provider->updateUser($user_test1);
-        $user_test1 = $provider->getUser('userid1');
-        $this->assertEquals('userid1', $user_test1->getId());
-        $this->assertEquals('userid1 test update', $user_test1->getDisplayName());
-        $this->assertEquals('userid1.test_update@test.com', $user_test1->getEmail());
-        $this->assertFalse($user_test1->authenticate('password1'));
-        $this->assertTrue($user_test1->authenticate('password1_update'));
-        $this->assertTrue($user_test1->hasRole('Everyone'));
-        $this->assertFalse($user_test1->hasRole('Administrators'));
+        if (!$provider->isReadOnly()) {
+            $provider->updateUser($user_test1);
+            $user_test1 = $provider->getUser('userid1');
+            $this->assertEquals('userid1', $user_test1->getId());
+            $this->assertEquals('userid1 test update', $user_test1->getDisplayName());
+            $this->assertEquals('userid1.test_update@test.com', $user_test1->getEmail());
+            $this->assertFalse($user_test1->authenticate('password1'));
+            $this->assertTrue($user_test1->authenticate('password1_update'));
+            $this->assertTrue($user_test1->hasRole('Everyone'));
+            $this->assertFalse($user_test1->hasRole('Administrators'));
+        }
 
         // delete attribute test
         $user_test1->setDisplayName('');
-        $provider->updateUser($user_test1);
-        $user_test1 = $provider->getUser('userid1');
-        $this->assertEquals('', $user_test1->getDisplayName());
-        $user_test1->setDisplayName('userid1 test');
-        $provider->updateUser($user_test1);
-        $user_test1 = $provider->getUser('userid1');
-        $this->assertEquals('userid1 test', $user_test1->getDisplayName());
-        $user_test1->setAttributes(array('displayName' => ''));
-        $provider->updateUser($user_test1);
-        $user_test1 = $provider->getUser('userid1');
-        $this->assertEquals('', $user_test1->getDisplayName());
+        if (!$provider->isReadOnly()) {
+            $provider->updateUser($user_test1);
+            $user_test1 = $provider->getUser('userid1');
+            $this->assertEquals('', $user_test1->getDisplayName());
+            $user_test1->setDisplayName('userid1 test');
+            $provider->updateUser($user_test1);
+            $user_test1 = $provider->getUser('userid1');
+            $this->assertEquals('userid1 test', $user_test1->getDisplayName());
+            $user_test1->setAttributes(array('displayName' => ''));
+            $provider->updateUser($user_test1);
+            $user_test1 = $provider->getUser('userid1');
+            $this->assertEquals('', $user_test1->getDisplayName());
+        }
 
         $users = $provider->getAllUsers();
         $this->assertNotEmpty($users);

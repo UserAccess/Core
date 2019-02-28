@@ -14,11 +14,11 @@ abstract class AbstractEntry implements EntryInterface {
 
     public function __construct(string $id) {
         if (empty($id)) {
-            throw new \Exception('ID missing', UserAccess::EXCEPTION_MISSING_ID);
+            throw new \Exception(UserAccess::EXCEPTION_MISSING_ID);
         }
         $id = trim(strtolower($id));
         if(!ctype_alnum($id)){
-            throw new \Exception('ID invalid', UserAccess::EXCEPTION_INVALID_ID);
+            throw new \Exception(UserAccess::EXCEPTION_INVALID_ID);
         }
         $this->id = $id;
     }
@@ -51,7 +51,8 @@ abstract class AbstractEntry implements EntryInterface {
         return $array = [
             'id' => $this->id,
             'type' => $this->type,
-            'displayName' => $this->displayName
+            'displayName' => $this->displayName,
+            'readOnly' => $this->readOnly
         ];
     }
 
@@ -60,6 +61,9 @@ abstract class AbstractEntry implements EntryInterface {
         // type is read only
         if (array_key_exists('displayName', $attributes)) {
             $this->setDisplayName($attributes['displayName']);
+        }
+        if (array_key_exists('readOnly', $attributes)) {
+            $this->setReadOnly($attributes['readOnly']);
         }
     }
 

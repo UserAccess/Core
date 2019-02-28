@@ -8,4 +8,6 @@ interface EntryProviderInterface {
 
     public function isExisting(string $id): bool;
 
+    public function isReadOnly(): bool;
+
 }

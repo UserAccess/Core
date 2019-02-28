@@ -4,13 +4,14 @@ use \PHPUnit\Framework\TestCase;
 
 use \UserAccess\Core\Provider\RoleProviderInterface;
 use \UserAccess\Core\Provider\FilebaseRoleProvider;
+use \UserAccess\Core\Provider\StaticRoleProvider;
 use \UserAccess\Core\Entry\Role;
-use \UserAccess\Core\Util\Password;
 
 class RoleProviderTest extends TestCase {
 
     public function test() {
         $this->performTest(new FilebaseRoleProvider('testdata/roles'));
+        $this->performTest(new StaticRoleProvider());
     }
 
     public function performTest(RoleProviderInterface $provider) {
@@ -38,6 +39,8 @@ class RoleProviderTest extends TestCase {
         $role_test2 = $provider->getRole('roleid2');
         $this->assertNotEmpty($role_test1);
         $this->assertNotEmpty($role_test2);
+        $this->assertEquals($provider->isReadOnly(), $role_test1->isReadOnly());
+        $this->assertEquals($provider->isReadOnly(), $role_test2->isReadOnly());
 
         $this->assertEquals('roleid1', $role_test1->getId());
         $this->assertEquals('roleid1 test description', $role_test1->getDescription());
@@ -51,13 +54,15 @@ class RoleProviderTest extends TestCase {
             $this->assertNotEmpty($e);
         }
 
-        $role_test1 = $provider->getRole('roleid1');
-        $role_test1->setDisplayName('roleid1 test update');
-        $role_test1->setDescription('roleid1 test description update');
-        $provider->updateRole($role_test1);
-        $role_test1 = $provider->getRole('roleid1');
-        $this->assertEquals('roleid1', $role_test1->getId());
-        $this->assertEquals('roleid1 test description update', $role_test1->getDescription());
+        if (!$provider->isReadOnly()) {
+            $role_test1 = $provider->getRole('roleid1');
+            $role_test1->setDisplayName('roleid1 test update');
+            $role_test1->setDescription('roleid1 test description update');
+            $provider->updateRole($role_test1);
+            $role_test1 = $provider->getRole('roleid1');
+            $this->assertEquals('roleid1', $role_test1->getId());
+            $this->assertEquals('roleid1 test description update', $role_test1->getDescription());
+        }
 
         $roles = $provider->getAllroles();
         $this->assertNotEmpty($roles);

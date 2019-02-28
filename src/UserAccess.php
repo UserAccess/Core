@@ -4,46 +4,48 @@ namespace UserAccess\Core;
 
 use \UserAccess\Core\Entry\UserInterface;
 use \UserAccess\Core\Provider\UserProviderInterface;
+use \UserAccess\Core\Provider\StaticUserProvider;
 use \UserAccess\Core\Provider\RoleProviderInterface;
+use \UserAccess\Core\Provider\StaticRoleProvider;
 use \UserAccess\Core\Util\AuditLog;
 
 class UserAccess {
 
     private $userProvider;
-    private $fallbackUserProvider;
+    private $inbuiltUserProvider;
     private $roleProvider;
+    private $inbuilRoleProvider;
 
-    const EXCEPTION_MISSING_ID = '1';
-    const EXCEPTION_INVALID_ID = '2';
-    const EXCEPTION_INVALID_EMAIL = '3';
+    const EXCEPTION_MISSING_ID = 'EXCEPTION_MISSING_ID';
+    const EXCEPTION_INVALID_ID = 'EXCEPTION_INVALID_ID';
+    const EXCEPTION_INVALID_EMAIL = 'EXCEPTION_INVALID_EMAIL';
+    const EXCEPTION_ENTRY_ALREADY_EXIST = 'EXCEPTION_ENTRY_ALREADY_EXIST';
+    const EXCEPTION_ENTRY_NOT_EXIST = 'EXCEPTION_ENTRY_NOT_EXIST';
+    const EXCEPTION_ENTRY_READONLY = 'EXCEPTION_ENTRY_READONLY';
+    const EXCEPTION_PROVIDER_NOT_EXIST = 'EXCEPTION_PROVIDER_NOT_EXIST';
 
     public function __construct(
         UserProviderInterface $userProvider, 
-        UserProviderInterface $fallbackUserProvider = null, 
-        RoleProviderInterface $roleProvider = null,
+        RoleProviderInterface $roleProvider,
         AuditLog $logger = null) {
         if (empty($userProvider)) {
-            throw new \Exception('User provider missing');
+            throw new \Exception(UserAccess::EXCEPTION_PROVIDER_NOT_EXIST);
         }
         $this->userProvider = $userProvider;
-        if ($fallbackUserProvider) {
-            $this->fallbackUserProvider = $fallbackUserProvider;
-        }
+        $this->inbuiltUserProvider = new StaticUserProvider();
         if ($roleProvider) {
             $this->roleProvider = $roleProvider;
         }
+        $this->inbuiltRoleProvider = new StaticRoleProvider();
+
     }
 
     public function getUserProvider(): UserProviderInterface {
         return $this->userProvider;
     }
 
-    public function getFallbackUserProvider(): UserProviderInterface {
-        if ($this->fallbackUserProvider) {
-            return $this->fallbackUserProvider;
-        } else {
-            throw new \Exception('Fallback user provider not available');
-        }
+    public function getInbuiltUserProvider(): UserProviderInterface {
+        return $this->inbuiltUserProvider;
     }
 
     public function getRoleProvider(): RoleProviderInterface {
@@ -51,8 +53,12 @@ class UserAccess {
         if ($this->roleProvider) {
             return $this->roleProvider;
         } else {
-            throw new \Exception('Role provider not available');
+            throw new \Exception(UserAccess::EXCEPTION_PROVIDER_NOT_EXIST);
         }
+    }
+
+    public function getInbuiltRoleProvider(): RoleProviderInterface {
+        return $this->inbuiltRoleProvider;
     }
 
 }

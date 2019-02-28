@@ -2,6 +2,7 @@
 
 namespace UserAccess\Core\Provider;
 
+use \UserAccess\Core\UserAccess;
 use \UserAccess\Core\Entry\EntryInterface;
 use \UserAccess\Core\Provider\EntryProviderInterface;
 
@@ -58,12 +59,17 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
         return $this->db->has($id);
     }
 
+    public function isReadOnly(): bool {
+        return false;
+    }
+
     public function createEntry(EntryInterface $entry) {
         $id = $entry->getId();
         $type = $entry->getType();
         if ($this->isExisting($id)) {
-            throw new \Exception($type . ' with ' . $id . ' already existing');
+            throw new \Exception(UserAccess::EXCEPTION_ENTRY_ALREADY_EXIST);
         } else {
+            $entry->setReadOnly($this->isReadOnly());
             $item = $this->db->get($id);
             $item->set($entry->getAttributes())->save();
         }
@@ -76,7 +82,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
             $item = $this->db->get($id);
             $item->set($entry->getAttributes())->save();
         } else {
-            throw new \Exception($type . ' with ' . $id . ' not available');
+            throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
         }
     }
 
@@ -84,7 +90,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
         if ($this->isExisting($id)) {
             $this->db->delete($this->db->get($id));
         } else {
-            throw new \Exception('Entry with ' . $id . ' not available');
+            throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
         }
     }
 

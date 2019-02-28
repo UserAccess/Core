@@ -34,7 +34,7 @@ class User extends AbstractEntry implements UserInterface {
 
     public function setEmail(string $email) {
         if (!empty($email) && !filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
-            throw new \Exception('E-Mail invalid', UserAccess::EXCEPTION_INVALID_EMAIL);
+            throw new \Exception(UserAccess::EXCEPTION_INVALID_EMAIL);
         }
         $this->email = trim(strtolower($email));
     }
