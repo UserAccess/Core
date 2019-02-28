@@ -15,14 +15,14 @@ class RoleProviderTest extends TestCase {
     }
 
     public function performTest(RoleProviderInterface $provider) {
-        if ($provider->isExisting('roleid1')) {
+        if ($provider->isRoleExisting('roleid1')) {
             $provider->deleteRole('roleid1');
         }
-        if ($provider->isExisting('roleid2')) {
+        if ($provider->isRoleExisting('roleid2')) {
             $provider->deleteRole('roleid2');
         }
-        $this->assertFalse($provider->isExisting('roleid1'));
-        $this->assertFalse($provider->isExisting('roleid2'));
+        $this->assertFalse($provider->isRoleExisting('roleid1'));
+        $this->assertFalse($provider->isRoleExisting('roleid2'));
 
         $role1 = new Role('roleid1');
         $role1->setDisplayName('roleid1 test');
@@ -33,28 +33,28 @@ class RoleProviderTest extends TestCase {
         $provider->createRole($role1);
         $provider->createRole($role2);
 
-        $this->assertTrue($provider->isExisting('roleid1'));
-        $this->assertTrue($provider->isExisting('roleid2'));
+        $this->assertTrue($provider->isRoleExisting('roleid1'));
+        $this->assertTrue($provider->isRoleExisting('roleid2'));
         $role_test1 = $provider->getRole('roleid1');
         $role_test2 = $provider->getRole('roleid2');
         $this->assertNotEmpty($role_test1);
         $this->assertNotEmpty($role_test2);
-        $this->assertEquals($provider->isReadOnly(), $role_test1->isReadOnly());
-        $this->assertEquals($provider->isReadOnly(), $role_test2->isReadOnly());
+        $this->assertEquals($provider->isProviderReadOnly(), $role_test1->isReadOnly());
+        $this->assertEquals($provider->isProviderReadOnly(), $role_test2->isReadOnly());
 
         $this->assertEquals('roleid1', $role_test1->getId());
         $this->assertEquals('roleid1 test description', $role_test1->getDescription());
         $this->assertEquals('roleid2', $role_test2->getId());
         $this->assertEquals('roleid2 test description', $role_test2->getDescription());
 
-        $this->assertFalse($provider->isExisting('roleid3'));
+        $this->assertFalse($provider->isRoleExisting('roleid3'));
         try {
             $provider->getrole('roleid3');
         } catch (\Exception $e) {
             $this->assertNotEmpty($e);
         }
 
-        if (!$provider->isReadOnly()) {
+        if (!$provider->isProviderReadOnly()) {
             $role_test1 = $provider->getRole('roleid1');
             $role_test1->setDisplayName('roleid1 test update');
             $role_test1->setDescription('roleid1 test description update');

@@ -10,6 +10,10 @@ use \UserAccess\Core\Entry\User;
 
 class StaticUserProvider extends AbstractStaticEntryProvider implements UserProviderInterface {
 
+    public function isUserExisting(string $id): bool {
+        return parent::isEntryExisting($id);
+    }
+
     public function createUser(UserInterface $entry) {
         parent::createEntry($entry);
     }

@@ -13,7 +13,7 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
     public function __construct() {
     }
 
-    public function isExisting(string $id): bool {
+    public function isEntryExisting(string $id): bool {
         if (isset($this->entries[$id])) {
             return true;        
         } else {
@@ -21,16 +21,16 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
         }
     }
 
-    public function isReadOnly(): bool {
+    public function isProviderReadOnly(): bool {
         return true;
     }
 
     public function createEntry(EntryInterface $entry) {
         $id = $entry->getId();
-        if ($this->isExisting($id)) {
+        if ($this->isEntryExisting($id)) {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_ALREADY_EXIST);
         } else {
-            $entry->setReadOnly($this->isReadOnly());
+            $entry->setReadOnly($this->isProviderReadOnly());
             $this->entries[$id] = $entry;
         }
     }

@@ -16,14 +16,14 @@ class UserProviderTest extends TestCase {
     }
 
     public function performTest(UserProviderInterface $provider) {
-        if ($provider->isExisting('userid1')) {
+        if ($provider->isUserExisting('userid1')) {
             $provider->deleteUser('userid1');
         }
-        if ($provider->isExisting('userid2')) {
+        if ($provider->isUserExisting('userid2')) {
             $provider->deleteUser('userid2');
         }
-        $this->assertFalse($provider->isExisting('userid1'));
-        $this->assertFalse($provider->isExisting('userid2'));
+        $this->assertFalse($provider->isUserExisting('userid1'));
+        $this->assertFalse($provider->isUserExisting('userid2'));
 
         $user1 = new User('userid1');
         $user1->setDisplayName('userid1 test');
@@ -39,14 +39,14 @@ class UserProviderTest extends TestCase {
         $provider->createUser($user1);
         $provider->createUser($user2);
 
-        $this->assertTrue($provider->isExisting('userid1'));
-        $this->assertTrue($provider->isExisting('userid2'));
+        $this->assertTrue($provider->isUserExisting('userid1'));
+        $this->assertTrue($provider->isUserExisting('userid2'));
         $user_test1 = $provider->getUser('userid1');
         $user_test2 = $provider->getUser('userid2');
         $this->assertNotEmpty($user_test1);
         $this->assertNotEmpty($user_test2);
-        $this->assertEquals($provider->isReadOnly(), $user_test1->isReadOnly());
-        $this->assertEquals($provider->isReadOnly(), $user_test2->isReadOnly());
+        $this->assertEquals($provider->isProviderReadOnly(), $user_test1->isReadOnly());
+        $this->assertEquals($provider->isProviderReadOnly(), $user_test2->isReadOnly());
 
         $this->assertEquals('userid1', $user_test1->getId());
         $this->assertEquals('userid1.test@test.com', $user_test1->getEmail());
@@ -59,7 +59,7 @@ class UserProviderTest extends TestCase {
         $this->assertTrue($user_test1->authenticate('password1'));
         $this->assertTrue($user_test2->authenticate('password2'));
 
-        $this->assertFalse($provider->isExisting('userid3'));
+        $this->assertFalse($provider->isUserExisting('userid3'));
         try {
             $provider->getUser('userid3');
         } catch (\Exception $e) {
@@ -71,7 +71,7 @@ class UserProviderTest extends TestCase {
         $user_test1->setPasswordHash(Password::hash('password1_update'));
         $user_test1->setEmail('userid1.test_update@test.com');
         $user_test1->removeRole('Administrators');
-        if (!$provider->isReadOnly()) {
+        if (!$provider->isProviderReadOnly()) {
             $provider->updateUser($user_test1);
             $user_test1 = $provider->getUser('userid1');
             $this->assertEquals('userid1', $user_test1->getId());
@@ -85,7 +85,7 @@ class UserProviderTest extends TestCase {
 
         // delete attribute test
         $user_test1->setDisplayName('');
-        if (!$provider->isReadOnly()) {
+        if (!$provider->isProviderReadOnly()) {
             $provider->updateUser($user_test1);
             $user_test1 = $provider->getUser('userid1');
             $this->assertEquals('', $user_test1->getDisplayName());

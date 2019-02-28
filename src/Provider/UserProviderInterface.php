@@ -7,6 +7,8 @@ use \UserAccess\Core\Provider\EntryProviderInterface;
 
 interface UserProviderInterface extends EntryProviderInterface {
 
+    public function isUserExisting(string $id): bool;
+
     public function createUser(UserInterface $user);
 
     public function getUser(string $id): ?UserInterface;

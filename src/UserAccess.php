@@ -3,6 +3,7 @@
 namespace UserAccess\Core;
 
 use \UserAccess\Core\Entry\UserInterface;
+use \UserAccess\Core\Entry\RoleInterface;
 use \UserAccess\Core\Provider\UserProviderInterface;
 use \UserAccess\Core\Provider\StaticUserProvider;
 use \UserAccess\Core\Provider\RoleProviderInterface;
@@ -14,7 +15,7 @@ class UserAccess {
     private $userProvider;
     private $inbuiltUserProvider;
     private $roleProvider;
-    private $inbuilRoleProvider;
+    private $inbuiltRoleProvider;
 
     const EXCEPTION_MISSING_ID = 'EXCEPTION_MISSING_ID';
     const EXCEPTION_INVALID_ID = 'EXCEPTION_INVALID_ID';
@@ -28,16 +29,13 @@ class UserAccess {
         UserProviderInterface $userProvider, 
         RoleProviderInterface $roleProvider,
         AuditLog $logger = null) {
-        if (empty($userProvider)) {
+        if (empty($userProvider) || empty($roleProvider)) {
             throw new \Exception(UserAccess::EXCEPTION_PROVIDER_NOT_EXIST);
         }
         $this->userProvider = $userProvider;
         $this->inbuiltUserProvider = new StaticUserProvider();
-        if ($roleProvider) {
-            $this->roleProvider = $roleProvider;
-        }
+        $this->roleProvider = $roleProvider;
         $this->inbuiltRoleProvider = new StaticRoleProvider();
-
     }
 
     public function getUserProvider(): UserProviderInterface {
@@ -50,15 +48,58 @@ class UserAccess {
 
     public function getRoleProvider(): RoleProviderInterface {
         return $this->roleProvider;
-        if ($this->roleProvider) {
-            return $this->roleProvider;
-        } else {
-            throw new \Exception(UserAccess::EXCEPTION_PROVIDER_NOT_EXIST);
-        }
     }
 
     public function getInbuiltRoleProvider(): RoleProviderInterface {
         return $this->inbuiltRoleProvider;
+    }
+
+    public function isUserExisting(string $id): bool {
+        if ($this->userProvider->isUserExisting($id)) {
+            return true;
+        } else if ($this->inbuiltUserProvider->isUserExisting($id)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getUser(string $id): UserInterface {
+        if ($this->userProvider->isUserExisting($id)) {
+            return $this->userProvider->getUser($id);
+        } else if ($this->inbuiltUserProvider->isUserExisting($id)) {
+            return $this->inbuiltUserProvider->getUser($id);
+        } else {
+            throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
+        }
+    }
+
+    public function getAllUsers(): array {
+        return array_merge($this->userProvider->getAllUsers(), $this->inbuiltUserProvider->getAllUsers());
+    }
+
+    public function isRoleExisting(string $id): bool {
+        if ($this->roleProvider->isRoleExisting($id)) {
+            return true;
+        } else if ($this->inbuiltRoleProvider->isRoleExisting($id)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getRole(string $id): RoleInterface {
+        if ($this->roleProvider->isRoleExisting($id)) {
+            return $this->roleProvider->getRole($id);
+        } else if ($this->inbuiltRoleProvider->isRoleExisting($id)) {
+            return $this->inbuiltRoleProvider->getRole($id);
+        } else {
+            throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
+        }
+    }
+
+    public function getAllRoles(): array {
+        return array_merge($this->roleProvider->getAllRoles(), $this->inbuiltRoleProvider->getAllRoles());
     }
 
 }

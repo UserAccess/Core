@@ -14,12 +14,16 @@ use \Filebase\Format\Json;
 
 class FilebaseUserProvider extends AbstractFilebaseEntryProvider implements UserProviderInterface {
 
+    public function isUserExisting(string $id): bool {
+        return parent::isEntryExisting($id);
+    }
+
     public function createUser(UserInterface $entry) {
         parent::createEntry($entry);
     }
 
     public function getUser(string $id): UserInterface {
-        if ($this->isExisting($id)) {
+        if ($this->isUserExisting($id)) {
             $user = new User($id);
             $user->setAttributes($this->db->get($id)->toArray());
             return $user;

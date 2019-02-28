@@ -6,8 +6,8 @@ use \UserAccess\Core\Entry\EntryInterface;
 
 interface EntryProviderInterface {
 
-    public function isExisting(string $id): bool;
+    public function isEntryExisting(string $id): bool;
 
-    public function isReadOnly(): bool;
+    public function isProviderReadOnly(): bool;
 
 }

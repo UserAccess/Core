@@ -10,6 +10,10 @@ use \UserAccess\Core\Entry\Role;
 
 class StaticRoleProvider extends AbstractStaticEntryProvider implements RoleProviderInterface {
 
+    public function isRoleExisting(string $id): bool {
+        return parent::isEntryExisting($id);
+    }
+
     public function createRole(RoleInterface $entry) {
         parent::createEntry($entry);
     }

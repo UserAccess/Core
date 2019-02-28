@@ -55,21 +55,21 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
         ]);
     }
 
-    public function isExisting(string $id): bool {
+    public function isEntryExisting(string $id): bool {
         return $this->db->has($id);
     }
 
-    public function isReadOnly(): bool {
+    public function isProviderReadOnly(): bool {
         return false;
     }
 
     public function createEntry(EntryInterface $entry) {
         $id = $entry->getId();
         $type = $entry->getType();
-        if ($this->isExisting($id)) {
+        if ($this->isEntryExisting($id)) {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_ALREADY_EXIST);
         } else {
-            $entry->setReadOnly($this->isReadOnly());
+            $entry->setReadOnly($this->isProviderReadOnly());
             $item = $this->db->get($id);
             $item->set($entry->getAttributes())->save();
         }
@@ -78,7 +78,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
     public function updateEntry(EntryInterface $entry) {
         $id = $entry->getId();
         $type = $entry->getType();
-        if ($this->isExisting($id)) {
+        if ($this->isEntryExisting($id)) {
             $item = $this->db->get($id);
             $item->set($entry->getAttributes())->save();
         } else {
@@ -87,7 +87,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
     }
 
     public function deleteEntry(string $id) {
-        if ($this->isExisting($id)) {
+        if ($this->isEntryExisting($id)) {
             $this->db->delete($this->db->get($id));
         } else {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
