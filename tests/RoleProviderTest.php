@@ -10,7 +10,7 @@ use \UserAccess\Core\Entry\Role;
 class RoleProviderTest extends TestCase {
 
     public function test() {
-        $this->performTest(new FilebaseRoleProvider('testdata/roles'));
+        $this->performTest(new FilebaseRoleProvider('data/roles'));
         $this->performTest(new StaticRoleProvider());
     }
 

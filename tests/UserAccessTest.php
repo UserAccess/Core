@@ -11,8 +11,8 @@ use \UserAccess\Core\Provider\FilebaseRoleProvider;
 class UserAccessTest extends TestCase {
 
     public function test() {
-        $userProvider = new FilebaseUserProvider('testdata/users');
-        $roleProvider = new FilebaseRoleProvider('testdata/roles');
+        $userProvider = new FilebaseUserProvider('data/users');
+        $roleProvider = new FilebaseRoleProvider('data/roles');
         $userAccess = new UserAccess($userProvider, $roleProvider);
         $this->assertNotEmpty($userAccess->getUserProvider());
         $this->assertNotEmpty($userAccess->getInbuiltUserProvider());
