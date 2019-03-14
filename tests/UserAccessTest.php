@@ -36,11 +36,11 @@ class UserAccessTest extends TestCase {
         $this->assertEquals(2, count($users));
         $user = $userAccess->getUser('administrator');
         $this->assertNotEmpty($user);
-        $this->assertEquals('administrator', $user->getId());
+        $this->assertEquals('ADMINISTRATOR', $user->getId());
         $this->assertTrue($user->isReadOnly());
         $user = $userAccess->getUser('userid1');
         $this->assertNotEmpty($user);
-        $this->assertEquals('userid1', $user->getId());
+        $this->assertEquals('USERID1', $user->getId());
         $this->assertFalse($user->isReadOnly());
 
         $role = new Role('administrators');
@@ -60,11 +60,11 @@ class UserAccessTest extends TestCase {
         $this->assertEquals(2, count($roles));
         $role = $userAccess->getRole('administrators');
         $this->assertNotEmpty($role);
-        $this->assertEquals('administrators', $role->getId());
+        $this->assertEquals('ADMINISTRATORS', $role->getId());
         $this->assertTrue($role->isReadOnly());
         $role = $userAccess->getRole('roleid1');
         $this->assertNotEmpty($role);
-        $this->assertEquals('roleid1', $role->getId());
+        $this->assertEquals('ROLEID1', $role->getId());
         $this->assertFalse($role->isReadOnly());
 
     }

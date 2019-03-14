@@ -18,20 +18,8 @@ class StaticUserProvider extends AbstractStaticEntryProvider implements UserProv
         parent::createEntry($entry);
     }
 
-    public function isExisting(string $id): bool {
-        if (isset($this->entries[$id])) {
-            return true;        
-        } else {
-            return false;
-        }
-    }
-
     public function getUser(string $id): UserInterface {
-        if ($this->isExisting($id)) {
-            return $this->entries[$id];
-        } else {
-            throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
-        }
+        return parent::getEntry($id);
     }
 
     public function getAllUsers(): array {

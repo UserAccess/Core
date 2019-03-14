@@ -16,7 +16,7 @@ abstract class AbstractEntry implements EntryInterface {
         if (empty($id)) {
             throw new \Exception(UserAccess::EXCEPTION_MISSING_ID);
         }
-        $id = trim(strtolower($id));
+        $id = trim(strtoupper($id));
         if(!ctype_alnum($id)){
             throw new \Exception(UserAccess::EXCEPTION_INVALID_ID);
         }

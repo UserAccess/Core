@@ -10,9 +10,9 @@ class UserTest extends TestCase {
     public function test() {
         $user = new User('userid1');
         $this->assertNotEmpty($user);
-        $this->assertEquals('userid1', $user->getId());
+        $this->assertEquals('USERID1', $user->getId());
         $userAttributes = $user->getAttributes();
-        $this->assertEquals('userid1', $userAttributes['id']);
+        $this->assertEquals('USERID1', $userAttributes['id']);
         $user->setDisplayName('User 1');
         $this->assertEquals('User 1', $user->getDisplayName());
         $user->setEmail('userid1.test@test.com');

@@ -14,10 +14,20 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
     }
 
     public function isEntryExisting(string $id): bool {
+        $id = strtoupper($id);
         if (isset($this->entries[$id])) {
             return true;        
         } else {
             return false;
+        }
+    }
+
+    public function getEntry(string $id) {
+        $id = strtoupper($id);
+        if ($this->isEntryExisting($id)) {
+            return $this->entries[$id];
+        } else {
+            throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
         }
     }
 
