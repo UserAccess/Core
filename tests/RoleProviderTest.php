@@ -10,8 +10,8 @@ use \UserAccess\Core\Entry\Role;
 class RoleProviderTest extends TestCase {
 
     public function test() {
+        $this->performTest(new StaticRoleProvider());
         $this->performTest(new FilebaseRoleProvider('data/roles'));
-        //$this->performTest(new StaticRoleProvider());
     }
 
     public function performTest(RoleProviderInterface $provider) {
@@ -43,8 +43,10 @@ class RoleProviderTest extends TestCase {
         $this->assertEquals($provider->isProviderReadOnly(), $role_test2->isReadOnly());
 
         $this->assertEquals('ROLEID1', $role_test1->getId());
+        $this->assertEquals('roleid1 test', $role_test1->getDisplayName());
         $this->assertEquals('roleid1 test description', $role_test1->getDescription());
         $this->assertEquals('ROLEID2', $role_test2->getId());
+        $this->assertEquals('roleid2 test', $role_test2->getDisplayName());
         $this->assertEquals('roleid2 test description', $role_test2->getDescription());
 
         $this->assertFalse($provider->isRoleExisting('roleid3'));

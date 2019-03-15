@@ -11,8 +11,8 @@ use \UserAccess\Core\Util\Password;
 class UserProviderTest extends TestCase {
 
     public function test() {
+        $this->performTest(new StaticUserProvider());
         $this->performTest(new FilebaseUserProvider('data/users'));
-        //$this->performTest(new StaticUserProvider());
     }
 
     public function performTest(UserProviderInterface $provider) {
