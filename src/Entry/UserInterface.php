@@ -4,6 +4,8 @@ namespace UserAccess\Core\Entry;
 
 interface UserInterface extends EntryInterface {
 
+    const TYPE = 'USER';
+
     public function authenticate(string $secret): bool;
 
     public function getEmail(): string;

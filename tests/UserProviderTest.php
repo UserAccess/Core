@@ -2,6 +2,7 @@
 
 use \PHPUnit\Framework\TestCase;
 
+use \UserAccess\Core\UserAccess;
 use \UserAccess\Core\Provider\UserProviderInterface;
 use \UserAccess\Core\Provider\FilebaseUserProvider;
 use \UserAccess\Core\Provider\StaticUserProvider;
@@ -59,6 +60,16 @@ class UserProviderTest extends TestCase {
         $this->assertTrue($user_test1->authenticate('password1'));
         $this->assertTrue($user_test2->authenticate('password2'));
 
+        $find = $provider->findUsers('displayName', 'userid1 test', UserAccess::COMPARISON_EQUAL);
+        $this->assertNotEmpty($find);
+        $this->assertEquals(1, count($find));
+        $find = $provider->findUsers('email', 'userid1.test@test.com', UserAccess::COMPARISON_EQUAL);
+        $this->assertNotEmpty($find);
+        $this->assertEquals(1, count($find));
+        $find = $provider->findUsers('displayName', 'USERID', UserAccess::COMPARISON_LIKE);
+        $this->assertNotEmpty($find);
+        $this->assertEquals(2, count($find));
+
         $this->assertFalse($provider->isUserExisting('userid3'));
         try {
             $provider->getUser('userid3');
@@ -99,7 +110,7 @@ class UserProviderTest extends TestCase {
             $this->assertEquals('', $user_test1->getDisplayName());
         }
 
-        $users = $provider->getAllUsers();
+        $users = $provider->getUsers();
         $this->assertNotEmpty($users);
         $this->assertEquals(2, count($users));
 

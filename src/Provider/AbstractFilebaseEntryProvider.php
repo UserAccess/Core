@@ -15,8 +15,10 @@ use \Filebase\Format\Json;
 abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
 
     protected $db;
+    protected $type;
 
-    public function __construct(string $directory = 'data', string $format = 'YAML') {
+    public function __construct(string $type, string $directory = 'data', string $format = 'YAML') {
+        $this->type = $type;
         $this->db = new Database([
             'dir' => $directory,
             'format' => $format == 'YAML' ? Yaml::class : Json::class,
@@ -33,32 +35,12 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
                     'valid.type' => 'string',
                     'valid.required' => false
                 ]
-                // 'passwordHash' => [
-                //     'valid.type'     => 'string',
-                //     'valid.required' => false
-                // ],
-                // 'email' => [
-                //     'valid.type' => 'string',
-                //     'valid.required' => false
-                // ],
-                // 'locked' => [
-                //     'valid.type' => 'integer',
-                //     'valid.required' => false
-                // ],
-                // 'failedLoginAttempts' => [
-                //     'valid.type'     => 'integer',
-                //     'valid.required' => false
-                // ],
-                // 'roles' => [
-                //     'valid.type'     => 'array',
-                //     'valid.required' => false
-                // ],
             ]
         ]);
     }
 
     public function isEntryExisting(string $id): bool {
-        $id = strtoupper($id);
+        $id = \strtoupper($id);
         return $this->db->has($id);
     }
 
@@ -78,16 +60,15 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
     }
 
     public function getEntry(string $id): EntryInterface {
-        $id = strtoupper($id);
+        $id = \strtoupper($id);
         if ($this->isEntryExisting($id)) {
             $attributes = $this->db->get($id)->toArray();
-            $type = $attributes['type'];
             $entry;
-            switch ($type) {
-                case 'User':
+            switch ($this->type) {
+                case User::TYPE:
                     $entry = new User($id);
                     break;
-                case 'Role':
+                case Role::TYPE:
                     $entry = new Role($id);
                     break;
                 default:
@@ -100,28 +81,25 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
         }
     }
 
-    public function getAllEntries(): array {
-        $result = [];
+    public function getEntries(): array {
         $items = $this->db->findAll();
-        foreach($items as $item){
-            $id = $item->id;
-            $attributes = $item->toArray();
-            $type = $attributes['type'];
-            $entry;
-            switch ($type) {
-                case 'User':
-                    $entry = new User($id);
-                    break;
-                case 'Role':
-                    $entry = new Role($id);
-                    break;
-                default:
-                    throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
-            }
-            $entry->setAttributes($attributes);
-            $result[] = $entry;
+        return $this->itemsToImpl($items);
+    }
+
+    public function findEntries(string $attributeName, string $attributeValue, string $comparisonOperator): array {
+        $items = [];
+        switch ($comparisonOperator) {
+            case UserAccess::COMPARISON_EQUAL:
+                $items = $this->db->where($attributeName, '=', $attributeValue)->resultDocuments();
+                break;
+            case UserAccess::COMPARISON_LIKE:
+                $items = $this->db->where($attributeName, 'LIKE', $attributeValue)->resultDocuments();
+                break;
+            default:
+                $items = $this->db->where($attributeName, '=', $attributeValue)->resultDocuments();
+                break;
         }
-        return $result;
+        return $this->itemsToImpl($items);
     }
     
     public function updateEntry(EntryInterface $entry) {
@@ -135,12 +113,34 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
     }
 
     public function deleteEntry(string $id) {
-        $id = strtoupper($id);
+        $id = \strtoupper($id);
         if ($this->isEntryExisting($id)) {
             $this->db->delete($this->db->get($id));
         } else {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
         }
+    }
+
+    private function itemsToImpl(array $items): array {
+        $result = [];
+        foreach($items as $item){
+            $id = $item->id;
+            $attributes = $item->toArray();
+            $entry;
+            switch ($this->type) {
+                case User::TYPE:
+                    $entry = new User($id);
+                    break;
+                case Role::TYPE:
+                    $entry = new Role($id);
+                    break;
+                default:
+                    throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
+            }
+            $entry->setAttributes($attributes);
+            $result[] = $entry;
+        }
+        return $result;
     }
 
 }

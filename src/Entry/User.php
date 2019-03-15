@@ -9,7 +9,6 @@ use \UserAccess\Core\Util\Password;
 
 class User extends AbstractEntry implements UserInterface {
 
-    protected $type = 'User';
     private $passwordHash = '';
     private $email = '';
     private $locked = false;
@@ -36,7 +35,7 @@ class User extends AbstractEntry implements UserInterface {
         if (!empty($email) && !filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_EMAIL);
         }
-        $this->email = trim(strtolower($email));
+        $this->email = trim(\strtolower($email));
     }
 
     public function isLocked(): bool {

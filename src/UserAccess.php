@@ -25,6 +25,9 @@ class UserAccess {
     const EXCEPTION_ENTRY_READONLY = 'EXCEPTION_ENTRY_READONLY';
     const EXCEPTION_PROVIDER_NOT_EXIST = 'EXCEPTION_PROVIDER_NOT_EXIST';
 
+    const COMPARISON_EQUAL = 'COMPARISON_EQUAL';
+    const COMPARISON_LIKE = 'COMPARISON_LIKE';
+
     public function __construct(
         UserProviderInterface $userProvider, 
         RoleProviderInterface $roleProvider,
@@ -74,8 +77,8 @@ class UserAccess {
         }
     }
 
-    public function getAllUsers(): array {
-        return array_merge($this->userProvider->getAllUsers(), $this->inbuiltUserProvider->getAllUsers());
+    public function getUsers(): array {
+        return array_merge($this->userProvider->getUsers(), $this->inbuiltUserProvider->getUsers());
     }
 
     public function isRoleExisting(string $id): bool {
@@ -98,8 +101,8 @@ class UserAccess {
         }
     }
 
-    public function getAllRoles(): array {
-        return array_merge($this->roleProvider->getAllRoles(), $this->inbuiltRoleProvider->getAllRoles());
+    public function getRoles(): array {
+        return array_merge($this->roleProvider->getRoles(), $this->inbuiltRoleProvider->getRoles());
     }
 
 }

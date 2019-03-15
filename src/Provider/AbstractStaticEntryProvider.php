@@ -9,12 +9,14 @@ use \UserAccess\Core\Provider\EntryProviderInterface;
 abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
 
     protected $entries = [];
+    protected $type;
 
-    public function __construct() {
+    public function __construct(string $type) {
+        $this->type = $type;
     }
 
     public function isEntryExisting(string $id): bool {
-        $id = strtoupper($id);
+        $id = \strtoupper($id);
         if (isset($this->entries[$id])) {
             return true;        
         } else {
@@ -22,8 +24,8 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
         }
     }
 
-    public function getEntry(string $id) {
-        $id = strtoupper($id);
+    public function getEntry(string $id): EntryInterface {
+        $id = \strtoupper($id);
         if ($this->isEntryExisting($id)) {
             return $this->entries[$id];
         } else {
@@ -47,6 +49,33 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
 
     public function getEntries(): array {
         return $this->entries;
+    }
+
+    public function findEntries(string $attributeName, string $attributeValue, string $comparisonOperator = UserAccess::COMPARISON_EQUAL): array {
+        $result = [];
+        foreach($this->entries as $entry){
+            $attributes = $entry->getAttributes();
+            if (array_key_exists($attributeName, $attributes)) {
+                switch ($comparisonOperator) {
+                    case UserAccess::COMPARISON_EQUAL:
+                        if (strcasecmp($attributes[$attributeName], $attributeValue) == 0) {
+                            $result[] = $entry;
+                        }
+                        break;
+                    case UserAccess::COMPARISON_LIKE:
+                        if (stripos($attributes[$attributeName], $attributeValue) !== false) {
+                            $result[] = $entry;
+                        }
+                        break;
+                    default:
+                        if (strcasecmp($attributes[$attributeName], $attributeValue) == 0) {
+                            $result[] = $entry;
+                        }
+                        break;
+                }
+            }
+        }
+        return $result;
     }
 
     public function updateEntry(EntryInterface $entry) {

@@ -8,7 +8,6 @@ use \UserAccess\Core\Entry\EntryInterface;
 abstract class AbstractEntry implements EntryInterface {
 
     protected $id = '';
-    protected $type = '';
     protected $displayName = '';
     protected $readOnly = false;
 
@@ -16,7 +15,7 @@ abstract class AbstractEntry implements EntryInterface {
         if (empty($id)) {
             throw new \Exception(UserAccess::EXCEPTION_MISSING_ID);
         }
-        $id = trim(strtoupper($id));
+        $id = trim(\strtoupper($id));
         if(!ctype_alnum($id)){
             throw new \Exception(UserAccess::EXCEPTION_INVALID_ID);
         }
@@ -28,7 +27,7 @@ abstract class AbstractEntry implements EntryInterface {
     }
 
     public function getType(): string {
-        return $this->type;
+        return $this::TYPE;
     }
 
     public function getDisplayName(): string {
@@ -50,7 +49,7 @@ abstract class AbstractEntry implements EntryInterface {
     public function getAttributes(): array {
         return $array = [
             'id' => $this->id,
-            'type' => $this->type,
+            'type' => $this::TYPE,
             'displayName' => $this->displayName,
             'readOnly' => $this->readOnly
         ];

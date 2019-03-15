@@ -10,6 +10,10 @@ use \UserAccess\Core\Entry\Role;
 
 class StaticRoleProvider extends AbstractStaticEntryProvider implements RoleProviderInterface {
 
+    function __construct() {
+        parent::__construct(Role::TYPE);
+    }
+
     public function isRoleExisting(string $id): bool {
         return parent::isEntryExisting($id);
     }
@@ -22,8 +26,12 @@ class StaticRoleProvider extends AbstractStaticEntryProvider implements RoleProv
         return parent::getEntry($id);
     }
 
-    public function getAllRoles(): array {
+    public function getRoles(): array {
         return parent::getEntries();
+    }
+
+    public function findRoles(string $attributeName, string $attributeValue, string $comparisonOperator): array {
+        return parent::findEntries($attributeName, $attributeValue, $comparisonOperator);
     }
 
     public function updateRole(RoleInterface $entry) {

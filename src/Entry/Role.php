@@ -8,7 +8,6 @@ use \UserAccess\Core\Entry\RoleInterface;
 
 class Role extends AbstractEntry implements RoleInterface {
 
-    protected $type = 'Role';
     private $description = '';
 
     public function getDescription(): string {

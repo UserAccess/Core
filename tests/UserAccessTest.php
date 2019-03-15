@@ -31,7 +31,7 @@ class UserAccessTest extends TestCase {
         $userAccess->getUserProvider()->createUser($user);
         $this->assertTrue($userAccess->isUserExisting('administrator'));
         $this->assertTrue($userAccess->isUserExisting('userid1'));
-        $users = $userAccess->getAllUsers();
+        $users = $userAccess->getUsers();
         $this->assertNotEmpty($users);
         $this->assertEquals(2, count($users));
         $user = $userAccess->getUser('administrator');
@@ -55,7 +55,7 @@ class UserAccessTest extends TestCase {
         $userAccess->getRoleProvider()->createRole($role);
         $this->assertTrue($userAccess->isRoleExisting('administrators'));
         $this->assertTrue($userAccess->isRoleExisting('roleid1'));
-        $roles = $userAccess->getAllRoles();
+        $roles = $userAccess->getRoles();
         $this->assertNotEmpty($roles);
         $this->assertEquals(2, count($roles));
         $role = $userAccess->getRole('administrators');

@@ -14,6 +14,10 @@ use \Filebase\Format\Json;
 
 class FilebaseRoleProvider extends AbstractFilebaseEntryProvider implements RoleProviderInterface {
 
+    public function __construct(string $directory = 'data', string $format = 'YAML') {
+        parent::__construct(Role::TYPE, $directory, $format);
+    }
+
     public function isRoleExisting(string $id): bool {
         return parent::isEntryExisting($id);
     }
@@ -26,8 +30,12 @@ class FilebaseRoleProvider extends AbstractFilebaseEntryProvider implements Role
         return parent::getEntry($id);
     }
 
-    public function getAllRoles(): array {
-        return parent::getAllEntries();
+    public function getRoles(): array {
+        return parent::getEntries();
+    }
+
+    public function findRoles(string $attributeName, string $attributeValue, string $comparisonOperator): array {
+        return parent::findEntries($attributeName, $attributeValue, $comparisonOperator);
     }
 
     public function updateRole(RoleInterface $entry) {

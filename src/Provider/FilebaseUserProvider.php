@@ -14,6 +14,10 @@ use \Filebase\Format\Json;
 
 class FilebaseUserProvider extends AbstractFilebaseEntryProvider implements UserProviderInterface {
 
+    public function __construct(string $directory = 'data', string $format = 'YAML') {
+        parent::__construct(User::TYPE, $directory, $format);
+    }
+
     public function isUserExisting(string $id): bool {
         return parent::isEntryExisting($id);
     }
@@ -26,8 +30,12 @@ class FilebaseUserProvider extends AbstractFilebaseEntryProvider implements User
         return parent::getEntry($id);
     }
 
-    public function getAllUsers(): array {
-        return parent::getAllEntries();
+    public function getUsers(): array {
+        return parent::getEntries();
+    }
+
+    public function findUsers(string $attributeName, string $attributeValue, string $comparisonOperator): array {
+        return parent::findEntries($attributeName, $attributeValue, $comparisonOperator);
     }
 
     public function updateUser(UserInterface $entry) {

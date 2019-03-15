@@ -13,7 +13,9 @@ interface UserProviderInterface extends EntryProviderInterface {
 
     public function getUser(string $id): ?UserInterface;
 
-    public function getAllUsers(): ?array;
+    public function getUsers(): ?array;
+
+    public function findUsers(string $attributeName, string $attributeValue, string $comparisonOperator): ?array;
 
     public function updateUser(UserInterface $user);
 
