@@ -7,6 +7,7 @@ use \UserAccess\Core\Provider\FilebaseRoleProvider;
 use \UserAccess\Core\Provider\StaticRoleProvider;
 use \UserAccess\Core\Entry\Role;
 
+
 class RoleProviderTest extends TestCase {
 
     public function test() {

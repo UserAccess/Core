@@ -23,6 +23,7 @@ class FilebaseUserProvider extends AbstractFilebaseEntryProvider implements User
     }
 
     public function getUser(string $id): UserInterface {
+        $id = strtoupper($id);
         if ($this->isUserExisting($id)) {
             $user = new User($id);
             $user->setAttributes($this->db->get($id)->toArray());

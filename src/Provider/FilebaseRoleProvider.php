@@ -23,6 +23,7 @@ class FilebaseRoleProvider extends AbstractFilebaseEntryProvider implements Role
     }
 
     public function getRole(string $id): RoleInterface {
+        $id = strtoupper($id);
         if ($this->isRoleExisting($id)) {
             $role = new Role($id);
             $role->setAttributes($this->db->get($id)->toArray());
