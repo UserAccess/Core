@@ -45,6 +45,10 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
         }
     }
 
+    public function getEntries(): array {
+        return $this->entries;
+    }
+
     public function updateEntry(EntryInterface $entry) {
         throw new \Exception(UserAccess::EXCEPTION_ENTRY_READONLY);
     }

@@ -23,7 +23,7 @@ class StaticRoleProvider extends AbstractStaticEntryProvider implements RoleProv
     }
 
     public function getAllRoles(): array {
-        return $this->entries;
+        return parent::getEntries();
     }
 
     public function updateRole(RoleInterface $entry) {

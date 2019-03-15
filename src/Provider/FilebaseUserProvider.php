@@ -23,25 +23,11 @@ class FilebaseUserProvider extends AbstractFilebaseEntryProvider implements User
     }
 
     public function getUser(string $id): UserInterface {
-        $id = strtoupper($id);
-        if ($this->isUserExisting($id)) {
-            $user = new User($id);
-            $user->setAttributes($this->db->get($id)->toArray());
-            return $user;
-        } else {
-            throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
-        }
+        return parent::getEntry($id);
     }
 
     public function getAllUsers(): array {
-        $result = [];
-        $items = $this->db->findAll();
-        foreach($items as $item){
-            $user = new User($item->id);
-            $user->setAttributes($item->toArray());
-            $result[] = $user;
-        }
-        return $result;
+        return parent::getAllEntries();
     }
 
     public function updateUser(UserInterface $entry) {

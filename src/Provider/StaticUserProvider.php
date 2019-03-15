@@ -23,7 +23,7 @@ class StaticUserProvider extends AbstractStaticEntryProvider implements UserProv
     }
 
     public function getAllUsers(): array {
-        return $this->entries;
+        return parent::getEntries();
     }
 
     public function updateUser(UserInterface $entry) {

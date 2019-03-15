@@ -4,6 +4,8 @@ namespace UserAccess\Core\Provider;
 
 use \UserAccess\Core\UserAccess;
 use \UserAccess\Core\Entry\EntryInterface;
+use \UserAccess\Core\Entry\Role;
+use \UserAccess\Core\Entry\User;
 use \UserAccess\Core\Provider\EntryProviderInterface;
 
 use \Filebase\Database;
@@ -66,7 +68,6 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
 
     public function createEntry(EntryInterface $entry) {
         $id = $entry->getId();
-        $type = $entry->getType();
         if ($this->isEntryExisting($id)) {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_ALREADY_EXIST);
         } else {
@@ -76,9 +77,55 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
         }
     }
 
+    public function getEntry(string $id): EntryInterface {
+        $id = strtoupper($id);
+        if ($this->isEntryExisting($id)) {
+            $attributes = $this->db->get($id)->toArray();
+            $type = $attributes['type'];
+            $entry;
+            switch ($type) {
+                case 'User':
+                    $entry = new User($id);
+                    break;
+                case 'Role':
+                    $entry = new Role($id);
+                    break;
+                default:
+                    throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
+            }
+            $entry->setAttributes($attributes);
+            return $entry;
+        } else {
+            throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
+        }
+    }
+
+    public function getAllEntries(): array {
+        $result = [];
+        $items = $this->db->findAll();
+        foreach($items as $item){
+            $id = $item->id;
+            $attributes = $item->toArray();
+            $type = $attributes['type'];
+            $entry;
+            switch ($type) {
+                case 'User':
+                    $entry = new User($id);
+                    break;
+                case 'Role':
+                    $entry = new Role($id);
+                    break;
+                default:
+                    throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
+            }
+            $entry->setAttributes($attributes);
+            $result[] = $entry;
+        }
+        return $result;
+    }
+    
     public function updateEntry(EntryInterface $entry) {
         $id = $entry->getId();
-        $type = $entry->getType();
         if ($this->isEntryExisting($id)) {
             $item = $this->db->get($id);
             $item->set($entry->getAttributes())->save();
