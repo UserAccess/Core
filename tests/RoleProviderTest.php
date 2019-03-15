@@ -11,7 +11,7 @@ class RoleProviderTest extends TestCase {
 
     public function test() {
         $this->performTest(new FilebaseRoleProvider('data/roles'));
-        $this->performTest(new StaticRoleProvider());
+        //$this->performTest(new StaticRoleProvider());
     }
 
     public function performTest(RoleProviderInterface $provider) {
