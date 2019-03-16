@@ -52,6 +52,7 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
     }
 
     public function findEntries(string $attributeName, string $attributeValue, string $comparisonOperator = UserAccess::COMPARISON_EQUAL): array {
+        $attributeValue = \trim($attributeValue);
         $result = [];
         foreach($this->entries as $entry){
             $attributes = $entry->getAttributes();

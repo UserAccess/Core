@@ -60,7 +60,7 @@ class UserProviderTest extends TestCase {
         $this->assertTrue($user_test1->authenticate('password1'));
         $this->assertTrue($user_test2->authenticate('password2'));
 
-        $find = $provider->findUsers('displayName', 'userid1 test', UserAccess::COMPARISON_EQUAL);
+        $find = $provider->findUsers('displayName', 'userid1 TEST ', UserAccess::COMPARISON_EQUAL);
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
         $find = $provider->findUsers('email', 'userid1.test@test.com', UserAccess::COMPARISON_EQUAL);

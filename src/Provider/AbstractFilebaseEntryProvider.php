@@ -87,10 +87,12 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
     }
 
     public function findEntries(string $attributeName, string $attributeValue, string $comparisonOperator): array {
+        $attributeValue = \trim($attributeValue);
         $items = [];
         switch ($comparisonOperator) {
             case UserAccess::COMPARISON_EQUAL:
-                $items = $this->db->where($attributeName, '=', $attributeValue)->resultDocuments();
+                //$items = $this->db->where($attributeName, '===', $attributeValue)->resultDocuments();
+                $items = $this->db->where($attributeName,'REGEX','/' . $attributeValue . '/i')->resultDocuments();
                 break;
             case UserAccess::COMPARISON_LIKE:
                 $items = $this->db->where($attributeName, 'LIKE', $attributeValue)->resultDocuments();

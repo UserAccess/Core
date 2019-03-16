@@ -51,7 +51,7 @@ class RoleProviderTest extends TestCase {
         $this->assertEquals('roleid2 test', $role_test2->getDisplayName());
         $this->assertEquals('roleid2 test description', $role_test2->getDescription());
 
-        $find = $provider->findRoles('displayName', 'roleid1 test', UserAccess::COMPARISON_EQUAL);
+        $find = $provider->findRoles('displayName', 'roleid1 TEST ', UserAccess::COMPARISON_EQUAL);
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
         $find = $provider->findRoles('description', 'roleid2 test description', UserAccess::COMPARISON_EQUAL);
