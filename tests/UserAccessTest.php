@@ -24,8 +24,8 @@ class UserAccessTest extends TestCase {
         if ($userAccess->getUserProvider()->isUserExisting('userid1')) {
             $userAccess->getUserProvider()->deleteUser('userid1');
         }
-        if ($userAccess->getUserProvider()->isUserExisting('userid2')) {
-            $userAccess->getUserProvider()->deleteUser('userid2');
+        if ($userAccess->getUserProvider()->isUserExisting('userid_2')) {
+            $userAccess->getUserProvider()->deleteUser('userid_2');
         }
         $user = new User('userid1');
         $userAccess->getUserProvider()->createUser($user);

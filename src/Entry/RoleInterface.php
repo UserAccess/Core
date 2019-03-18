@@ -8,4 +8,6 @@ interface RoleInterface extends EntryInterface {
     
     public function getDescription(): string;
 
+    public function setDescription(string $description);
+
 }
