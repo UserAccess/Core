@@ -15,12 +15,15 @@ class User extends AbstractEntry implements UserInterface {
     private $failedLoginAttempts = 0;
     private $roles = [];
 
-    public function getPasswordHash(): string {
-        return $this->passwordHash;
-    }
-
-    public function setPasswordHash(string $passwordHash) {
-        $this->passwordHash = trim($passwordHash);
+    public function setPassword(string $password) {
+        if (empty($password)) {
+            throw new \Exception(UserAccess::EXCEPTION_INVALID_PASSWORD);
+        }
+        $password = \trim($password);
+        if (\strlen($password) < 7) {
+            throw new \Exception(UserAccess::EXCEPTION_INVALID_PASSWORD);
+        }
+        $this->passwordHash = Password::hash($password);
     }
 
     public function authenticate(string $secret): bool {
@@ -91,7 +94,7 @@ class User extends AbstractEntry implements UserInterface {
         if (!empty($attributes['passwordHash'])) {
             $this->setPasswordHash($attributes['passwordHash']);
         } else if (!empty($attributes['password'])) {
-            $this->setPasswordHash(Password::hash(trim($attributes['password'])));
+            $this->setPassword($attributes['password']);
         }
         if (array_key_exists('email', $attributes)) {
             $this->setEmail($attributes['email']);
@@ -105,6 +108,12 @@ class User extends AbstractEntry implements UserInterface {
         if (array_key_exists('roles', $attributes)) {
             $this->setRoles($attributes['roles']);
         }
+    }
+
+    //////////////////////////////////////////////////
+
+    private function setPasswordHash(string $passwordHash) {
+        $this->passwordHash = trim($passwordHash);
     }
 
 }

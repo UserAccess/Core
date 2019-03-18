@@ -19,11 +19,13 @@ class UserAccess {
 
     const EXCEPTION_INVALID_ID = 'EXCEPTION_INVALID_ID';
     const EXCEPTION_INVALID_EMAIL = 'EXCEPTION_INVALID_EMAIL';
+    const EXCEPTION_INVALID_PASSWORD = 'EXCEPTION_INVALID_PASSWORD';
     const EXCEPTION_INVALID_VALUE = 'EXCEPTION_INVALID_VALUE';
     const EXCEPTION_ENTRY_ALREADY_EXIST = 'EXCEPTION_ENTRY_ALREADY_EXIST';
     const EXCEPTION_ENTRY_NOT_EXIST = 'EXCEPTION_ENTRY_NOT_EXIST';
     const EXCEPTION_ENTRY_READONLY = 'EXCEPTION_ENTRY_READONLY';
     const EXCEPTION_PROVIDER_NOT_EXIST = 'EXCEPTION_PROVIDER_NOT_EXIST';
+    const EXCEPTION_AUTHENTICATION_FAILED = 'EXCEPTION_AUTHENTICATION_FAILED';
 
     const COMPARISON_EQUAL = 'COMPARISON_EQUAL';
     const COMPARISON_LIKE = 'COMPARISON_LIKE';
@@ -81,6 +83,11 @@ class UserAccess {
         return array_merge($this->userProvider->getUsers(), $this->inbuiltUserProvider->getUsers());
     }
 
+    public function findUsers(string $attributeName, string $attributeValue, string $comparisonOperator): array {
+        return array_merge($this->userProvider->findUsers($attributeName, $attributeValue, $comparisonOperator), 
+            $this->inbuiltUserProvider->findUsers($attributeName, $attributeValue, $comparisonOperator));
+    }
+
     public function isRoleExisting(string $id): bool {
         if ($this->roleProvider->isRoleExisting($id)) {
             return true;
@@ -103,6 +110,11 @@ class UserAccess {
 
     public function getRoles(): array {
         return array_merge($this->roleProvider->getRoles(), $this->inbuiltRoleProvider->getRoles());
+    }
+
+    public function findRoles(string $attributeName, string $attributeValue, string $comparisonOperator): array {
+        return array_merge($this->roleProvider->findRoles($attributeName, $attributeValue, $comparisonOperator), 
+            $this->inbuiltRoleProvider->findRoles($attributeName, $attributeValue, $comparisonOperator));
     }
 
 }

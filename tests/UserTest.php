@@ -30,7 +30,7 @@ class UserTest extends TestCase {
         $user->removeRole('Administrator');
         $this->assertTrue($user->hasRole('Everyone'));
         $this->assertFalse($user->hasRole('Administrator'));
-        $user->setPasswordHash(Password::hash('password'));
+        $user->setPassword('password');
         $this->assertTrue($user->authenticate('password'));
         $this->assertFalse($user->authenticate('wrong_password'));
         $user->setFailedLoginAttempts(5);

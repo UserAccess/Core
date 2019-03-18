@@ -28,12 +28,12 @@ class UserProviderTest extends TestCase {
 
         $user1 = new User('userid1');
         $user1->setDisplayName('userid1 test');
-        $user1->setPasswordHash(Password::hash('password1'));
+        $user1->setPassword('password1');
         $user1->setEmail('userid1.test@test.com');
         $user1->setRoles(array('Everyone', 'Administrators'));
         $user2 = new User('USERID_2');
         $user2->setDisplayName('USERID_2 test');
-        $user2->setPasswordHash(Password::hash('password2'));
+        $user2->setPassword('password2');
         $user2->setEmail('userid_2.test@test.com');
         $user2->addRole('Everyone');
         $user2->addRole('Administrators');
@@ -79,7 +79,7 @@ class UserProviderTest extends TestCase {
 
         $user_test1 = $provider->getUser('userid1');
         $user_test1->setDisplayName('userid1 test update');
-        $user_test1->setPasswordHash(Password::hash('password1_update'));
+        $user_test1->setPassword('password1_update');
         $user_test1->setEmail('userid1.test_update@test.com');
         $user_test1->removeRole('Administrators');
         if (!$provider->isProviderReadOnly()) {

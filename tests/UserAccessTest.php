@@ -67,6 +67,14 @@ class UserAccessTest extends TestCase {
         $this->assertEquals('ROLEID1', $role->getId());
         $this->assertFalse($role->isReadOnly());
 
+        $find = $userAccess->findUsers('id', 's', UserAccess::COMPARISON_LIKE);
+        $this->assertNotEmpty($find);
+        $this->assertEquals(2, count($find));
+
+        $find = $userAccess->findRoles('id', 'r', UserAccess::COMPARISON_LIKE);
+        $this->assertNotEmpty($find);
+        $this->assertEquals(2, count($find));
+
     }
 
 }
