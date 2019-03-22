@@ -32,12 +32,9 @@ class UserAccess {
     const COMPARISON_LIKE = 'COMPARISON_LIKE';
 
     public function __construct(
-        UserProviderInterface $userProvider, 
-        RoleProviderInterface $roleProvider,
+        UserProviderInterface $userProvider = null, 
+        RoleProviderInterface $roleProvider = null,
         AuditLog $logger = null) {
-        if (empty($userProvider) || empty($roleProvider)) {
-            throw new \Exception(UserAccess::EXCEPTION_PROVIDER_NOT_EXIST);
-        }
         $this->userProvider = $userProvider;
         $this->inbuiltUserProvider = new StaticUserProvider();
         $this->roleProvider = $roleProvider;
@@ -45,6 +42,9 @@ class UserAccess {
     }
 
     public function getUserProvider(): UserProviderInterface {
+        if (empty($this->userProvider)) {
+            throw new \Exception(UserAccess::EXCEPTION_PROVIDER_NOT_EXIST);
+        }
         return $this->userProvider;
     }
 
@@ -53,6 +53,9 @@ class UserAccess {
     }
 
     public function getRoleProvider(): RoleProviderInterface {
+        if (empty($this->roleProvider)) {
+            throw new \Exception(UserAccess::EXCEPTION_PROVIDER_NOT_EXIST);
+        }
         return $this->roleProvider;
     }
 
@@ -61,7 +64,7 @@ class UserAccess {
     }
 
     public function isUserExisting(string $id): bool {
-        if ($this->userProvider->isUserExisting($id)) {
+        if (!empty($this->userProvider) && $this->userProvider->isUserExisting($id)) {
             return true;
         } else if ($this->inbuiltUserProvider->isUserExisting($id)) {
             return true;
@@ -71,7 +74,7 @@ class UserAccess {
     }
 
     public function getUser(string $id): UserInterface {
-        if ($this->userProvider->isUserExisting($id)) {
+        if (!empty($this->userProvider) && $this->userProvider->isUserExisting($id)) {
             return $this->userProvider->getUser($id);
         } else if ($this->inbuiltUserProvider->isUserExisting($id)) {
             return $this->inbuiltUserProvider->getUser($id);
@@ -81,16 +84,30 @@ class UserAccess {
     }
 
     public function getUsers(): array {
-        return array_merge($this->userProvider->getUsers(), $this->inbuiltUserProvider->getUsers());
+        $entries;
+        if (!empty($this->userProvider)) {
+            $entries = array_merge($this->userProvider->getUsers(), $this->inbuiltUserProvider->getUsers());
+        } else {
+            $entries = $this->inbuiltUserProvider->getUsers();
+        }
+        ksort($entries);
+        return $entries;
     }
 
     public function findUsers(string $attributeName, string $attributeValue, string $comparisonOperator): array {
-        return array_merge($this->userProvider->findUsers($attributeName, $attributeValue, $comparisonOperator), 
-            $this->inbuiltUserProvider->findUsers($attributeName, $attributeValue, $comparisonOperator));
+        $entries;
+        if (!empty($this->userProvider)) {
+            $entries = array_merge($this->userProvider->findUsers($attributeName, $attributeValue, $comparisonOperator), 
+                $this->inbuiltUserProvider->findUsers($attributeName, $attributeValue, $comparisonOperator));
+        } else {
+            $entries = $this->inbuiltUserProvider->findUsers($attributeName, $attributeValue, $comparisonOperator);
+        }  
+        ksort($entries);
+        return $entries;
     }
 
     public function isRoleExisting(string $id): bool {
-        if ($this->roleProvider->isRoleExisting($id)) {
+        if (!empty($this->roleProvider) && $this->roleProvider->isRoleExisting($id)) {
             return true;
         } else if ($this->inbuiltRoleProvider->isRoleExisting($id)) {
             return true;
@@ -100,7 +117,7 @@ class UserAccess {
     }
 
     public function getRole(string $id): RoleInterface {
-        if ($this->roleProvider->isRoleExisting($id)) {
+        if (!empty($this->roleProvider) && $this->roleProvider->isRoleExisting($id)) {
             return $this->roleProvider->getRole($id);
         } else if ($this->inbuiltRoleProvider->isRoleExisting($id)) {
             return $this->inbuiltRoleProvider->getRole($id);
@@ -110,12 +127,26 @@ class UserAccess {
     }
 
     public function getRoles(): array {
-        return array_merge($this->roleProvider->getRoles(), $this->inbuiltRoleProvider->getRoles());
+        $entries;
+        if (!empty($this->roleProvider)) {
+            $entries = array_merge($this->roleProvider->getRoles(), $this->inbuiltRoleProvider->getRoles());
+        } else {
+            $entries = $this->inbuiltRoleProvider->getRoles();
+        }
+        ksort($entries);
+        return $entries;
     }
 
     public function findRoles(string $attributeName, string $attributeValue, string $comparisonOperator): array {
-        return array_merge($this->roleProvider->findRoles($attributeName, $attributeValue, $comparisonOperator), 
+        $entries;
+        if (!empty($this->roleProvider)) {
+            $entries = array_merge($this->roleProvider->findRoles($attributeName, $attributeValue, $comparisonOperator), 
             $this->inbuiltRoleProvider->findRoles($attributeName, $attributeValue, $comparisonOperator));
+        } else {
+            $entries = $this->inbuiltRoleProvider->findRoles($attributeName, $attributeValue, $comparisonOperator);
+        }
+        ksort($entries);
+        return $entries;
     }
 
 }

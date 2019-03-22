@@ -140,7 +140,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
                     throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
             }
             $entry->setAttributes($attributes);
-            $result[] = $entry;
+            $result[$id] = $entry;
         }
         return $result;
     }

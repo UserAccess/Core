@@ -16,7 +16,7 @@ abstract class AbstractEntry implements EntryInterface {
         if (empty($id)) {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_ID);
         }
-        $id = trim(\strtoupper($id));
+        $id = \trim(\strtoupper($id));
         if(!\preg_match('/^[A-Z0-9_\-]{1,32}/', $id) || \strlen($id) > 32){
             throw new \Exception(UserAccess::EXCEPTION_INVALID_ID);
         }
@@ -36,7 +36,7 @@ abstract class AbstractEntry implements EntryInterface {
     }
 
     public function setDisplayName(string $displayName) {
-        $this->displayName = trim($displayName);
+        $this->displayName = \trim($displayName);
     }
 
     public function getDescription(): string {
@@ -44,7 +44,7 @@ abstract class AbstractEntry implements EntryInterface {
     }
 
     public function setDescription(string $description) {
-        $this->description = trim($description);
+        $this->description = \trim($description);
     }
 
     public function isReadOnly(): bool {

@@ -38,7 +38,7 @@ class User extends AbstractEntry implements UserInterface {
         if (!empty($email) && !filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_EMAIL);
         }
-        $this->email = trim(\strtolower($email));
+        $this->email = \trim(\strtolower($email));
     }
 
     public function isLocked(): bool {
@@ -113,7 +113,7 @@ class User extends AbstractEntry implements UserInterface {
     //////////////////////////////////////////////////
 
     private function setPasswordHash(string $passwordHash) {
-        $this->passwordHash = trim($passwordHash);
+        $this->passwordHash = \trim($passwordHash);
     }
 
 }
