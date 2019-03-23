@@ -1,12 +1,12 @@
 <?php
 
-namespace UserAccess\Core\Provider;
+namespace UserAccess\Provider;
 
-use \UserAccess\Core\UserAccess;
-use \UserAccess\Core\Provider\AbstractStaticEntryProvider;
-use \UserAccess\Core\Provider\RoleProviderInterface;
-use \UserAccess\Core\Entry\RoleInterface;
-use \UserAccess\Core\Entry\Role;
+use \UserAccess\UserAccess;
+use \UserAccess\Provider\AbstractStaticEntryProvider;
+use \UserAccess\Provider\RoleProviderInterface;
+use \UserAccess\Entry\RoleInterface;
+use \UserAccess\Entry\Role;
 
 class StaticRoleProvider extends AbstractStaticEntryProvider implements RoleProviderInterface {
 

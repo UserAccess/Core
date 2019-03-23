@@ -1,9 +1,9 @@
 <?php
 
-namespace UserAccess\Core\Provider;
+namespace UserAccess\Provider;
 
-use \UserAccess\Core\Entry\RoleInterface;
-use \UserAccess\Core\Provider\EntryProviderInterface;
+use \UserAccess\Entry\RoleInterface;
+use \UserAccess\Provider\EntryProviderInterface;
 
 interface RoleProviderInterface extends EntryProviderInterface {
 

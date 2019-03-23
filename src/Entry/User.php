@@ -1,11 +1,11 @@
 <?php
 
-namespace UserAccess\Core\Entry;
+namespace UserAccess\Entry;
 
-use \UserAccess\Core\UserAccess;
-use \UserAccess\Core\Entry\Entry;
-use \UserAccess\Core\Entry\UserInterface;
-use \UserAccess\Core\Util\Password;
+use \UserAccess\UserAccess;
+use \UserAccess\Entry\Entry;
+use \UserAccess\Entry\UserInterface;
+use \UserAccess\Util\Password;
 
 class User extends AbstractEntry implements UserInterface {
 

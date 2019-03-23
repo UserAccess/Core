@@ -1,0 +1,11 @@
+.pointer {
+    cursor: pointer;
+}
+
+.VueTables__search-field label {
+    vertical-align: middle;
+}
+
+.VueTables__limit-field label {
+    display: none !important;
+}

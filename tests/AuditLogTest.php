@@ -2,12 +2,12 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\Core\Util\AuditLog;
+use \UserAccess\Util\AuditLog;
 
 class AuditLogTest extends TestCase {
 
     public function test() {
-        $auditLog = new AuditLog('data/log');
+        $auditLog = new AuditLog('testdata/log');
         $this->assertNotEmpty($auditLog);
     }
 

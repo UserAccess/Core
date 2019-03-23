@@ -2,17 +2,17 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\Core\UserAccess;
-use \UserAccess\Core\Entry\User;
-use \UserAccess\Core\Entry\Role;
-use \UserAccess\Core\Provider\FilebaseUserProvider;
-use \UserAccess\Core\Provider\FilebaseRoleProvider;
+use \UserAccess\UserAccess;
+use \UserAccess\Entry\User;
+use \UserAccess\Entry\Role;
+use \UserAccess\Provider\FilebaseUserProvider;
+use \UserAccess\Provider\FilebaseRoleProvider;
 
 class UserAccessTest extends TestCase {
 
     public function test() {
-        $userProvider = new FilebaseUserProvider('data/users');
-        $roleProvider = new FilebaseRoleProvider('data/roles');
+        $userProvider = new FilebaseUserProvider('testdata/users');
+        $roleProvider = new FilebaseRoleProvider('testdata/roles');
         $userAccess = new UserAccess($userProvider, $roleProvider);
         $this->assertNotEmpty($userAccess->getUserProvider());
         $this->assertNotEmpty($userAccess->getInbuiltUserProvider());

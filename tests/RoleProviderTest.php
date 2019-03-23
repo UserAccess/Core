@@ -2,18 +2,18 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\Core\UserAccess;
-use \UserAccess\Core\Provider\RoleProviderInterface;
-use \UserAccess\Core\Provider\FilebaseRoleProvider;
-use \UserAccess\Core\Provider\StaticRoleProvider;
-use \UserAccess\Core\Entry\Role;
+use \UserAccess\UserAccess;
+use \UserAccess\Provider\RoleProviderInterface;
+use \UserAccess\Provider\FilebaseRoleProvider;
+use \UserAccess\Provider\StaticRoleProvider;
+use \UserAccess\Entry\Role;
 
 
 class RoleProviderTest extends TestCase {
 
     public function test() {
         $this->performTest(new StaticRoleProvider());
-        $this->performTest(new FilebaseRoleProvider('data/roles'));
+        $this->performTest(new FilebaseRoleProvider('testdata/roles'));
     }
 
     public function performTest(RoleProviderInterface $provider) {

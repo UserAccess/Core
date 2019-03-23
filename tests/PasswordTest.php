@@ -2,7 +2,7 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\Core\Util\Password;
+use \UserAccess\Util\Password;
 
 class PasswordTest extends TestCase {
 

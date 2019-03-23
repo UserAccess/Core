@@ -1,12 +1,12 @@
 <?php
 
-namespace UserAccess\Core\Provider;
+namespace UserAccess\Provider;
 
-use \UserAccess\Core\UserAccess;
-use \UserAccess\Core\Provider\AbstractFilebaseEntryProvider;
-use \UserAccess\Core\Provider\UserProviderInterface;
-use \UserAccess\Core\Entry\UserInterface;
-use \UserAccess\Core\Entry\User;
+use \UserAccess\UserAccess;
+use \UserAccess\Provider\AbstractFilebaseEntryProvider;
+use \UserAccess\Provider\UserProviderInterface;
+use \UserAccess\Entry\UserInterface;
+use \UserAccess\Entry\User;
 
 use \Filebase\Database;
 use \Filebase\Format\Yaml;

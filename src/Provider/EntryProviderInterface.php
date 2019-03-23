@@ -1,8 +1,8 @@
 <?php
 
-namespace UserAccess\Core\Provider;
+namespace UserAccess\Provider;
 
-use \UserAccess\Core\Entry\EntryInterface;
+use \UserAccess\Entry\EntryInterface;
 
 interface EntryProviderInterface {
 

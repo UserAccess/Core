@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Vue Table</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="userTable">
+            <v-client-table :data="tableData" :columns="columns" :options="options">
+                <div slot="beforeFilter" class="btn-toolbar mr-2" role="toolbar" aria-label="Toolbar with button groups">
+                    <button class="btn btn-secondary" v-on:click="search()">
+                        <i class="fa fa-refresh"></i>
+                        <span class="d-none d-md-inline">{{ $t('REFRESH') }}</span>
+                    </button>
+                </div>
+                <div slot="afterFilter" class="btn-toolbar ml-2" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group" role="group" aria-label="Button group">
+                        <button class="btn btn-success" v-on:click="actionCreate()" data-toggle="modal" data-target="#userEdit">
+                            <i class="fa fa-user-plus"></i>
+                            <span class="d-none d-md-inline">{{ $t('USER_CREATE') }}</span>
+                        </button>
+                        <button class="btn btn-success create-button" v-on:click="actionUpload()"
+                            data-toggle="modal" data-target="#userUpload">
+                            <i class="fa fa-upload"></i>
+                            <span class="d-none d-md-inline">{{$t('USER_UPLOAD') }}</span>
+                        </button>
+                    </div>
+                </div>
+                <a slot="actionEdit" slot-scope="props" class="fa fa-edit pointer text-success" v-on:click="actionEdit(props.row)"
+                    data-toggle="modal" data-target="#userEdit"></a>
+                <a slot="actionDelete" slot-scope="props" class="fa fa-trash pointer text-danger" v-on:click="actionDelete(props.row)"
+                    data-toggle="modal" data-target="#userDelete"></a>
+            </v-client-table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="userEdit" tabindex="-1" role="dialog" aria-labelledby="userEdit" aria-hidden="true">
+        <div class="modal-dialog modal-xl   " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" v-if="create">{{ $t('USER_CREATE') }}</h5>
+                    <h5 class="modal-title" v-else>{{ $t('USER_EDIT', [id]) }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div id="userEditAlert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+                        {{ alert }}
+                        <button type="button" class="close" aria-label="Close" v-on:click="hideAlert()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+
+
+                    <form>
+                        <div class="form-group">
+                            <label for="userEditId">{{ $t('USER_ID') }}</label>
+                            <input class="form-control" id="userEditId" name="USER_ID" aria-describedby="userEditIdHelp"
+                                v-bind:placeholder="$t('USER_ID')" v-model="id" v-validate="'required'" v-bind:disabled="!create" maxlength="32" pattern="^[a-zA-Z0-9_-]*$" aria-required="true">
+                            <small id="userEditIdHelp" class="form-text text-muted">{{ $t('USER_ID_HELP') }}</small>
+                            <small id="userEditIdError" class="form-text text-danger">{{ errors.first('USER_ID') }}</small>
+                        </div>
+
+                        <template v-if="create">
+                            <div class="form-group">
+                                <label for="userEditPassword">{{ $t('PASSWORD') }}</label>
+                                <input type="password" class="form-control" id="userEditPassword" name="PASSWORD" 
+                                    v-bind:placeholder="$t('PASSWORD')" v-model="password" v-validate="'required|min:8'" ref="PASSWORD" aria-required="true">
+                                <small id="userEditPasswordError" class="form-text text-danger">{{ errors.first('PASSWORD') }}</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="userEditPasswordConfirm">{{ $t('PASSWORD_CONFIRM') }}</label>
+                                <input type="password" class="form-control" id="userEditPasswordConfirm" name="PASSWORD_CONFIRM" 
+                                    v-bind:placeholder="$t('PASSWORD_CONFIRM')" v-model="passwordConfirm" v-validate="'required|confirmed:PASSWORD'" aria-required="true">
+                                <small id="userEditPasswordConfirmError" class="form-text text-danger">{{ errors.first('PASSWORD_CONFIRM') }}</small>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="form-group">
+                                <label for="userEditPassword">{{ $t('PASSWORD') }}</label>
+                                <input type="password" class="form-control" id="userEditPassword" name="PASSWORD" 
+                                    v-bind:placeholder="$t('PASSWORD')" v-model="password" v-validate="'min:8'" ref="PASSWORD">
+                                <small id="userEditPasswordError" class="form-text text-danger">{{ errors.first('PASSWORD') }}</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="userEditPasswordConfirm">{{ $t('PASSWORD_CONFIRM') }}</label>
+                                <input type="password" class="form-control" id="userEditPasswordConfirm" name="PASSWORD_CONFIRM" 
+                                    v-bind:placeholder="$t('PASSWORD_CONFIRM')" v-model="passwordConfirm" v-validate="'confirmed:PASSWORD'">
+                                <small id="userEditPasswordConfirmError" class="form-text text-danger">{{ errors.first('PASSWORD_CONFIRM') }}</small>
+                            </div>
+                        </template>
+
+                        <div class="form-group">
+                            <label for="userEditDisplayName">{{ $t('DISPLAY_NAME') }}</label>
+                            <input type="text" class="form-control" id="userEditDisplayName" 
+                                aria-describedby="userEditDisplayNameHelp" v-bind:placeholder="$t('DISPLAY_NAME')"
+                                v-model="displayName">
+                            <small id="userEditDisplayNameHelp" class="form-text text-muted">{{ $t('DISPLAY_NAME_HELP') }}</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="userEditEmail">{{ $t('EMAIL') }}</label>
+                            <input type="email" class="form-control" id="userEditEmail" name="EMAIL" 
+                                v-bind:placeholder="$t('EMAIL')" v-model="email" v-validate>
+                            <small id="userEditEmailHelp" class="form-text text-muted">{{ $t('EMAIL_HELP') }}</small>
+                            <small id="userEditEmailError" class="form-text text-danger">{{ errors.first('EMAIL') }}</small>
+                        </div>
+                        <!--<div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        </div>-->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('CANCEL') }}</button>
+                    <button type="button" class="btn btn-primary" v-on:click="saveUser()">{{ $t('SAVE') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="userDelete" tabindex="-1" role="dialog" aria-labelledby="userDelete" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ $t('USER_DELETE', [id]) }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ $t('USER_DELETE_CONFIRM', [id, displayName]) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> {{ $t('CANCEL') }}</button>
+                    <button type="button" class="btn btn-danger" v-on:click="deleteUser(id)"><i class="fa fa-trash"></i> {{ $t('DELETE') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../node_modules/vue-i18n/dist/vue-i18n.min.js"></script>
+    <script src="../../node_modules/vue-tables-2/dist/vue-tables-2.min.js"></script>
+    <script src="../../node_modules/vee-validate/dist/vee-validate.min.js"></script>
+    <script src="../../node_modules/vee-validate/dist/locale/en.js"></script>
+    <script src="../../node_modules/vee-validate/dist/locale/de.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>

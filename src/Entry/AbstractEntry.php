@@ -1,9 +1,9 @@
 <?php
 
-namespace UserAccess\Core\Entry;
+namespace UserAccess\Entry;
 
-use \UserAccess\Core\UserAccess;
-use \UserAccess\Core\Entry\EntryInterface;
+use \UserAccess\UserAccess;
+use \UserAccess\Entry\EntryInterface;
 
 abstract class AbstractEntry implements EntryInterface {
 

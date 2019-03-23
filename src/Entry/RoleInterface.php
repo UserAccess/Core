@@ -1,6 +1,6 @@
 <?php
 
-namespace UserAccess\Core\Entry;
+namespace UserAccess\Entry;
 
 interface RoleInterface extends EntryInterface {
 

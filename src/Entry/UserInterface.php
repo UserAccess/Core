@@ -1,6 +1,6 @@
 <?php
 
-namespace UserAccess\Core\Entry;
+namespace UserAccess\Entry;
 
 interface UserInterface extends EntryInterface {
 

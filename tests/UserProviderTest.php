@@ -2,18 +2,18 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\Core\UserAccess;
-use \UserAccess\Core\Provider\UserProviderInterface;
-use \UserAccess\Core\Provider\FilebaseUserProvider;
-use \UserAccess\Core\Provider\StaticUserProvider;
-use \UserAccess\Core\Entry\User;
-use \UserAccess\Core\Util\Password;
+use \UserAccess\UserAccess;
+use \UserAccess\Provider\UserProviderInterface;
+use \UserAccess\Provider\FilebaseUserProvider;
+use \UserAccess\Provider\StaticUserProvider;
+use \UserAccess\Entry\User;
+use \UserAccess\Util\Password;
 
 class UserProviderTest extends TestCase {
 
     public function test() {
         $this->performTest(new StaticUserProvider());
-        $this->performTest(new FilebaseUserProvider('data/users'));
+        $this->performTest(new FilebaseUserProvider('testdata/users'));
     }
 
     public function performTest(UserProviderInterface $provider) {

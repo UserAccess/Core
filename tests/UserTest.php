@@ -2,8 +2,8 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\Core\Entry\User;
-use \UserAccess\Core\Util\Password;
+use \UserAccess\Entry\User;
+use \UserAccess\Util\Password;
 
 class UserTest extends TestCase {
 

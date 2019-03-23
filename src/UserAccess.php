@@ -1,14 +1,14 @@
 <?php
 
-namespace UserAccess\Core;
+namespace UserAccess;
 
-use \UserAccess\Core\Entry\UserInterface;
-use \UserAccess\Core\Entry\RoleInterface;
-use \UserAccess\Core\Provider\UserProviderInterface;
-use \UserAccess\Core\Provider\StaticUserProvider;
-use \UserAccess\Core\Provider\RoleProviderInterface;
-use \UserAccess\Core\Provider\StaticRoleProvider;
-use \UserAccess\Core\Util\AuditLog;
+use \UserAccess\Entry\UserInterface;
+use \UserAccess\Entry\RoleInterface;
+use \UserAccess\Provider\UserProviderInterface;
+use \UserAccess\Provider\StaticUserProvider;
+use \UserAccess\Provider\RoleProviderInterface;
+use \UserAccess\Provider\StaticRoleProvider;
+use \UserAccess\Util\AuditLog;
 
 class UserAccess {
 

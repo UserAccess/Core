@@ -1,10 +1,10 @@
 <?php
 
-namespace UserAccess\Core\Provider;
+namespace UserAccess\Provider;
 
-use \UserAccess\Core\UserAccess;
-use \UserAccess\Core\Entry\EntryInterface;
-use \UserAccess\Core\Provider\EntryProviderInterface;
+use \UserAccess\UserAccess;
+use \UserAccess\Entry\EntryInterface;
+use \UserAccess\Provider\EntryProviderInterface;
 
 abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
 
