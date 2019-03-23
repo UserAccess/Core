@@ -1,4 +1,5 @@
-# core
-UserAccess Core
+# UserAccess
 
-[![Build Status](https://api.travis-ci.com/useraccess/core.svg)](https://travis-ci.com/useraccess/core)
+PHP User and Access Management
+
+[![Build Status](https://api.travis-ci.com/useraccess/useraccess.svg)](https://travis-ci.com/useraccess/useraccess)
