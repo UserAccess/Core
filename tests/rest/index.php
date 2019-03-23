@@ -2,8 +2,6 @@
 
 require '../../vendor/autoload.php';
 
-require '../../src/RestApp.php';
-
 use \UserAccess\UserAccess;
 use \UserAccess\Entry\User;
 use \UserAccess\Provider\FilebaseUserProvider;

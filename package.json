@@ -1,7 +1,7 @@
 {
-  "name": "useraccess_rest",
+  "name": "useraccess",
   "version": "0.0.1",
-  "description": "UserAccess Rest",
+  "description": "UserAccess",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/useraccess/rest.git"
+    "url": "git+https://github.com/useraccess/useraccess.git"
   },
   "author": "Jannis Rondorf",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/useraccess/rest/issues"
+    "url": "https://github.com/useraccess/useraccess/issues"
   },
-  "homepage": "https://github.com/useraccess/rest#readme",
+  "homepage": "https://github.com/useraccess/useraccess#readme",
   "dependencies": {
     "bootbox": "^5.0.1",
     "bootstrap": "^4.3.1",
