@@ -6,7 +6,9 @@ interface UserInterface extends EntryInterface {
 
     const TYPE = 'USER';
 
-    public function authenticate(string $secret): bool;
+    public function verifyPassword(string $password): bool;
+
+    public function setPassword(string $password);
 
     public function getEmail(): string;
 

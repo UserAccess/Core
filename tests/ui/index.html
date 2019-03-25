@@ -13,7 +13,6 @@
 </head>
 
 <body>
-
     <div class="container">
         <div id="userTable">
             <v-client-table :data="tableData" :columns="columns" :options="options">
@@ -45,7 +44,7 @@
     </div>
 
     <div class="modal fade" id="userEdit" tabindex="-1" role="dialog" aria-labelledby="userEdit" aria-hidden="true">
-        <div class="modal-dialog modal-xl   " role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" v-if="create">{{ $t('USER_CREATE') }}</h5>
@@ -62,8 +61,6 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-
-
 
                     <form>
                         <div class="form-group">

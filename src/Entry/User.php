@@ -15,6 +15,10 @@ class User extends AbstractEntry implements UserInterface {
     private $failedLoginAttempts = 0;
     private $roles = [];
 
+    public function verifyPassword(string $password): bool {
+        return Password::verify($password, $this->passwordHash);
+    }
+
     public function setPassword(string $password) {
         if (empty($password)) {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_PASSWORD);
@@ -24,10 +28,6 @@ class User extends AbstractEntry implements UserInterface {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_PASSWORD);
         }
         $this->passwordHash = Password::hash($password);
-    }
-
-    public function authenticate(string $secret): bool {
-        return Password::verify($secret, $this->passwordHash);
     }
 
     public function getEmail(): string {

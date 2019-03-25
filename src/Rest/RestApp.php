@@ -41,6 +41,22 @@ class RestApp {
 
         //////////////////////////////////////////////////
 
+        $this->app->post('/selfservice/login', function (Request $request, Response $response, array $args) {
+            $userAccess = $this->userAccess;
+            $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
+            if (!array_key_exists('id', $attributes) || !array_key_exists('password', $attributes)) {
+                throw new \Exception(UserAccess::EXCEPTION_AUTHENTICATION_FAILED);
+            }
+            $userAccess->selfserviceLogin($attributes['id'], $attributes['password']);
+        });
+
+        $this->app->post('/selfservice/logout', function (Request $request, Response $response, array $args) {
+            $userAccess = $this->userAccess;
+            $userAccess->selfserviceLogout();
+        });
+
+        //////////////////////////////////////////////////
+
         $this->app->get('/users', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $entries = $userAccess->getUsers();

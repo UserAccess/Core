@@ -3,10 +3,12 @@
 use \PHPUnit\Framework\TestCase;
 
 use \UserAccess\UserAccess;
+use \UserAccess\Auth\SessionAuthenticator;
 use \UserAccess\Entry\User;
 use \UserAccess\Entry\Role;
 use \UserAccess\Provider\FilebaseUserProvider;
 use \UserAccess\Provider\FilebaseRoleProvider;
+use \UserAccess\Util\AuditLog;
 
 class UserAccessTest extends TestCase {
 
@@ -28,6 +30,7 @@ class UserAccessTest extends TestCase {
             $userAccess->getUserProvider()->deleteUser('userid_2');
         }
         $user = new User('userid1');
+        $user->setPassword('password');
         $userAccess->getUserProvider()->createUser($user);
         $this->assertTrue($userAccess->isUserExisting('administrator'));
         $this->assertTrue($userAccess->isUserExisting('userid1'));
@@ -42,6 +45,7 @@ class UserAccessTest extends TestCase {
         $this->assertNotEmpty($user);
         $this->assertEquals('USERID1', $user->getId());
         $this->assertFalse($user->isReadOnly());
+        //$this->assertTrue($userAccess->selfserviceLogin('userid1', 'password'));
 
         $role = new Role('administrators');
         $userAccess->getInbuiltRoleProvider()->createRole($role);

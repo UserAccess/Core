@@ -2,6 +2,7 @@
 
 namespace UserAccess;
 
+use \UserAccess\Auth\AuthenticatorInterface;
 use \UserAccess\Entry\UserInterface;
 use \UserAccess\Entry\RoleInterface;
 use \UserAccess\Provider\UserProviderInterface;
@@ -16,6 +17,8 @@ class UserAccess {
     private $inbuiltUserProvider;
     private $roleProvider;
     private $inbuiltRoleProvider;
+    private $authenticator;
+    private $logger;
 
     const EXCEPTION_INVALID_ID = 'EXCEPTION_INVALID_ID';
     const EXCEPTION_INVALID_EMAIL = 'EXCEPTION_INVALID_EMAIL';
@@ -31,14 +34,21 @@ class UserAccess {
     const COMPARISON_EQUAL = 'COMPARISON_EQUAL';
     const COMPARISON_LIKE = 'COMPARISON_LIKE';
 
+    const SESSION_USERACCESS_USERID = 'SESSION_USERACCESS_USERID';
+    const SESSION_USERACCESS_AUTHENTICATED = 'SESSION_USERACCESS_AUTHENTICATED';
+
     public function __construct(
         UserProviderInterface $userProvider = null, 
         RoleProviderInterface $roleProvider = null,
+        AuthenticatorInterface $authenticator = null,
         AuditLog $logger = null) {
+
         $this->userProvider = $userProvider;
         $this->inbuiltUserProvider = new StaticUserProvider();
         $this->roleProvider = $roleProvider;
         $this->inbuiltRoleProvider = new StaticRoleProvider();
+        $this->authenticator = $authenticator;
+        $this->logger = $logger;
     }
 
     public function getUserProvider(): UserProviderInterface {
@@ -62,6 +72,36 @@ class UserAccess {
     public function getInbuiltRoleProvider(): RoleProviderInterface {
         return $this->inbuiltRoleProvider;
     }
+
+    public function getAuthenticator(): AuthenticatorInterface {
+        return $this->authenticator;
+    }
+
+    public function getLogger(): AuditLog {
+        return $this->logger;
+    }
+
+    //////////////////////////////////////////////////
+
+    public function selfserviceLogin(string $id, $password): bool {
+        if (empty($id) || empty($password) || !$this->isUserExisting($id)) {
+            throw new \Exception(UserAccess::EXCEPTION_AUTHENTICATION_FAILED);
+        }
+        $user = $this->getUser($id);
+        if ($user->isLocked() || $user->getFailedLoginAttempts() > 10) {
+            throw new \Exception(UserAccess::EXCEPTION_AUTHENTICATION_FAILED);
+        }
+        if (!$this->authenticator->login($user, $password)) {
+            throw new \Exception(UserAccess::EXCEPTION_AUTHENTICATION_FAILED);
+        }
+        return true;
+    }
+
+    public function selfserviceLogout() {
+        $this->authenticator->logout();
+    }
+
+    //////////////////////////////////////////////////
 
     public function isUserExisting(string $id): bool {
         if (!empty($this->userProvider) && $this->userProvider->isUserExisting($id)) {

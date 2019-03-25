@@ -31,11 +31,11 @@ class UserTest extends TestCase {
         $this->assertTrue($user->hasRole('Everyone'));
         $this->assertFalse($user->hasRole('Administrator'));
         $user->setPassword('password');
-        $this->assertTrue($user->authenticate('password'));
-        $this->assertFalse($user->authenticate('wrong_password'));
+        $this->assertTrue($user->verifyPassword('password'));
+        $this->assertFalse($user->verifyPassword('wrong_password'));
         $user->setFailedLoginAttempts(5);
         $this->assertEquals(5, $user->getFailedLoginAttempts());
-        $this->assertFalse($user->authenticate('wrong_password'));
+        $this->assertFalse($user->verifyPassword('wrong_password'));
         //print_r($user->getAttributes());
 
     }

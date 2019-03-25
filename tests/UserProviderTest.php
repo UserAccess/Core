@@ -57,8 +57,8 @@ class UserProviderTest extends TestCase {
         $this->assertEquals('userid_2.test@test.com', $user_test2->getEmail());
         $this->assertTrue($user_test2->hasRole('Administrators'));
         $this->assertFalse($user_test2->hasRole('Guests'));
-        $this->assertTrue($user_test1->authenticate('password1'));
-        $this->assertTrue($user_test2->authenticate('password2'));
+        $this->assertTrue($user_test1->verifyPassword('password1'));
+        $this->assertTrue($user_test2->verifyPassword('password2'));
 
         $find = $provider->findUsers('displayName', 'userid1 TEST ', UserAccess::COMPARISON_EQUAL);
         $this->assertNotEmpty($find);
@@ -88,8 +88,8 @@ class UserProviderTest extends TestCase {
             $this->assertEquals('USERID1', $user_test1->getId());
             $this->assertEquals('userid1 test update', $user_test1->getDisplayName());
             $this->assertEquals('userid1.test_update@test.com', $user_test1->getEmail());
-            $this->assertFalse($user_test1->authenticate('password1'));
-            $this->assertTrue($user_test1->authenticate('password1_update'));
+            $this->assertFalse($user_test1->verifyPassword('password1'));
+            $this->assertTrue($user_test1->verifyPassword('password1_update'));
             $this->assertTrue($user_test1->hasRole('Everyone'));
             $this->assertFalse($user_test1->hasRole('Administrators'));
         }
