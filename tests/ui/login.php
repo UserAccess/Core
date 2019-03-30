@@ -4,8 +4,8 @@ print_r($_SESSION);
 ?>
 <!doctype html>
 <html lang="en">
-
 <head>
+    <!--https://getbootstrap.com/docs/4.3/examples/sign-in/-->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -44,6 +44,7 @@ print_r($_SESSION);
                 </div>
             </form>
             <button type="submit" class="btn btn-primary" v-on:click="login()">{{ $t('LOGIN') }}</button>
+            <button type="submit" class="btn btn-primary" v-on:click="logout()">{{ $t('LOGOUT') }}</button>
         </div>
     </div>
 

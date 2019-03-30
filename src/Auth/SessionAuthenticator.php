@@ -21,8 +21,8 @@ class SessionAuthenticator implements AuthenticatorInterface {
     }
 
     public function logout() {
-        $_SESSION[UserAccess::SESSION_USERACCESS_USERID] = NULL;
-        $_SESSION[UserAccess::SESSION_USERACCESS_AUTHENTICATED] = NULL;
+        unset($_SESSION[UserAccess::SESSION_USERACCESS_USERID]);
+        unset($_SESSION[UserAccess::SESSION_USERACCESS_AUTHENTICATED]);
         \session_start();
         \session_regenerate_id();
     }

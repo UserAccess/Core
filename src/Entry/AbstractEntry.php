@@ -16,8 +16,8 @@ abstract class AbstractEntry implements EntryInterface {
         if (empty($id)) {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_ID);
         }
-        $id = \trim(\strtoupper($id));
-        if(!\preg_match('/^[A-Z0-9_\-]{1,32}/', $id) || \strlen($id) > 32){
+        $id = \trim(\strtolower($id));
+        if(!\preg_match('/^[a-z0-9_\-]{1,32}/', $id) || \strlen($id) > 32){
             throw new \Exception(UserAccess::EXCEPTION_INVALID_ID);
         }
         $this->id = $id;

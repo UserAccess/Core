@@ -1,6 +1,6 @@
 $(function () {
 
-    var baseUrl = '../rest/selfservice';
+    var baseUrl = '../rest/v1/Me';
 
     Vue.use(VueI18n);
 
@@ -138,7 +138,30 @@ $(function () {
                                 password: userLogin.password
                             }
                         }).done(function(data, textStatus, jqXHR){
-                            location.reload();
+                            //location.reload();
+                            alert("login successfull");
+                        }).fail(function(data, textStatus, jqXHR){
+                            userLogin.$data.alert = i18n.t(data.responseText);
+                            $('#userLoginAlert').removeClass('d-none');
+                        });
+                    }
+                });
+            },
+            logout: function(){
+                this.$validator.validate().then(function(result){
+                    if (!result) {
+                        // do stuff if not valid.
+                    } else {
+                        $.ajax({
+                            url: baseUrl + '/' + 'logout',
+                            method: 'POST',
+                            data: {
+                                // id: userLogin.id,
+                                // password: userLogin.password
+                            }
+                        }).done(function(data, textStatus, jqXHR){
+                            //location.reload();
+                            alert("logout successfull");
                         }).fail(function(data, textStatus, jqXHR){
                             userLogin.$data.alert = i18n.t(data.responseText);
                             $('#userLoginAlert').removeClass('d-none');

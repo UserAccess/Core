@@ -39,11 +39,11 @@ class UserAccessTest extends TestCase {
         $this->assertEquals(2, count($users));
         $user = $userAccess->getUser('administrator');
         $this->assertNotEmpty($user);
-        $this->assertEquals('ADMINISTRATOR', $user->getId());
+        $this->assertEquals('administrator', $user->getId());
         $this->assertTrue($user->isReadOnly());
         $user = $userAccess->getUser('userid1');
         $this->assertNotEmpty($user);
-        $this->assertEquals('USERID1', $user->getId());
+        $this->assertEquals('userid1', $user->getId());
         $this->assertFalse($user->isReadOnly());
         //$this->assertTrue($userAccess->selfserviceLogin('userid1', 'password'));
 
@@ -64,11 +64,11 @@ class UserAccessTest extends TestCase {
         $this->assertEquals(2, count($roles));
         $role = $userAccess->getRole('administrators');
         $this->assertNotEmpty($role);
-        $this->assertEquals('ADMINISTRATORS', $role->getId());
+        $this->assertEquals('administrators', $role->getId());
         $this->assertTrue($role->isReadOnly());
         $role = $userAccess->getRole('roleid1');
         $this->assertNotEmpty($role);
-        $this->assertEquals('ROLEID1', $role->getId());
+        $this->assertEquals('roleid1', $role->getId());
         $this->assertFalse($role->isReadOnly());
 
         $find = $userAccess->findUsers('id', 's', UserAccess::COMPARISON_LIKE);

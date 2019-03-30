@@ -1,6 +1,6 @@
 $(function () {
 
-    var baseUrl = '../rest/users';
+    var baseUrl = '../rest/v1/Users';
 
     Vue.use(VueTables.ClientTable, {}, false, 'bootstrap4');
     Vue.use(VueI18n);

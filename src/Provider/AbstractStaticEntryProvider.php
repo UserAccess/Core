@@ -16,7 +16,7 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
     }
 
     public function isEntryExisting(string $id): bool {
-        $id = \strtoupper($id);
+        $id = \strtolower($id);
         if (isset($this->entries[$id])) {
             return true;        
         } else {
@@ -25,7 +25,7 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
     }
 
     public function getEntry(string $id): EntryInterface {
-        $id = \strtoupper($id);
+        $id = \strtolower($id);
         if ($this->isEntryExisting($id)) {
             return $this->entries[$id];
         } else {

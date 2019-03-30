@@ -41,7 +41,7 @@ class RestApp {
 
         //////////////////////////////////////////////////
 
-        $this->app->post('/selfservice/login', function (Request $request, Response $response, array $args) {
+        $this->app->post('/v1/Me/login', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             if (!array_key_exists('id', $attributes) || !array_key_exists('password', $attributes)) {
@@ -50,14 +50,14 @@ class RestApp {
             $userAccess->selfserviceLogin($attributes['id'], $attributes['password']);
         });
 
-        $this->app->post('/selfservice/logout', function (Request $request, Response $response, array $args) {
+        $this->app->post('/v1/Me/logout', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $userAccess->selfserviceLogout();
         });
 
         //////////////////////////////////////////////////
 
-        $this->app->get('/users', function (Request $request, Response $response, array $args) {
+        $this->app->get('/v1/Users', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $entries = $userAccess->getUsers();
             $result = [];
@@ -67,13 +67,13 @@ class RestApp {
             return $response->withJson($result);
         });
 
-        $this->app->get('/users/{id}', function (Request $request, Response $response, array $args) {
+        $this->app->get('/v1/Users/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $entry = $userAccess->getUser($args['id']);
             return $response->withJson(self::filterPassword($entry->getAttributes()));
         });
 
-        $this->app->post('/users', function (Request $request, Response $response, array $args) {
+        $this->app->post('/v1/Users', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             if (!array_key_exists('id', $attributes)) {
@@ -93,7 +93,7 @@ class RestApp {
             $userAccess->getUserProvider()->createUser($entry);
         });
 
-        $this->app->post('/users/{id}', function (Request $request, Response $response, array $args) {
+        $this->app->post('/v1/Users/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             $entry = $userAccess->getUser($args['id']);
@@ -110,14 +110,14 @@ class RestApp {
             $userAccess->getUserProvider()->updateUser($entry);
         });
 
-        $this->app->delete('/users/{id}', function (Request $request, Response $response, array $args) {
+        $this->app->delete('/v1/Users/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $userAccess->getUserProvider()->deleteUser($args['id']);
         });
 
         //////////////////////////////////////////////////
 
-        $this->app->get('/roles', function (Request $request, Response $response, array $args) {
+        $this->app->get('/v1/Roles', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $entries = $userAccess->getRoles();
             $result = [];
@@ -127,13 +127,13 @@ class RestApp {
             return $response->withJson($result);
         });
 
-        $this->app->get('/roles/{id}', function (Request $request, Response $response, array $args) {
+        $this->app->get('/v1/Roles/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $entry = $userAccess->getRole($args['id']);
             return $response->withJson($entry->getAttributes());
         });
 
-        $this->app->post('/roles', function (Request $request, Response $response, array $args) {
+        $this->app->post('/v1/Roles', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             $entry = new Role($attributes['id']);
@@ -141,7 +141,7 @@ class RestApp {
             $userAccess->getRoleProvider()->createRole($entry);
         });
 
-        $this->app->post('/roles/{id}', function (Request $request, Response $response, array $args) {
+        $this->app->post('/v1/Roles/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             $entry = $userAccess->getRole($args['id']);
@@ -149,7 +149,7 @@ class RestApp {
             $userAccess->getRoleProvider()->updateRole($entry);
         });
 
-        $this->app->delete('/roles/{id}', function (Request $request, Response $response, array $args) {
+        $this->app->delete('/v1/Roles/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $userAccess->getRoleProvider()->deleteRole($args['id']);
         });

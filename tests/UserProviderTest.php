@@ -49,11 +49,11 @@ class UserProviderTest extends TestCase {
         $this->assertEquals($provider->isProviderReadOnly(), $user_test1->isReadOnly());
         $this->assertEquals($provider->isProviderReadOnly(), $user_test2->isReadOnly());
 
-        $this->assertEquals('USERID1', $user_test1->getId());
+        $this->assertEquals('userid1', $user_test1->getId());
         $this->assertEquals('userid1.test@test.com', $user_test1->getEmail());
         $this->assertTrue($user_test1->hasRole('Administrators'));
         $this->assertFalse($user_test1->hasRole('Guests'));
-        $this->assertEquals('USERID_2', $user_test2->getId());
+        $this->assertEquals('userid_2', $user_test2->getId());
         $this->assertEquals('userid_2.test@test.com', $user_test2->getEmail());
         $this->assertTrue($user_test2->hasRole('Administrators'));
         $this->assertFalse($user_test2->hasRole('Guests'));
@@ -85,7 +85,7 @@ class UserProviderTest extends TestCase {
         if (!$provider->isProviderReadOnly()) {
             $provider->updateUser($user_test1);
             $user_test1 = $provider->getUser('userid1');
-            $this->assertEquals('USERID1', $user_test1->getId());
+            $this->assertEquals('userid1', $user_test1->getId());
             $this->assertEquals('userid1 test update', $user_test1->getDisplayName());
             $this->assertEquals('userid1.test_update@test.com', $user_test1->getEmail());
             $this->assertFalse($user_test1->verifyPassword('password1'));

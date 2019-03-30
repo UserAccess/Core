@@ -23,7 +23,7 @@ class RestAppTest extends TestCase {
     public function test11_CreateUser() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'POST',
-            'REQUEST_URI'    => '/users',
+            'REQUEST_URI'    => '/v1/Users'
         ]);
         $req = Request::createFromEnvironment($env);
         $attributes = array();
@@ -37,7 +37,7 @@ class RestAppTest extends TestCase {
     public function test12_UpdateUser() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'POST',
-            'REQUEST_URI'    => '/users/rest_u_1',
+            'REQUEST_URI'    => '/v1/Users/rest_u_1',
         ]);
         $req = Request::createFromEnvironment($env);
         $attributes = array();
@@ -51,7 +51,7 @@ class RestAppTest extends TestCase {
     public function test13_GetUser() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI'    => '/users/rest_u_1'
+            'REQUEST_URI'    => '/v1/Users/rest_u_1'
             ]);
         $req = Request::createFromEnvironment($env);
         $this->app->getApp()->getContainer()['request'] = $req;
@@ -63,7 +63,7 @@ class RestAppTest extends TestCase {
     public function test14_GetUsers() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI'    => '/users'
+            'REQUEST_URI'    => '/v1/Users'
             ]);
         $req = Request::createFromEnvironment($env);
         $this->app->getApp()->getContainer()['request'] = $req;
@@ -74,7 +74,7 @@ class RestAppTest extends TestCase {
     public function test15_DeleteUser() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'DELETE',
-            'REQUEST_URI'    => '/users/rest_u_1'
+            'REQUEST_URI'    => '/v1/Users/rest_u_1'
             ]);
         $req = Request::createFromEnvironment($env);
         $this->app->getApp()->getContainer()['request'] = $req;
@@ -85,7 +85,7 @@ class RestAppTest extends TestCase {
     public function test16_GetUserFail() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI'    => '/users/rest_u_1'
+            'REQUEST_URI'    => '/v1/Users/rest_u_1'
             ]);
         $req = Request::createFromEnvironment($env);
         $this->app->getApp()->getContainer()['request'] = $req;
@@ -99,7 +99,7 @@ class RestAppTest extends TestCase {
     public function test21_CreateRole() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'POST',
-            'REQUEST_URI'    => '/roles',
+            'REQUEST_URI'    => '/v1/Roles',
         ]);
         $req = Request::createFromEnvironment($env);
         $attributes = array();
@@ -113,7 +113,7 @@ class RestAppTest extends TestCase {
     public function test22_UpdateRole() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'POST',
-            'REQUEST_URI'    => '/roles/rest_r_1',
+            'REQUEST_URI'    => '/v1/Roles/rest_r_1',
         ]);
         $req = Request::createFromEnvironment($env);
         $attributes = array();
@@ -127,7 +127,7 @@ class RestAppTest extends TestCase {
     public function test23_GetRole() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI'    => '/roles/rest_r_1'
+            'REQUEST_URI'    => '/v1/Roles/rest_r_1'
             ]);
         $req = Request::createFromEnvironment($env);
         $this->app->getApp()->getContainer()['request'] = $req;
@@ -139,7 +139,7 @@ class RestAppTest extends TestCase {
     public function test24_GetRoles() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI'    => '/roles'
+            'REQUEST_URI'    => '/v1/Roles'
             ]);
         $req = Request::createFromEnvironment($env);
         $this->app->getApp()->getContainer()['request'] = $req;
@@ -150,7 +150,7 @@ class RestAppTest extends TestCase {
     public function test25_DeleteRole() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'DELETE',
-            'REQUEST_URI'    => '/roles/rest_r_1'
+            'REQUEST_URI'    => '/v1/Roles/rest_r_1'
             ]);
         $req = Request::createFromEnvironment($env);
         $this->app->getApp()->getContainer()['request'] = $req;
@@ -161,7 +161,7 @@ class RestAppTest extends TestCase {
     public function test26_GetRoleFail() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI'    => '/roles/rest_r_1'
+            'REQUEST_URI'    => '/v1/Roles/rest_r_1'
             ]);
         $req = Request::createFromEnvironment($env);
         $this->app->getApp()->getContainer()['request'] = $req;

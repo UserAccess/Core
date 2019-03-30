@@ -44,10 +44,10 @@ class RoleProviderTest extends TestCase {
         $this->assertEquals($provider->isProviderReadOnly(), $role_test1->isReadOnly());
         $this->assertEquals($provider->isProviderReadOnly(), $role_test2->isReadOnly());
 
-        $this->assertEquals('ROLEID1', $role_test1->getId());
+        $this->assertEquals('roleid1', $role_test1->getId());
         $this->assertEquals('roleid1 test', $role_test1->getDisplayName());
         $this->assertEquals('roleid1 test description', $role_test1->getDescription());
-        $this->assertEquals('ROLEID2', $role_test2->getId());
+        $this->assertEquals('roleid2', $role_test2->getId());
         $this->assertEquals('roleid2 test', $role_test2->getDisplayName());
         $this->assertEquals('roleid2 test description', $role_test2->getDescription());
 
@@ -74,7 +74,7 @@ class RoleProviderTest extends TestCase {
             $role_test1->setDescription('roleid1 test description update');
             $provider->updateRole($role_test1);
             $role_test1 = $provider->getRole('roleid1');
-            $this->assertEquals('ROLEID1', $role_test1->getId());
+            $this->assertEquals('roleid1', $role_test1->getId());
             $this->assertEquals('roleid1 test description update', $role_test1->getDescription());
         }
 

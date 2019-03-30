@@ -40,7 +40,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
     }
 
     public function isEntryExisting(string $id): bool {
-        $id = \strtoupper($id);
+        $id = \strtolower($id);
         return $this->db->has($id);
     }
 
@@ -60,7 +60,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
     }
 
     public function getEntry(string $id): EntryInterface {
-        $id = \strtoupper($id);
+        $id = \strtolower($id);
         if ($this->isEntryExisting($id)) {
             $attributes = $this->db->get($id)->toArray();
             $entry;
@@ -115,7 +115,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
     }
 
     public function deleteEntry(string $id) {
-        $id = \strtoupper($id);
+        $id = \strtolower($id);
         if ($this->isEntryExisting($id)) {
             $this->db->delete($this->db->get($id));
         } else {
