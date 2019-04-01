@@ -6,20 +6,15 @@ use \UserAccess\UserAccess;
 use \UserAccess\Provider\AbstractStaticEntryProvider;
 use \UserAccess\Provider\UserProviderInterface;
 use \UserAccess\Entry\UserInterface;
-use \UserAccess\Entry\User;
 
 class StaticUserProvider extends AbstractStaticEntryProvider implements UserProviderInterface {
 
     function __construct() {
-        parent::__construct(User::TYPE);
+        parent::__construct(UserInterface::TYPE);
     }
 
-    public function isUserExisting(string $id): bool {
-        return parent::isEntryExisting($id);
-    }
-
-    public function createUser(UserInterface $entry) {
-        parent::createEntry($entry);
+    public function createUser(UserInterface $entry): UserInterface {
+        return parent::createEntry($entry);
     }
 
     public function getUser(string $id): UserInterface {
@@ -34,12 +29,16 @@ class StaticUserProvider extends AbstractStaticEntryProvider implements UserProv
         return parent::findEntries($attributeName, $attributeValue, $comparisonOperator);
     }
 
-    public function updateUser(UserInterface $entry) {
-        parent::updateEntry($entry);
+    public function updateUser(UserInterface $entry): UserInterface {
+        return parent::updateEntry($entry);
     }
 
     public function deleteUser(string $id) {
         parent::deleteEntry($id);
+    }
+
+    public function deleteUsers() {
+        parent::deleteEntries();
     }
 
 }

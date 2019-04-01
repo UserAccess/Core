@@ -8,27 +8,40 @@ use \UserAccess\Entry\EntryInterface;
 abstract class AbstractEntry implements EntryInterface {
 
     protected $id = '';
+    protected $uniqueName = '';
     protected $displayName = '';
     protected $description = '';
     protected $readOnly = false;
 
-    public function __construct(string $id) {
-        if (empty($id)) {
-            throw new \Exception(UserAccess::EXCEPTION_INVALID_ID);
+    public function __construct(string $uniqueName) {
+        if (empty($uniqueName)) {
+            throw new \Exception(UserAccess::EXCEPTION_INVALID_UNIQUE_NAME);
         }
-        $id = \trim(\strtolower($id));
-        if(!\preg_match('/^[a-z0-9_\-]{1,32}/', $id) || \strlen($id) > 32){
-            throw new \Exception(UserAccess::EXCEPTION_INVALID_ID);
+        $uniqueName = \trim(\strtolower($uniqueName));
+        if(!\preg_match('/^[a-z0-9_\-]{1,32}/', $uniqueName) || \strlen($uniqueName) > 32){
+            throw new \Exception(UserAccess::EXCEPTION_INVALID_UNIQUE_NAME);
         }
-        $this->id = $id;
+        $this->uniqueName = $uniqueName;
     }
 
     public function getId(): string {
         return $this->id;
     }
 
+    public function setId(string $id) {
+        $this->id = \trim($id);
+    }
+
     public function getType(): string {
         return $this::TYPE;
+    }
+
+    public function getUniqueName(): string {
+        return $this->uniqueName;
+    }
+
+    public function setUniqueName(string $uniqueName) {
+        $this->uniqueName = \trim($uniqueName);
     }
 
     public function getDisplayName(): string {
@@ -57,17 +70,24 @@ abstract class AbstractEntry implements EntryInterface {
 
     public function getAttributes(): array {
         return $array = [
-            'id' => $this->id,
+            'id' => $this->getId(),
             'type' => $this::TYPE,
-            'displayName' => $this->displayName,
-            'description' => $this->description,
-            'readOnly' => $this->readOnly
+            'uniqueName' => $this->getUniqueName(),
+            'displayName' => $this->getDisplayName(),
+            'description' => $this->getDescription(),
+            'readOnly' => $this->isReadOnly()
         ];
     }
 
     public function setAttributes(array $attributes) {
         // id is read only
         // type is read only
+        if (array_key_exists('id', $attributes)) {
+            $this->setId($attributes['id']);
+        }
+        if (array_key_exists('uniqueName', $attributes)) {
+            $this->setUniqueName($attributes['uniqueName']);
+        }
         if (array_key_exists('displayName', $attributes)) {
             $this->setDisplayName($attributes['displayName']);
         }

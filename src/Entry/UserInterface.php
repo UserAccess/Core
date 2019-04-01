@@ -4,7 +4,11 @@ namespace UserAccess\Entry;
 
 interface UserInterface extends EntryInterface {
 
-    const TYPE = 'USER';
+    const TYPE = 'User';
+
+    public function getUserName(): string;
+
+    // public function setUserName(string $userName);
 
     public function verifyPassword(string $password): bool;
 
@@ -14,13 +18,13 @@ interface UserInterface extends EntryInterface {
 
     public function setEmail(string $email);
 
-    public function isLocked(): bool;
+    public function isActive(): bool;
 
-    public function setLocked(bool $locked);
+    public function setActive(bool $active);
 
-    public function getFailedLoginAttempts(): int;
+    public function getLoginAttempts(): int;
 
-    public function setFailedLoginAttempts(int $failedLoginAttempts);
+    public function setLoginAttempts(int $LoginAttempts);
 
     public function hasRole(string $role): bool;
 

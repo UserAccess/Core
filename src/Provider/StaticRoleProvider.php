@@ -6,20 +6,15 @@ use \UserAccess\UserAccess;
 use \UserAccess\Provider\AbstractStaticEntryProvider;
 use \UserAccess\Provider\RoleProviderInterface;
 use \UserAccess\Entry\RoleInterface;
-use \UserAccess\Entry\Role;
 
 class StaticRoleProvider extends AbstractStaticEntryProvider implements RoleProviderInterface {
 
     function __construct() {
-        parent::__construct(Role::TYPE);
+        parent::__construct(RoleInterface::TYPE);
     }
 
-    public function isRoleExisting(string $id): bool {
-        return parent::isEntryExisting($id);
-    }
-
-    public function createRole(RoleInterface $entry) {
-        parent::createEntry($entry);
+    public function createRole(RoleInterface $entry): RoleInterface {
+        return parent::createEntry($entry);
     }
 
     public function getRole(string $id): RoleInterface {
@@ -34,12 +29,16 @@ class StaticRoleProvider extends AbstractStaticEntryProvider implements RoleProv
         return parent::findEntries($attributeName, $attributeValue, $comparisonOperator);
     }
 
-    public function updateRole(RoleInterface $entry) {
-        parent::updateEntry($entry);
+    public function updateRole(RoleInterface $entry): RoleInterface {
+        return parent::updateEntry($entry);
     }
 
     public function deleteRole(string $id) {
         parent::deleteEntry($id);
+    }
+
+    public function deleteRoles() {
+        parent::deleteEntries();
     }
 
 }

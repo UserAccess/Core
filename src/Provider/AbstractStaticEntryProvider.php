@@ -15,35 +15,41 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
         $this->type = $type;
     }
 
-    public function isEntryExisting(string $id): bool {
-        $id = \strtolower($id);
-        if (isset($this->entries[$id])) {
+    public function isIdExisting(string $id): bool {
+        return $this->isUniqueNameExisting($id);
+    }
+
+    public function isUniqueNameExisting(string $uniqueName): bool {
+        $uniqueName = \trim(\strtolower($uniqueName));
+        if (isset($this->entries[$uniqueName])) {
             return true;        
         } else {
             return false;
         }
     }
 
-    public function getEntry(string $id): EntryInterface {
-        $id = \strtolower($id);
-        if ($this->isEntryExisting($id)) {
-            return $this->entries[$id];
+    public function getEntry(string $uniqueName): EntryInterface {
+        $uniqueName = \trim(\strtolower($uniqueName));
+        if ($this->isUniqueNameExisting($uniqueName)) {
+            return $this->entries[$uniqueName];
         } else {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
         }
     }
 
-    public function isProviderReadOnly(): bool {
+    public function isReadOnly(): bool {
         return true;
     }
 
-    public function createEntry(EntryInterface $entry) {
-        $id = $entry->getId();
-        if ($this->isEntryExisting($id)) {
+    public function createEntry(EntryInterface $entry): EntryInterface {
+        $uniqueName = $entry->getUniqueName();
+        if ($this->isUniqueNameExisting($uniqueName)) {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_ALREADY_EXIST);
         } else {
-            $entry->setReadOnly($this->isProviderReadOnly());
-            $this->entries[$id] = $entry;
+            $entry->setReadOnly($this->isReadOnly());
+            $entry->setId($uniqueName);
+            $this->entries[$uniqueName] = $entry;
+            return $entry;
         }
     }
 
@@ -79,11 +85,15 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
         return $result;
     }
 
-    public function updateEntry(EntryInterface $entry) {
+    public function updateEntry(EntryInterface $entry): EntryInterface {
         throw new \Exception(UserAccess::EXCEPTION_ENTRY_READONLY);
     }
 
-    public function deleteEntry(string $id) {
+    public function deleteEntry(string $uniqueName) {
+        throw new \Exception(UserAccess::EXCEPTION_ENTRY_READONLY);
+    }
+
+    public function deleteEntries() {
         throw new \Exception(UserAccess::EXCEPTION_ENTRY_READONLY);
     }
 

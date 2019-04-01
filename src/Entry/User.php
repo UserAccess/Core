@@ -11,9 +11,13 @@ class User extends AbstractEntry implements UserInterface {
 
     private $passwordHash = '';
     private $email = '';
-    private $locked = false;
-    private $failedLoginAttempts = 0;
+    private $active = true;
+    private $loginAttempts = 0;
     private $roles = [];
+
+    public function getUserName(): string {
+        return parent::getUniqueName();
+    }
 
     public function verifyPassword(string $password): bool {
         return Password::verify($password, $this->passwordHash);
@@ -41,20 +45,20 @@ class User extends AbstractEntry implements UserInterface {
         $this->email = \trim(\strtolower($email));
     }
 
-    public function isLocked(): bool {
-        return $this->locked;
+    public function isActive(): bool {
+        return $this->active;
     }
 
-    public function setLocked(bool $locked) {
-        $this->locked = $locked;
+    public function setActive(bool $active) {
+        $this->active = $active;
     }
 
-    public function getFailedLoginAttempts(): int {
-        return $this->failedLoginAttempts;
+    public function getLoginAttempts(): int {
+        return $this->loginAttempts;
     }
 
-    public function setFailedLoginAttempts(int $failedLoginAttempts) {
-        $this->failedLoginAttempts = $failedLoginAttempts;
+    public function setLoginAttempts(int $loginAttempts) {
+        $this->loginAttempts = $loginAttempts;
     }
 
     public function addRole(string $role) {
@@ -81,16 +85,20 @@ class User extends AbstractEntry implements UserInterface {
 
     public function getAttributes(): array {
         $attributes = parent::getAttributes();
-        $attributes['passwordHash'] = $this->passwordHash;
-        $attributes['email'] = $this->email;
-        $attributes['locked'] = $this->locked;
-        $attributes['failedLoginAttempts'] = $this->failedLoginAttempts;
-        $attributes['roles'] = $this->roles;
+        $attributes['userName'] = $this->getUniqueName();
+        $attributes['passwordHash'] = $this->getPasswordHash();
+        $attributes['email'] = $this->getEmail();
+        $attributes['active'] = $this->isActive();
+        $attributes['loginAttempts'] = $this->getLoginAttempts();
+        $attributes['roles'] = $this->getRoles();
         return $attributes;
     }
 
     public function setAttributes(array $attributes) {
         parent::setAttributes($attributes);
+        // if (array_key_exists('userName', $attributes)) {
+        //     $this->setUserName($attributes['userName']);
+        // }
         if (!empty($attributes['passwordHash'])) {
             $this->setPasswordHash($attributes['passwordHash']);
         } else if (!empty($attributes['password'])) {
@@ -99,11 +107,11 @@ class User extends AbstractEntry implements UserInterface {
         if (array_key_exists('email', $attributes)) {
             $this->setEmail($attributes['email']);
         }
-        if (array_key_exists('locked', $attributes)) {
-            $this->setLocked($attributes['locked']);
+        if (array_key_exists('active', $attributes)) {
+            $this->setActive($attributes['active']);
         }
-        if (array_key_exists('failedLoginAttempts', $attributes)) {
-            $this->setFailedLoginAttempts($attributes['failedLoginAttempts']);
+        if (array_key_exists('loginAttempts', $attributes)) {
+            $this->setLoginAttempts($attributes['loginAttempts']);
         }
         if (array_key_exists('roles', $attributes)) {
             $this->setRoles($attributes['roles']);
@@ -114,6 +122,10 @@ class User extends AbstractEntry implements UserInterface {
 
     private function setPasswordHash(string $passwordHash) {
         $this->passwordHash = \trim($passwordHash);
+    }
+
+    private function getPasswordHash(): string {
+        return $this->passwordHash;
     }
 
 }

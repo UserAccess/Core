@@ -6,7 +6,7 @@ use \UserAccess\Entry\UserInterface;
 
 interface AuthenticatorInterface {
 
-    public function login(UserInterface $user, string $secret): bool;
+    public function login(string $userName, string $secret);
 
     public function logout();
 

@@ -4,13 +4,21 @@ namespace UserAccess\Entry;
 
 interface EntryInterface {
 
-    public function __construct(string $id);
+    public function __construct(string $uniqueName);
+
+    public function getType(): string;
 
     public function getId(): string;
 
+    public function setId(string $id);
+
+    public function getUniqueName(): string;
+
+    // public function setUniqueName(string $uniqueName);
+
     public function getDisplayName(): string;
 
-    public function setDisplayName(string $id);
+    public function setDisplayName(string $displayName);
 
     public function getDescription(): string;
 

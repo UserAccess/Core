@@ -7,18 +7,18 @@ use \UserAccess\Provider\EntryProviderInterface;
 
 interface RoleProviderInterface extends EntryProviderInterface {
 
-    public function isRoleExisting(string $id): bool;
+    public function createRole(RoleInterface $role): RoleInterface;
 
-    public function createRole(RoleInterface $role);
-
-    public function getRole(string $id): ?RoleInterface;
+    public function getRole(string $id): RoleInterface;
 
     public function getRoles(): ?array;
 
-    public function findRoles(string $attributeName, string $attributeValue, string $comparisonOperator): ?array;
+    public function findRoles(string $attributeName, string $attributeValue, string $comparisonOperator): array;
 
-    public function updateRole(RoleInterface $role);
+    public function updateRole(RoleInterface $role): RoleInterface;
 
-    public function deleteRole(string $id);
+    public function deleteRole(string $uniqueName);
+
+    public function deleteRoles();
 
 }

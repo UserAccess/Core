@@ -59,48 +59,49 @@ class RestApp {
 
         $this->app->get('/v1/Users', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
-            $entries = $userAccess->getUsers();
+            $entries = $userAccess->getUserProvider()->getUsers();
             $result = [];
             foreach($entries as $entry){
                 $result[] = self::filterPassword($entry->getAttributes());
             }
-            return $response->withJson($result);
+            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson($result);
         });
 
         $this->app->get('/v1/Users/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
-            $entry = $userAccess->getUser($args['id']);
-            return $response->withJson(self::filterPassword($entry->getAttributes()));
+            $entry = $userAccess->getUserProvider()->getUser($args['id']);
+            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson(self::filterPassword($entry->getAttributes()));
         });
 
         $this->app->post('/v1/Users', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
-            if (!array_key_exists('id', $attributes)) {
-                throw new \Exception(UserAccess::EXCEPTION_INVALID_ID);
+            if (!array_key_exists('userName', $attributes)) {
+                throw new \Exception(UserAccess::EXCEPTION_INVALID_UNIQUE_NAME);
             }
-            if ($userAccess->isUserExisting($attributes['id'])) {
+            if ($userAccess->getUserProvider()->isUniqueNameExisting($attributes['userName'])) {
                 throw new \Exception(UserAccess::EXCEPTION_ENTRY_ALREADY_EXIST);
             }
             if (!empty($attributes['email'])) {
-                $find = $userAccess->findUsers('email', $attributes['email'], UserAccess::COMPARISON_EQUAL);
+                $find = $userAccess->getUserProvider()->findUsers('email', $attributes['email'], UserAccess::COMPARISON_EQUAL);
                 if (!empty($find)) {
                     throw new \Exception(UserAccess::EXCEPTION_DUPLICATE_EMAIL);
                 }
             }
-            $entry = new User($attributes['id']);
+            $entry = new User($attributes['userName']);
             $entry->setAttributes($attributes);
-            $userAccess->getUserProvider()->createUser($entry);
+            $entry = $userAccess->getUserProvider()->createUser($entry);
+            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson(self::filterPassword($entry->getAttributes()));
         });
 
         $this->app->post('/v1/Users/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
-            $entry = $userAccess->getUser($args['id']);
+            $entry = $userAccess->getUserProvider()->getUser($args['id']);
             if (!empty($attributes['email'])) {
                 $email = \trim(\strtolower($attributes['email']));
                 if (strcasecmp($email, $entry->getEmail()) != 0) {
-                    $find = $userAccess->findUsers('email', $email, UserAccess::COMPARISON_EQUAL);
+                    $find = $userAccess->getUserProvider()->findUsers('email', $email, UserAccess::COMPARISON_EQUAL);
                     if (!empty($find)) {
                         throw new \Exception(UserAccess::EXCEPTION_DUPLICATE_EMAIL);
                     }
@@ -108,56 +109,61 @@ class RestApp {
             }
             $entry->setAttributes($attributes);
             $userAccess->getUserProvider()->updateUser($entry);
+            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson(self::filterPassword($entry->getAttributes()));
         });
 
         $this->app->delete('/v1/Users/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $userAccess->getUserProvider()->deleteUser($args['id']);
+            return $response->withStatus(204);
         });
 
         //////////////////////////////////////////////////
 
         $this->app->get('/v1/Roles', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
-            $entries = $userAccess->getRoles();
+            $entries = $userAccess->getRoleProvider()->getRoles();
             $result = [];
             foreach($entries as $entry){
                 $result[] = $entry->getAttributes();
             }
-            return $response->withJson($result);
+            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson($result);
         });
 
         $this->app->get('/v1/Roles/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
-            $entry = $userAccess->getRole($args['id']);
-            return $response->withJson($entry->getAttributes());
+            $entry = $userAccess->getRoleProvider()->getRole($args['id']);
+            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
         });
 
         $this->app->post('/v1/Roles', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
-            $entry = new Role($attributes['id']);
+            $entry = new Role($attributes['uniqueName']);
             $entry->setAttributes($attributes);
-            $userAccess->getRoleProvider()->createRole($entry);
+            $entry = $userAccess->getRoleProvider()->createRole($entry);
+            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
         });
 
         $this->app->post('/v1/Roles/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
-            $entry = $userAccess->getRole($args['id']);
+            $entry = $userAccess->getRoleProvider()->getRole($args['id']);
             $entry->setAttributes($attributes);
-            $userAccess->getRoleProvider()->updateRole($entry);
+            $entry = $userAccess->getRoleProvider()->updateRole($entry);
+            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
         });
 
         $this->app->delete('/v1/Roles/{id}', function (Request $request, Response $response, array $args) {
             $userAccess = $this->userAccess;
             $userAccess->getRoleProvider()->deleteRole($args['id']);
+            return $response->withStatus(204);
         });
 
     }
 
-    public function run() {
-        return $this->app->run();
+    public function run($silent = false) {
+        return $this->app->run($silent);
     }
 
     public function getApp() {

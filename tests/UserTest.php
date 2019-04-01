@@ -10,17 +10,17 @@ class UserTest extends TestCase {
     public function test() {
         $user = new User('userid1');
         $this->assertNotEmpty($user);
-        $this->assertEquals('userid1', $user->getId());
+        $this->assertEquals('userid1', $user->getUniqueName());
         $userAttributes = $user->getAttributes();
-        $this->assertEquals('userid1', $userAttributes['id']);
+        $this->assertEquals('userid1', $userAttributes['uniqueName']);
         $user->setDisplayName('User 1');
         $this->assertEquals('User 1', $user->getDisplayName());
         $user->setEmail('userid1.test@test.com');
         $this->assertEquals('userid1.test@test.com', $user->getEmail());
-        $user->setLocked(false);
-        $this->assertFalse($user->isLocked());
-        $user->setLocked(true);
-        $this->assertTrue($user->isLocked());
+        $user->setActive(false);
+        $this->assertFalse($user->isActive());
+        $user->setActive(true);
+        $this->assertTrue($user->isActive());
         $user->addRole('Everyone');
         $this->assertTrue($user->hasRole('Everyone'));
         $user->addRole('Administrator');
@@ -33,8 +33,8 @@ class UserTest extends TestCase {
         $user->setPassword('password');
         $this->assertTrue($user->verifyPassword('password'));
         $this->assertFalse($user->verifyPassword('wrong_password'));
-        $user->setFailedLoginAttempts(5);
-        $this->assertEquals(5, $user->getFailedLoginAttempts());
+        $user->setLoginAttempts(5);
+        $this->assertEquals(5, $user->getLoginAttempts());
         $this->assertFalse($user->verifyPassword('wrong_password'));
         //print_r($user->getAttributes());
 

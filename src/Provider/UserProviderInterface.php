@@ -7,18 +7,18 @@ use \UserAccess\Provider\EntryProviderInterface;
 
 interface UserProviderInterface extends EntryProviderInterface {
 
-    public function isUserExisting(string $id): bool;
+    public function createUser(UserInterface $user): UserInterface;
 
-    public function createUser(UserInterface $user);
+    public function getUser(string $id): UserInterface;
 
-    public function getUser(string $id): ?UserInterface;
+    public function getUsers(): array;
 
-    public function getUsers(): ?array;
+    public function findUsers(string $attributeName, string $attributeValue, string $comparisonOperator): array;
 
-    public function findUsers(string $attributeName, string $attributeValue, string $comparisonOperator): ?array;
+    public function updateUser(UserInterface $user): UserInterface;
 
-    public function updateUser(UserInterface $user);
+    public function deleteUser(string $uniqueName);
 
-    public function deleteUser(string $id);
+    public function deleteUsers();
 
 }
