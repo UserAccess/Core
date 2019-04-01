@@ -2,7 +2,6 @@
 
 namespace UserAccess;
 
-use \UserAccess\Auth\AuthenticatorInterface;
 use \UserAccess\Entry\UserInterface;
 use \UserAccess\Entry\RoleInterface;
 use \UserAccess\Provider\UserProviderInterface;
@@ -17,7 +16,6 @@ class UserAccess {
     private $inbuiltUserProvider;
     private $roleProvider;
     private $inbuiltRoleProvider;
-    private $authenticator;
     private $logger;
 
     const EXCEPTION_INVALID_ID = 'EXCEPTION_INVALID_ID';
@@ -44,7 +42,6 @@ class UserAccess {
 
         $this->userProvider = $userProvider;
         $this->roleProvider = $roleProvider;
-        $this->authenticator = $authenticator;
         $this->logger = $logger;
     }
 
