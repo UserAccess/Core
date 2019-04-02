@@ -17,7 +17,7 @@ class UserAccessTest extends TestCase {
         $userProvider->deleteUsers();
         $roleProvider = new FilebaseRoleProvider('testdata/roles');
         $roleProvider->deleteRoles();
-        $userAccess = new UserAccess($userProvider, $roleProvider);
+        $userAccess = new UserAccess($userProvider, null, $roleProvider);
         $this->assertNotEmpty($userAccess->getUserProvider());
         $this->assertNotEmpty($userAccess->getRoleProvider());
 

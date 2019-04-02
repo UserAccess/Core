@@ -3,8 +3,6 @@
 namespace UserAccess\Entry;
 
 use \UserAccess\UserAccess;
-use \UserAccess\Entry\Entry;
-use \UserAccess\Entry\UserInterface;
 use \UserAccess\Util\Password;
 
 class User extends AbstractEntry implements UserInterface {
@@ -14,6 +12,7 @@ class User extends AbstractEntry implements UserInterface {
     private $active = true;
     private $loginAttempts = 0;
     private $roles = [];
+    private $groups = [];
 
     public function getUserName(): string {
         return parent::getUniqueName();
@@ -32,6 +31,13 @@ class User extends AbstractEntry implements UserInterface {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_PASSWORD);
         }
         $this->passwordHash = Password::hash($password);
+    }
+
+    public function setPasswordHash(string $passwordHash) {
+        if (empty($passwordHash)) {
+            throw new \Exception(UserAccess::EXCEPTION_INVALID_PASSWORD);
+        }
+        $this->passwordHash = \trim($passwordHash);
     }
 
     public function getEmail(): string {
@@ -61,17 +67,29 @@ class User extends AbstractEntry implements UserInterface {
         $this->loginAttempts = $loginAttempts;
     }
 
-    public function addRole(string $role) {
-        $this->roles[] = $role;
+    public function getGroups(): array {
+        return $this->groups;
     }
 
-    public function removeRole(string $role) {
-        if (($key = array_search($role, $this->roles)) !== false) {
-            unset($this->roles[$key]);
+    public function setGroups(array $groups) {
+        $this->groups = $groups;
+    }
+
+    public function hasGroup(string $group): bool {
+        return in_array($group, $this->groups);
+    }
+
+    public function addGroup(string $group) {
+        $this->groups[] = $group;
+    }
+
+    public function removeGroup(string $group) {
+        if (($key = array_search($group, $this->groups)) !== false) {
+            unset($this->groups[$key]);
         }
     }
 
-    public function getRoles() {
+    public function getRoles(): array {
         return $this->roles;
     }
 
@@ -83,6 +101,16 @@ class User extends AbstractEntry implements UserInterface {
         return in_array($role, $this->roles);
     }
 
+    public function addRole(string $role) {
+        $this->roles[] = $role;
+    }
+
+    public function removeRole(string $role) {
+        if (($key = array_search($role, $this->roles)) !== false) {
+            unset($this->roles[$key]);
+        }
+    }
+
     public function getAttributes(): array {
         $attributes = parent::getAttributes();
         $attributes['userName'] = $this->getUniqueName();
@@ -90,6 +118,7 @@ class User extends AbstractEntry implements UserInterface {
         $attributes['email'] = $this->getEmail();
         $attributes['active'] = $this->isActive();
         $attributes['loginAttempts'] = $this->getLoginAttempts();
+        $attributes['groups'] = $this->getGroups();
         $attributes['roles'] = $this->getRoles();
         return $attributes;
     }
@@ -113,16 +142,15 @@ class User extends AbstractEntry implements UserInterface {
         if (array_key_exists('loginAttempts', $attributes)) {
             $this->setLoginAttempts($attributes['loginAttempts']);
         }
+        if (array_key_exists('groups', $attributes)) {
+            $this->setRoles($attributes['groups']);
+        }
         if (array_key_exists('roles', $attributes)) {
             $this->setRoles($attributes['roles']);
         }
     }
 
     //////////////////////////////////////////////////
-
-    private function setPasswordHash(string $passwordHash) {
-        $this->passwordHash = \trim($passwordHash);
-    }
 
     private function getPasswordHash(): string {
         return $this->passwordHash;

@@ -4,6 +4,6 @@ namespace UserAccess\Entry;
 
 use \UserAccess\UserAccess;
 
-class Role extends AbstractEntry implements RoleInterface {
+class Group extends AbstractEntry implements GroupInterface {
 
 }

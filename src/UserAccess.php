@@ -12,12 +12,6 @@ use \UserAccess\Util\AuditLog;
 
 class UserAccess {
 
-    private $userProvider;
-    private $inbuiltUserProvider;
-    private $roleProvider;
-    private $inbuiltRoleProvider;
-    private $logger;
-
     const EXCEPTION_INVALID_ID = 'EXCEPTION_INVALID_ID';
     const EXCEPTION_INVALID_UNIQUE_NAME = 'EXCEPTION_INVALID_UNIQUE_NAME';
     const EXCEPTION_INVALID_EMAIL = 'EXCEPTION_INVALID_EMAIL';
@@ -30,23 +24,37 @@ class UserAccess {
     const EXCEPTION_AUTHENTICATION_FAILED = 'EXCEPTION_AUTHENTICATION_FAILED';
 
     const COMPARISON_EQUAL = 'COMPARISON_EQUAL';
+    const COMPARISON_EQUAL_IGNORE_CASE = 'COMPARISON_EQUAL_IGNORE_CASE';
     const COMPARISON_LIKE = 'COMPARISON_LIKE';
 
     const SESSION_USERACCESS_USERID = 'SESSION_USERACCESS_USERID';
     const SESSION_USERACCESS_AUTHENTICATED = 'SESSION_USERACCESS_AUTHENTICATED';
 
+    private $userProvider;
+    private $inbuiltUserProvider;
+    private $groupProvider;
+    private $roleProvider;
+    private $inbuiltRoleProvider;
+    private $logger;
+
     public function __construct(
-        UserProviderInterface $userProvider = null, 
+        UserProviderInterface $userProvider = null,
+        GroupProviderInterface $groupProvider = null,
         RoleProviderInterface $roleProvider = null,
         AuditLog $logger = null) {
 
         $this->userProvider = $userProvider;
+        $this->GroupProvider = $groupProvider;
         $this->roleProvider = $roleProvider;
         $this->logger = $logger;
     }
 
     public function getUserProvider(): UserProviderInterface {
         return $this->userProvider;
+    }
+
+    public function getGroupProvider(): GroupPviderInterface {
+        return $this->groupProvider;
     }
 
     public function getRoleProvider(): RoleProviderInterface {

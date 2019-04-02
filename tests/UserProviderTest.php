@@ -64,10 +64,10 @@ class UserProviderTest extends TestCase {
         $this->assertTrue($user_test1->verifyPassword('password1'));
         $this->assertTrue($user_test2->verifyPassword('password2'));
 
-        $find = $provider->findUsers('displayName', 'userid1 TEST ', UserAccess::COMPARISON_EQUAL);
+        $find = $provider->findUsers('displayName', 'userid1 TEST ', UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
-        $find = $provider->findUsers('email', 'userid1.test@test.com', UserAccess::COMPARISON_EQUAL);
+        $find = $provider->findUsers('email', 'userid1.test@test.com', UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
         $find = $provider->findUsers('displayName', 'USERID', UserAccess::COMPARISON_LIKE);

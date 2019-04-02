@@ -23,7 +23,7 @@ class RestAppTest extends TestCase {
     public function setUp() {
         $userProvider = new FilebaseUserProvider('testdata/users');
         $roleProvider = new FilebaseRoleProvider('testdata/roles');
-        $userAccess = new UserAccess($userProvider, $roleProvider);
+        $userAccess = new UserAccess($userProvider, null, $roleProvider);
         $this->app = new RestApp($userAccess);
     }
 
@@ -56,7 +56,7 @@ class RestAppTest extends TestCase {
         ]);
         $req = Request::createFromEnvironment($env);
         $this->app->getApp()->getContainer()['request'] = $req;
-        $response = $this->app->run(false);
+        $response = $this->app->run(true);
         $this->assertSame($response->getStatusCode(), 201);
         $this->assertNotEmpty((string)$response->getBody());
     }
@@ -72,7 +72,7 @@ class RestAppTest extends TestCase {
         $attributes['displayName'] = $this->userName . '_test';
         $req = $req->withParsedBody($attributes);
         $this->app->getApp()->getContainer()['request'] = $req;
-        $response = $this->app->run(false);
+        $response = $this->app->run(true);
         $this->assertSame($response->getStatusCode(), 200);
     }
 
@@ -84,7 +84,7 @@ class RestAppTest extends TestCase {
         ]);
         $req = Request::createFromEnvironment($env);
         $this->app->getApp()->getContainer()['request'] = $req;
-        $response = $this->app->run(false);
+        $response = $this->app->run(true);
         $this->assertSame($response->getStatusCode(), 201);
         $this->assertNotEmpty((string)$response->getBody());
         $attributes = json_decode($response->getBody(), true);

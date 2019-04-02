@@ -3,7 +3,6 @@
 namespace UserAccess\Entry;
 
 use \UserAccess\UserAccess;
-use \UserAccess\Entry\EntryInterface;
 
 abstract class AbstractEntry implements EntryInterface {
 
@@ -24,16 +23,16 @@ abstract class AbstractEntry implements EntryInterface {
         $this->uniqueName = $uniqueName;
     }
 
+    public function getType(): string {
+        return $this::TYPE;
+    }
+
     public function getId(): string {
         return $this->id;
     }
 
     public function setId(string $id) {
         $this->id = \trim($id);
-    }
-
-    public function getType(): string {
-        return $this::TYPE;
     }
 
     public function getUniqueName(): string {
@@ -70,8 +69,8 @@ abstract class AbstractEntry implements EntryInterface {
 
     public function getAttributes(): array {
         return $array = [
-            'id' => $this->getId(),
             'type' => $this::TYPE,
+            'id' => $this->getId(),
             'uniqueName' => $this->getUniqueName(),
             'displayName' => $this->getDisplayName(),
             'description' => $this->getDescription(),
@@ -80,14 +79,13 @@ abstract class AbstractEntry implements EntryInterface {
     }
 
     public function setAttributes(array $attributes) {
-        // id is read only
         // type is read only
         if (array_key_exists('id', $attributes)) {
             $this->setId($attributes['id']);
         }
-        if (array_key_exists('uniqueName', $attributes)) {
-            $this->setUniqueName($attributes['uniqueName']);
-        }
+        // if (array_key_exists('uniqueName', $attributes)) {
+        //     $this->setUniqueName($attributes['uniqueName']);
+        // }
         if (array_key_exists('displayName', $attributes)) {
             $this->setDisplayName($attributes['displayName']);
         }

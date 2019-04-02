@@ -14,7 +14,7 @@ interface EntryProviderInterface {
 
     // public function createEntry(EntryInterface $entry): EntryInterface;
 
-    // public function getEntry(string $uniqueName): EntryInterface;
+    // public function getEntry(string $id): EntryInterface;
 
     // public function getEntries(): array;
 

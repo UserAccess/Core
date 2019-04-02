@@ -3,8 +3,6 @@
 namespace UserAccess\Provider;
 
 use \UserAccess\UserAccess;
-use \UserAccess\Provider\AbstractFilebaseEntryProvider;
-use \UserAccess\Provider\RoleProviderInterface;
 use \UserAccess\Entry\RoleInterface;
 
 use \Filebase\Database;

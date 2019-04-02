@@ -3,7 +3,6 @@
 namespace UserAccess\Auth;
 
 use \UserAccess\UserAccess;
-use \UserAccess\Auth\AuthenticatorInterface;
 use \UserAccess\Entry\UserInterface;
 
 class SessionAuthenticator implements AuthenticatorInterface {
@@ -20,7 +19,7 @@ class SessionAuthenticator implements AuthenticatorInterface {
         if (empty($userName) || empty($password) || !$this->isUniqueNameExisting($userName)) {
             throw new \Exception(UserAccess::EXCEPTION_AUTHENTICATION_FAILED);
         }
-        $users = $this->userProvider->findUsers('uniqueName', $uniqueName, UserAccess::COMPARISON_EQUAL);
+        $users = $this->userProvider->findUsers('uniqueName', $uniqueName, UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
         $user;
         if (empty($users) || \count($users) > 1) {
             throw new \Exception(UserAccess::EXCEPTION_AUTHENTICATION_FAILED);

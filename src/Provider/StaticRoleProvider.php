@@ -3,8 +3,6 @@
 namespace UserAccess\Provider;
 
 use \UserAccess\UserAccess;
-use \UserAccess\Provider\AbstractStaticEntryProvider;
-use \UserAccess\Provider\RoleProviderInterface;
 use \UserAccess\Entry\RoleInterface;
 
 class StaticRoleProvider extends AbstractStaticEntryProvider implements RoleProviderInterface {

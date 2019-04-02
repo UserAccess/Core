@@ -3,7 +3,6 @@
 namespace UserAccess\Provider;
 
 use \UserAccess\Entry\RoleInterface;
-use \UserAccess\Provider\EntryProviderInterface;
 
 interface RoleProviderInterface extends EntryProviderInterface {
 
@@ -17,7 +16,7 @@ interface RoleProviderInterface extends EntryProviderInterface {
 
     public function updateRole(RoleInterface $role): RoleInterface;
 
-    public function deleteRole(string $uniqueName);
+    public function deleteRole(string $id);
 
     public function deleteRoles();
 

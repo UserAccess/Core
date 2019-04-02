@@ -8,11 +8,11 @@ interface UserInterface extends EntryInterface {
 
     public function getUserName(): string;
 
-    // public function setUserName(string $userName);
-
     public function verifyPassword(string $password): bool;
 
     public function setPassword(string $password);
+
+    public function setPasswordHash(string $passwordHash);
 
     public function getEmail(): string;
 
@@ -25,6 +25,10 @@ interface UserInterface extends EntryInterface {
     public function getLoginAttempts(): int;
 
     public function setLoginAttempts(int $LoginAttempts);
+
+    public function getRoles(): array;
+
+    public function setRoles(array $roles);
 
     public function hasRole(string $role): bool;
 

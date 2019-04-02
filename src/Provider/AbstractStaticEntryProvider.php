@@ -4,7 +4,6 @@ namespace UserAccess\Provider;
 
 use \UserAccess\UserAccess;
 use \UserAccess\Entry\EntryInterface;
-use \UserAccess\Provider\EntryProviderInterface;
 
 abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
 
@@ -16,22 +15,22 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
     }
 
     public function isIdExisting(string $id): bool {
-        return $this->isUniqueNameExisting($id);
-    }
-
-    public function isUniqueNameExisting(string $uniqueName): bool {
-        $uniqueName = \trim(\strtolower($uniqueName));
-        if (isset($this->entries[$uniqueName])) {
+        $id = \trim(\strtolower($id));
+        if (isset($this->entries[$id])) {
             return true;        
         } else {
             return false;
         }
     }
 
-    public function getEntry(string $uniqueName): EntryInterface {
-        $uniqueName = \trim(\strtolower($uniqueName));
-        if ($this->isUniqueNameExisting($uniqueName)) {
-            return $this->entries[$uniqueName];
+    public function isUniqueNameExisting(string $uniqueName): bool {
+        return $this->isIdExisting($uniqueName);
+    }
+
+    public function getEntry(string $id): EntryInterface {
+        $id = \trim(\strtolower($id));
+        if ($this->isIdExisting($id)) {
+            return $this->entries[$id];
         } else {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
         }
@@ -47,8 +46,9 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_ALREADY_EXIST);
         } else {
             $entry->setReadOnly($this->isReadOnly());
-            $entry->setId($uniqueName);
-            $this->entries[$uniqueName] = $entry;
+            $id = $uniqueName;
+            $entry->setId($id);
+            $this->entries[$id] = $entry;
             return $entry;
         }
     }
@@ -57,7 +57,8 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
         return $this->entries;
     }
 
-    public function findEntries(string $attributeName, string $attributeValue, string $comparisonOperator = UserAccess::COMPARISON_EQUAL): array {
+    public function findEntries(string $attributeName, string $attributeValue, string $comparisonOperator = UserAccess::COMPARISON_EQUAL_IGNORE_CASE): array {
+        $attributeName = \trim($attributeName);
         $attributeValue = \trim($attributeValue);
         $result = [];
         foreach($this->entries as $entry){
@@ -65,6 +66,11 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
             if (array_key_exists($attributeName, $attributes)) {
                 switch ($comparisonOperator) {
                     case UserAccess::COMPARISON_EQUAL:
+                        if (strcmp($attributes[$attributeName], $attributeValue) == 0) {
+                            $result[] = $entry;
+                        }
+                        break;
+                    case UserAccess::COMPARISON_EQUAL_IGNORE_CASE:
                         if (strcasecmp($attributes[$attributeName], $attributeValue) == 0) {
                             $result[] = $entry;
                         }

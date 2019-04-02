@@ -3,7 +3,6 @@
 namespace UserAccess\Provider;
 
 use \UserAccess\Entry\UserInterface;
-use \UserAccess\Provider\EntryProviderInterface;
 
 interface UserProviderInterface extends EntryProviderInterface {
 
@@ -17,7 +16,7 @@ interface UserProviderInterface extends EntryProviderInterface {
 
     public function updateUser(UserInterface $user): UserInterface;
 
-    public function deleteUser(string $uniqueName);
+    public function deleteUser(string $id);
 
     public function deleteUsers();
 

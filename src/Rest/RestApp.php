@@ -83,7 +83,7 @@ class RestApp {
                 throw new \Exception(UserAccess::EXCEPTION_ENTRY_ALREADY_EXIST);
             }
             if (!empty($attributes['email'])) {
-                $find = $userAccess->getUserProvider()->findUsers('email', $attributes['email'], UserAccess::COMPARISON_EQUAL);
+                $find = $userAccess->getUserProvider()->findUsers('email', $attributes['email'], UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
                 if (!empty($find)) {
                     throw new \Exception(UserAccess::EXCEPTION_DUPLICATE_EMAIL);
                 }
@@ -101,7 +101,7 @@ class RestApp {
             if (!empty($attributes['email'])) {
                 $email = \trim(\strtolower($attributes['email']));
                 if (strcasecmp($email, $entry->getEmail()) != 0) {
-                    $find = $userAccess->getUserProvider()->findUsers('email', $email, UserAccess::COMPARISON_EQUAL);
+                    $find = $userAccess->getUserProvider()->findUsers('email', $email, UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
                     if (!empty($find)) {
                         throw new \Exception(UserAccess::EXCEPTION_DUPLICATE_EMAIL);
                     }

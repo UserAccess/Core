@@ -4,11 +4,12 @@ namespace UserAccess\Provider;
 
 use \UserAccess\UserAccess;
 use \UserAccess\Entry\EntryInterface;
+use \UserAccess\Entry\Group;
+use \UserAccess\Entry\GroupInterface;
 use \UserAccess\Entry\Role;
 use \UserAccess\Entry\RoleInterface;
 use \UserAccess\Entry\User;
 use \UserAccess\Entry\UserInterface;
-use \UserAccess\Provider\EntryProviderInterface;
 
 use \Filebase\Database;
 use \Filebase\Document;
@@ -39,10 +40,6 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
                 'uniqueName' => [
                     'valid.type' => 'string',
                     'valid.required' => true
-                ],
-                'displayName' => [
-                    'valid.type' => 'string',
-                    'valid.required' => false
                 ]
             ]
         ]);
@@ -55,16 +52,8 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
 
     public function isUniqueNameExisting(string $uniqueName): bool {
         $uniqueName = \trim(\strtolower($uniqueName));
-        $entries = $this->findEntries('uniqueName', $uniqueName, UserAccess::COMPARISON_EQUAL);
-        if (empty($entries)) {
-            return false;
-        } else {
-            if (count($entries) === 1) {
-                return true;
-            } else {
-                throw new \Exception(UserAccess::EXCEPTION_INVALID_VALUE);
-            }
-        }
+        $entries = $this->findEntries('uniqueName', $uniqueName, UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
+        return !empty($entries);
     }
 
     public function isReadOnly(): bool {
@@ -76,7 +65,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
         if ($this->isUniqueNameExisting($uniqueName)) {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_ALREADY_EXIST);
         } else {
-            // $entry->setReadOnly($this->isReadOnly());
+            $entry->setReadOnly($this->isReadOnly());
             $id = Uuid::uuid4()->toString();
             $entry->setId($id);
             $item = $this->db->get($id);
@@ -88,21 +77,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
     public function getEntry(string $id): EntryInterface {
         $id = \trim($id);
         if ($this->isIdExisting($id)) {
-            $attributes = $this->db->get($id)->toArray();
-            $uniqueName = $attributes['uniqueName'];
-            $entry;
-            switch ($this->type) {
-                case UserInterface::TYPE:
-                    $entry = new User($uniqueName);
-                    break;
-                case RoleInterface::TYPE:
-                    $entry = new Role($uniqueName);
-                    break;
-                default:
-                    throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
-            }
-            $entry->setAttributes($attributes);
-            return $entry;
+            return $this->documentToEntry($this->db->get($id));
         } else {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_NOT_EXIST);
         }
@@ -110,15 +85,18 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
 
     public function getEntries(): array {
         $items = $this->db->findAll();
-        return $this->itemsToImpl($items);
+        return $this->documentsToEntries($items);
     }
 
-    public function findEntries(string $attributeName, string $attributeValue, string $comparisonOperator): array {
+    public function findEntries(string $attributeName, string $attributeValue, string $comparisonOperator = UserAccess::COMPARISON_EQUAL_IGNORE_CASE): array {
+        $attributeName = \trim($attributeName);
         $attributeValue = \trim($attributeValue);
         $items = [];
         switch ($comparisonOperator) {
             case UserAccess::COMPARISON_EQUAL:
-                //$items = $this->db->where($attributeName, '===', $attributeValue)->resultDocuments();
+                $items = $this->db->where($attributeName, '===', $attributeValue)->resultDocuments();
+                break;
+            case UserAccess::COMPARISON_EQUAL_IGNORE_CASE:
                 $items = $this->db->where($attributeName,'REGEX','/' . $attributeValue . '/i')->resultDocuments();
                 break;
             case UserAccess::COMPARISON_LIKE:
@@ -128,7 +106,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
                 $items = $this->db->where($attributeName, '=', $attributeValue)->resultDocuments();
                 break;
         }
-        return $this->itemsToImpl($items);
+        return $this->documentsToEntries($items);
     }
     
     public function updateEntry(EntryInterface $entry): EntryInterface {
@@ -157,21 +135,24 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
 
     //////////////////////////////////////////////////
 
-    private function itemsToImpl(array $items): array {
+    private function documentsToEntries(array $items): array {
         $result = [];
         foreach($items as $item){
-            $result[$item->id] = $this->itemToImpl($item);
+            $result[$item->id] = $this->documentToEntry($item);
         }
         return $result;
     }
 
-    private function itemToImpl(Document $item): EntryInterface {
+    private function documentToEntry(Document $item): EntryInterface {
         $attributes = $item->toArray();
         $uniqueName = $attributes['uniqueName'];
         $entry;
         switch ($this->type) {
             case UserInterface::TYPE:
                 $entry = new User($uniqueName);
+                break;
+            case GroupInterface::TYPE:
+                $entry = new Group($uniqueName);
                 break;
             case RoleInterface::TYPE:
                 $entry = new Role($uniqueName);
