@@ -3,10 +3,11 @@
 use \PHPUnit\Framework\TestCase;
 
 use \UserAccess\UserAccess;
-use \UserAccess\Auth\SessionAuthenticator;
 use \UserAccess\Entry\User;
+use \UserAccess\Entry\Group;
 use \UserAccess\Entry\Role;
 use \UserAccess\Provider\FilebaseUserProvider;
+use \UserAccess\Provider\FilebaseGroupProvider;
 use \UserAccess\Provider\FilebaseRoleProvider;
 use \UserAccess\Util\AuditLog;
 
@@ -15,10 +16,13 @@ class UserAccessTest extends TestCase {
     public function test() {
         $userProvider = new FilebaseUserProvider('testdata/users');
         $userProvider->deleteUsers();
+        $groupProvider = new FilebaseGroupProvider('testdata/groups');
+        $groupProvider->deleteGroups();
         $roleProvider = new FilebaseRoleProvider('testdata/roles');
         $roleProvider->deleteRoles();
-        $userAccess = new UserAccess($userProvider, null, $roleProvider);
+        $userAccess = new UserAccess($userProvider, $groupProvider, $roleProvider);
         $this->assertNotEmpty($userAccess->getUserProvider());
+        $this->assertNotEmpty($userAccess->getGroupProvider());
         $this->assertNotEmpty($userAccess->getRoleProvider());
 
         $user = new User('userid1');
@@ -33,6 +37,25 @@ class UserAccessTest extends TestCase {
         $this->assertEquals('userid1', $user->getUniqueName());
         $this->assertFalse($user->isReadOnly());
 
+        $find = $userAccess->getUserProvider()->findUsers('uniqueName', 's', UserAccess::COMPARISON_LIKE);
+        $this->assertNotEmpty($find);
+        $this->assertEquals(1, count($find));
+
+        $group = new Group('groupid1');
+        $group = $userAccess->getGroupProvider()->createGroup($group);
+        $this->assertTrue($userAccess->getGroupProvider()->isUniqueNameExisting('groupid1'));
+        $groups = $userAccess->getGroupProvider()->getGroups();
+        $this->assertNotEmpty($groups);
+        $this->assertEquals(1, count($groups));
+        $group = $userAccess->getGroupProvider()->getGroup($group->getId());
+        $this->assertNotEmpty($group);
+        $this->assertEquals('groupid1', $group->getUniqueName());
+        $this->assertFalse($group->isReadOnly());
+
+        $find = $userAccess->getGroupProvider()->findGroups('uniqueName', 'r', UserAccess::COMPARISON_LIKE);
+        $this->assertNotEmpty($find);
+        $this->assertEquals(1, count($find));
+
         $role = new Role('roleid1');
         $role = $userAccess->getRoleProvider()->createRole($role);
         $this->assertTrue($userAccess->getRoleProvider()->isUniqueNameExisting('roleid1'));
@@ -44,16 +67,13 @@ class UserAccessTest extends TestCase {
         $this->assertEquals('roleid1', $role->getUniqueName());
         $this->assertFalse($role->isReadOnly());
 
-        $find = $userAccess->getUserProvider()->findUsers('uniqueName', 's', UserAccess::COMPARISON_LIKE);
-        $this->assertNotEmpty($find);
-        $this->assertEquals(1, count($find));
-
         $find = $userAccess->getRoleProvider()->findRoles('uniqueName', 'r', UserAccess::COMPARISON_LIKE);
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
 
-        $userAccess->getRoleProvider()->deleteRoles();
         $userAccess->getUserProvider()->deleteUsers();
+        $userAccess->getGroupProvider()->deleteGroups();
+        $userAccess->getRoleProvider()->deleteRoles();
 
     }
 

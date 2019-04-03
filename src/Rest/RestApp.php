@@ -4,6 +4,7 @@ namespace UserAccess\Rest;
 
 use UserAccess\UserAccess;
 use UserAccess\Entry\User;
+use UserAccess\Entry\Group;
 use UserAccess\Entry\Role;
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -118,6 +119,48 @@ class RestApp {
             return $response->withStatus(204);
         });
 
+        //////////////////////////////////////////////////
+
+        $this->app->get('/v1/Groups', function (Request $request, Response $response, array $args) {
+            $userAccess = $this->userAccess;
+            $entries = $userAccess->getGroupProvider()->getGroups();
+            $result = [];
+            foreach($entries as $entry){
+                $result[] = $entry->getAttributes();
+            }
+            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson($result);
+        });
+
+        $this->app->get('/v1/Groups/{id}', function (Request $request, Response $response, array $args) {
+            $userAccess = $this->userAccess;
+            $entry = $userAccess->getGroupProvider()->getGroup($args['id']);
+            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
+        });
+
+        $this->app->post('/v1/Groups', function (Request $request, Response $response, array $args) {
+            $userAccess = $this->userAccess;
+            $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
+            $entry = new Group($attributes['uniqueName']);
+            $entry->setAttributes($attributes);
+            $entry = $userAccess->getGroupProvider()->createGroup($entry);
+            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
+        });
+
+        $this->app->post('/v1/Groups/{id}', function (Request $request, Response $response, array $args) {
+            $userAccess = $this->userAccess;
+            $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
+            $entry = $userAccess->getGroupProvider()->getGroup($args['id']);
+            $entry->setAttributes($attributes);
+            $entry = $userAccess->getGroupProvider()->updateGroup($entry);
+            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
+        });
+
+        $this->app->delete('/v1/Groups/{id}', function (Request $request, Response $response, array $args) {
+            $userAccess = $this->userAccess;
+            $userAccess->getGroupProvider()->deleteGroup($args['id']);
+            return $response->withStatus(204);
+        });
+        
         //////////////////////////////////////////////////
 
         $this->app->get('/v1/Roles', function (Request $request, Response $response, array $args) {

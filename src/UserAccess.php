@@ -6,6 +6,8 @@ use \UserAccess\Entry\UserInterface;
 use \UserAccess\Entry\RoleInterface;
 use \UserAccess\Provider\UserProviderInterface;
 use \UserAccess\Provider\StaticUserProvider;
+use \UserAccess\Provider\GroupProviderInterface;
+use \UserAccess\Provider\StaticGroupProvider;
 use \UserAccess\Provider\RoleProviderInterface;
 use \UserAccess\Provider\StaticRoleProvider;
 use \UserAccess\Util\AuditLog;
@@ -31,10 +33,8 @@ class UserAccess {
     const SESSION_USERACCESS_AUTHENTICATED = 'SESSION_USERACCESS_AUTHENTICATED';
 
     private $userProvider;
-    private $inbuiltUserProvider;
     private $groupProvider;
     private $roleProvider;
-    private $inbuiltRoleProvider;
     private $logger;
 
     public function __construct(
@@ -44,7 +44,7 @@ class UserAccess {
         AuditLog $logger = null) {
 
         $this->userProvider = $userProvider;
-        $this->GroupProvider = $groupProvider;
+        $this->groupProvider = $groupProvider;
         $this->roleProvider = $roleProvider;
         $this->logger = $logger;
     }
@@ -53,7 +53,7 @@ class UserAccess {
         return $this->userProvider;
     }
 
-    public function getGroupProvider(): GroupPviderInterface {
+    public function getGroupProvider(): GroupProviderInterface {
         return $this->groupProvider;
     }
 

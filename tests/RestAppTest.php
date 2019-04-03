@@ -4,8 +4,10 @@ use \PHPUnit\Framework\TestCase;
 
 use \UserAccess\UserAccess;
 use \UserAccess\Entry\UserInterface;
+use \UserAccess\Entry\GroupInterface;
 use \UserAccess\Entry\RoleInterface;
 use \UserAccess\Provider\FilebaseUserProvider;
+use \UserAccess\Provider\FilebaseGroupProvider;
 use \UserAccess\Provider\FilebaseRoleProvider;
 use \UserAccess\Rest\RestApp;
 use \Slim\Http\Environment;
@@ -17,17 +19,20 @@ class RestAppTest extends TestCase {
 
     private $userName = 'restu1';
     private $userId = '';
-    private $roleName = 'restr1';
+    private $groupName = 'restg1';
+    private $groupId = '';
+    private $roleName = 'restg1';
     private $roleId = '';
 
     public function setUp() {
         $userProvider = new FilebaseUserProvider('testdata/users');
+        $groupProvider = new FilebaseGroupProvider('testdata/groups');
         $roleProvider = new FilebaseRoleProvider('testdata/roles');
-        $userAccess = new UserAccess($userProvider, null, $roleProvider);
+        $userAccess = new UserAccess($userProvider, $groupProvider, $roleProvider);
         $this->app = new RestApp($userAccess);
     }
 
-    public function test10_CreateUser() {
+    public function test110_CreateUser() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'POST',
             'REQUEST_URI'    => '/v1/Users'
@@ -48,7 +53,7 @@ class RestAppTest extends TestCase {
         $this->userId = $attributes['id'];
     }
 
-    public function test11_GetUser() {
+    public function test111_GetUser() {
         $id = $this->getEntryId(UserInterface::TYPE);
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
@@ -61,7 +66,7 @@ class RestAppTest extends TestCase {
         $this->assertNotEmpty((string)$response->getBody());
     }
 
-    public function test12_UpdateUser() {
+    public function test112_UpdateUser() {
         $id = $this->getEntryId(UserInterface::TYPE);
         $env = Environment::mock([
             'REQUEST_METHOD' => 'POST',
@@ -76,7 +81,7 @@ class RestAppTest extends TestCase {
         $this->assertSame($response->getStatusCode(), 200);
     }
 
-    public function test13_GetUser() {
+    public function test113_GetUser() {
         $id = $this->getEntryId(UserInterface::TYPE);
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
@@ -93,7 +98,7 @@ class RestAppTest extends TestCase {
         $this->assertEquals($this->userName, $attributes['uniqueName']);
     }
 
-    public function test14_GetUsers() {
+    public function test114_GetUsers() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI'    => '/v1/Users'
@@ -104,7 +109,7 @@ class RestAppTest extends TestCase {
         $this->assertSame($response->getStatusCode(), 200);
     }
 
-    public function test15_DeleteUser() {
+    public function test115_DeleteUser() {
         $id = $this->getEntryId(UserInterface::TYPE);
         $env = Environment::mock([
             'REQUEST_METHOD' => 'DELETE',
@@ -116,7 +121,7 @@ class RestAppTest extends TestCase {
         $this->assertSame($response->getStatusCode(), 204);
     }
 
-    public function test16_GetUserFail() {
+    public function test116_GetUserFail() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI'    => '/v1/Users/rest_u_1'
@@ -130,7 +135,102 @@ class RestAppTest extends TestCase {
 
     //////////////////////////////////////////////////
 
-    public function test20_CreateRole() {
+    public function test220_CreateGroup() {
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'POST',
+            'REQUEST_URI'    => '/v1/Groups',
+        ]);
+        $req = Request::createFromEnvironment($env);
+        $attributes = array();
+        $attributes['uniqueName'] = $this->groupName;
+        $req = $req->withParsedBody($attributes);
+        $this->app->getApp()->getContainer()['request'] = $req;
+        $response = $this->app->run(true);
+        $this->assertSame($response->getStatusCode(), 201);
+    }
+
+    public function test221_GetGroup() {
+        $id = $this->getEntryId(GroupInterface::TYPE);
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI'    => '/v1/Groups/' . $id
+        ]);
+        $req = Request::createFromEnvironment($env);
+        $this->app->getApp()->getContainer()['request'] = $req;
+        $response = $this->app->run(true);
+        $this->assertSame($response->getStatusCode(), 201);
+        $this->assertNotEmpty((string)$response->getBody());
+    }
+
+    public function test222_UpdateGroup() {
+        $id = $this->getEntryId(GroupInterface::TYPE);
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'POST',
+            'REQUEST_URI'    => '/v1/Groups/' . $id
+        ]);
+        $req = Request::createFromEnvironment($env);
+        $attributes = array();
+        $attributes['displayName'] = $this->groupName . '_test';
+        $req = $req->withParsedBody($attributes);
+        $this->app->getApp()->getContainer()['request'] = $req;
+        $response = $this->app->run(true);
+        $this->assertSame($response->getStatusCode(), 200);
+    }
+
+    public function test223_GetGroup() {
+        $id = $this->getEntryId(GroupInterface::TYPE);
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI'    => '/v1/Groups/' . $id
+        ]);
+        $req = Request::createFromEnvironment($env);
+        $this->app->getApp()->getContainer()['request'] = $req;
+        $response = $this->app->run(true);
+        $this->assertSame($response->getStatusCode(), 201);
+        $this->assertNotEmpty((string)$response->getBody());
+        $attributes = json_decode($response->getBody(), true);
+        $this->assertEquals($this->groupName . '_test', $attributes['displayName']);
+        $this->assertEquals($this->groupName, $attributes['uniqueName']);
+    }
+
+    public function test224_GetGroups() {
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI'    => '/v1/Groups'
+        ]);
+        $req = Request::createFromEnvironment($env);
+        $this->app->getApp()->getContainer()['request'] = $req;
+        $response = $this->app->run(true);
+        $this->assertSame($response->getStatusCode(), 200);
+    }
+
+    public function test225_DeleteGroup() {
+        $id = $this->getEntryId(GroupInterface::TYPE);
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'DELETE',
+            'REQUEST_URI'    => '/v1/Groups/' . $id
+        ]);
+        $req = Request::createFromEnvironment($env);
+        $this->app->getApp()->getContainer()['request'] = $req;
+        $response = $this->app->run(true);
+        $this->assertSame($response->getStatusCode(), 204);
+    }
+
+    public function test226_GetGroupFail() {
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI'    => '/v1/Groups/rest_r_1'
+        ]);
+        $req = Request::createFromEnvironment($env);
+        $this->app->getApp()->getContainer()['request'] = $req;
+        $response = $this->app->run(true);
+        $this->assertSame($response->getStatusCode(), 404);
+        $this->assertNotEmpty((string)$response->getBody());
+    }
+    
+    //////////////////////////////////////////////////
+
+    public function test330_CreateRole() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'POST',
             'REQUEST_URI'    => '/v1/Roles',
@@ -144,7 +244,7 @@ class RestAppTest extends TestCase {
         $this->assertSame($response->getStatusCode(), 201);
     }
 
-    public function test21_GetRole() {
+    public function test331_GetRole() {
         $id = $this->getEntryId(RoleInterface::TYPE);
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
@@ -157,7 +257,7 @@ class RestAppTest extends TestCase {
         $this->assertNotEmpty((string)$response->getBody());
     }
 
-    public function test22_UpdateRole() {
+    public function test332_UpdateRole() {
         $id = $this->getEntryId(RoleInterface::TYPE);
         $env = Environment::mock([
             'REQUEST_METHOD' => 'POST',
@@ -172,7 +272,7 @@ class RestAppTest extends TestCase {
         $this->assertSame($response->getStatusCode(), 200);
     }
 
-    public function test23_GetRole() {
+    public function test333_GetRole() {
         $id = $this->getEntryId(RoleInterface::TYPE);
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
@@ -188,7 +288,7 @@ class RestAppTest extends TestCase {
         $this->assertEquals($this->roleName, $attributes['uniqueName']);
     }
 
-    public function test24_GetRoles() {
+    public function test334_GetRoles() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI'    => '/v1/Roles'
@@ -199,7 +299,7 @@ class RestAppTest extends TestCase {
         $this->assertSame($response->getStatusCode(), 200);
     }
 
-    public function test25_DeleteRole() {
+    public function test335_DeleteRole() {
         $id = $this->getEntryId(RoleInterface::TYPE);
         $env = Environment::mock([
             'REQUEST_METHOD' => 'DELETE',
@@ -211,7 +311,7 @@ class RestAppTest extends TestCase {
         $this->assertSame($response->getStatusCode(), 204);
     }
 
-    public function test26_GetRoleFail() {
+    public function test336_GetRoleFail() {
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI'    => '/v1/Roles/rest_r_1'
