@@ -4,12 +4,12 @@ namespace UserAccess\Provider;
 
 use \UserAccess\UserAccess;
 use \UserAccess\Entry\EntryInterface;
+use \UserAccess\Entry\User;
+use \UserAccess\Entry\UserInterface;
 use \UserAccess\Entry\Group;
 use \UserAccess\Entry\GroupInterface;
 use \UserAccess\Entry\Role;
 use \UserAccess\Entry\RoleInterface;
-use \UserAccess\Entry\User;
-use \UserAccess\Entry\UserInterface;
 
 use \Filebase\Database;
 use \Filebase\Document;
@@ -97,13 +97,13 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
                 $items = $this->db->where($attributeName, '===', $attributeValue)->resultDocuments();
                 break;
             case UserAccess::COMPARISON_EQUAL_IGNORE_CASE:
-                $items = $this->db->where($attributeName,'REGEX','/' . $attributeValue . '/i')->resultDocuments();
+                $items = $this->db->where($attributeName, 'REGEX', '/^' . $attributeValue . '$/i')->resultDocuments();
                 break;
             case UserAccess::COMPARISON_LIKE:
                 $items = $this->db->where($attributeName, 'LIKE', $attributeValue)->resultDocuments();
                 break;
             default:
-                $items = $this->db->where($attributeName, '=', $attributeValue)->resultDocuments();
+                $items = $this->db->where($attributeName, '===', $attributeValue)->resultDocuments();
                 break;
         }
         return $this->documentsToEntries($items);

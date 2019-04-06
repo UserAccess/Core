@@ -39,8 +39,24 @@ class UserProviderTest extends TestCase {
         $user2->setEmail('userid_2.test@test.com');
         $user2->addRole('Everyone');
         $user2->addRole('Administrators');
+        $user3 = new User('userid1');
+        $user3->setDisplayName('userid1 test');
+        $user3->setPassword('password1');
+        $user3->setEmail('userid1.test@test.com');
+        $user3->setRoles(array('Everyone', 'Administrators'));
         $user1 = $provider->createUser($user1);
         $user2 = $provider->createUser($user2);
+
+        $user3 = new User('user');
+        $user3->setDisplayName('user test');
+        $user3->setPassword('password1');
+        $user3->setEmail('user.test@test.com');
+        $user3->setRoles(array('Everyone', 'Administrators'));
+        $user3 = $provider->createUser($user3);
+
+        $user4 = new User('userid4');
+        $user3->setEmail('user.test@test.com');
+        $user3 = $provider->createUser($user4);
 
         $this->assertTrue($provider->isUniqueNameExisting('userid1'));
         $this->assertTrue($provider->isUniqueNameExisting('USERID_2'));
@@ -117,7 +133,7 @@ class UserProviderTest extends TestCase {
 
         $users = $provider->getUsers();
         $this->assertNotEmpty($users);
-        $this->assertEquals(2, count($users));
+        $this->assertEquals(3, count($users));
 
         if (!$provider->isReadOnly()) {
             $provider->deleteUsers();

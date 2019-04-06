@@ -26,8 +26,8 @@ $(function () {
             USER_DELETE: 'Delete User {0}',
             USER_DELETE_CONFIRM: 'Do you really want to delete user {0} {1}?',
             USER_EDIT: 'Edit User {0}',
-            USER_ID: 'User ID',
-            USER_ID_HELP: 'Alphanumeric characters and unique',
+            USER_NAME: 'User Name',
+            USER_NAME_HELP: 'Alphanumeric characters and unique',
             USER_UPLOAD: 'Upload Users',
             count: "Showing {from} to {to} of {count} users|{count} users|One user",
             first: 'First',
@@ -42,6 +42,7 @@ $(function () {
             defaultOption: 'Select {column}',
             columns: 'Columns',
             EXCEPTION_INVALID_ID: 'User ID invalid',
+            EXCEPTION_INVALID_UNIQUE_NAME: 'User Name invalid',
             EXCEPTION_INVALID_EMAIL: 'E-Mail address invalid',
             EXCEPTION_INVALID_PASSWORD: 'Password invalid',
             EXCEPTION_INVALID_VALUE: 'Duplicate value',
@@ -49,8 +50,7 @@ $(function () {
             EXCEPTION_ENTRY_ALREADY_EXIST: 'Entry already existing',
             EXCEPTION_ENTRY_NOT_EXIST: 'Entry not existing',
             EXCEPTION_ENTRY_READONLY: 'Entry readonly',
-            EXCEPTION_PROVIDER_NOT_EXIST: 'Provider not existing',
-            EXCEPTION_AUTHENTICATION_FAILED: 'Authentication failed'
+            EXCEPTION_AUTHENTICATION_FAILED: 'Authentication failed'       
         },
         de: {
             ACTIONS: 'Aktionen',
@@ -68,8 +68,8 @@ $(function () {
             USER_DELETE: 'Benutzer {0} löschen',
             USER_DELETE_CONFIRM: 'Wollen Sie wirklich Benutzer {0} {1} löschen?',
             USER_EDIT: 'Benutzer {0} ändern',
-            USER_ID: 'Benutzer ID',
-            USER_ID_HELP: 'Alphanumerische Zeichen und eindeutig',
+            USER_NAME: 'Benutzername',
+            USER_NAME_HELP: 'Alphanumerische Zeichen und eindeutig',
             USER_UPLOAD: 'Benutzer hochladen',
             count: "Anzeige {from} bis {to} von {count} Benutzern|{count} Benutzer|Ein Benutzer",
             first: 'Erster',
@@ -84,6 +84,7 @@ $(function () {
             defaultOption: 'Selektiere {column}',
             columns: 'Spalte',
             EXCEPTION_INVALID_ID: 'Benutzer ID ungültig',
+            EXCEPTION_INVALID_UNIQUE_NAME: 'Benutzername ungültig',
             EXCEPTION_INVALID_EMAIL: 'E-Mail Adresse ungültig',
             EXCEPTION_INVALID_PASSWORD: 'Password ungültig',
             EXCEPTION_INVALID_VALUE: 'Doppelter Wert',
@@ -91,7 +92,6 @@ $(function () {
             EXCEPTION_ENTRY_ALREADY_EXIST: 'Eintrag existiert bereits',
             EXCEPTION_ENTRY_NOT_EXIST: 'Eintrag existiert nicht',
             EXCEPTION_ENTRY_READONLY: 'Eintrag schreibgeschützt',
-            EXCEPTION_PROVIDER_NOT_EXIST: 'Provider existiert nicht',
             EXCEPTION_AUTHENTICATION_FAILED: 'Anmeldung fehlgeschlagen'
         }
     };
@@ -128,13 +128,13 @@ $(function () {
     var userTable = new Vue({
         el: "#userTable",
         data: {
-            columns: ['id', 'displayName', 'email', 'actionEdit', 'actionDelete'],
-            sortable: ['id', 'displayName', 'email'],
-            filterable: ['id', 'displayName', 'email'],
+            columns: ['userName', 'displayName', 'email', 'actionEdit', 'actionDelete'],
+            sortable: ['userName', 'displayName', 'email'],
+            filterable: ['userName', 'displayName', 'email'],
             tableData: [],
             options: {
                 headings: {
-                    id: i18n.t('USER_ID'),
+                    userName: i18n.t('USER_NAME'),
                     displayName: i18n.t('DISPLAY_NAME'),
                     email: i18n.t('EMAIL'),
                     actionEdit: '',
@@ -152,7 +152,7 @@ $(function () {
                 sortIcon: tableSortIcons,
                 perPage: 10,
                 orderBy: {
-                    column: 'id'
+                    column: 'userName'
                 }
             }
         },
@@ -165,6 +165,7 @@ $(function () {
             actionEdit: function (user) {
                 userEdit.create = false;
                 userEdit.id = user.id;
+                userEdit.userName = user.userName;
                 userEdit.displayName = user.displayName;
                 userEdit.email = user.email;
                 userEdit.password = '';
@@ -174,6 +175,7 @@ $(function () {
             },
             actionDelete: function (user) {
                 userDelete.id = user.id;
+                userDelete.userName = user.userName;
                 if (user.displayName) {
                     userDelete.displayName = '(' + user.displayName + ')';
                 } else {
@@ -183,6 +185,7 @@ $(function () {
             actionCreate: function () {
                 userEdit.create = true;
                 userEdit.id = '';
+                userEdit.userName = '';
                 userEdit.displayName = '';
                 userEdit.email = '';
                 userEdit.password = '';
@@ -202,6 +205,7 @@ $(function () {
         data: {
             create: false,
             id: '',
+            userName: '',
             displayName: '',
             email: '',
             password: '',
@@ -220,6 +224,7 @@ $(function () {
                             method: 'POST',
                             data: {
                                 id: userEdit.id,
+                                userName: userEdit.userName,
                                 displayName: userEdit.displayName,
                                 email: userEdit.email,
                                 password: userEdit.password
@@ -245,6 +250,7 @@ $(function () {
         el: "#userDelete",
         data: {
             id: '',
+            userName: '',
             displayName: ''
         },
         methods: {

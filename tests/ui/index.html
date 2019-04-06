@@ -48,7 +48,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" v-if="create">{{ $t('USER_CREATE') }}</h5>
-                    <h5 class="modal-title" v-else>{{ $t('USER_EDIT', [id]) }}</h5>
+                    <h5 class="modal-title" v-else>{{ $t('USER_EDIT', [userName]) }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -64,11 +64,11 @@
 
                     <form>
                         <div class="form-group">
-                            <label for="userEditId">{{ $t('USER_ID') }}</label>
-                            <input class="form-control" id="userEditId" name="USER_ID" aria-describedby="userEditIdHelp"
-                                v-bind:placeholder="$t('USER_ID')" v-model="id" v-validate="'required'" v-bind:disabled="!create" maxlength="32" pattern="^[a-zA-Z0-9_-]*$" aria-required="true">
-                            <small id="userEditIdHelp" class="form-text text-muted">{{ $t('USER_ID_HELP') }}</small>
-                            <small id="userEditIdError" class="form-text text-danger">{{ errors.first('USER_ID') }}</small>
+                            <label for="userEditId">{{ $t('USER_NAME') }}</label>
+                            <input class="form-control" id="userEditId" name="USER_NAME" aria-describedby="userEditIdHelp"
+                                v-bind:placeholder="$t('USER_NAME')" v-model="userName" v-validate="'required'" v-bind:disabled="!create" maxlength="32" pattern="^[a-zA-Z0-9_-]*$" aria-required="true">
+                            <small id="userEditIdHelp" class="form-text text-muted">{{ $t('USER_NAME_HELP') }}</small>
+                            <small id="userEditIdError" class="form-text text-danger">{{ errors.first('USER_NAME') }}</small>
                         </div>
 
                         <template v-if="create">
@@ -132,13 +132,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ $t('USER_DELETE', [id]) }}</h5>
+                    <h5 class="modal-title">{{ $t('USER_DELETE', [userName]) }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    {{ $t('USER_DELETE_CONFIRM', [id, displayName]) }}
+                    {{ $t('USER_DELETE_CONFIRM', [userName, displayName]) }}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> {{ $t('CANCEL') }}</button>
