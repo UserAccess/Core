@@ -133,7 +133,7 @@ class UserProviderTest extends TestCase {
 
         $users = $provider->getUsers();
         $this->assertNotEmpty($users);
-        $this->assertEquals(3, count($users));
+        $this->assertEquals(4, count($users));
 
         if (!$provider->isReadOnly()) {
             $provider->deleteUsers();
