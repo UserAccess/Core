@@ -30,20 +30,19 @@ class UserProviderTest extends TestCase {
 
         $user1 = new User('userid1');
         $user1->setDisplayName('userid1 test');
+        $user1->setGivenName('Userid1');
+        $user1->setFamilyName('Test');
         $user1->setPassword('password1');
         $user1->setEmail('userid1.test@test.com');
         $user1->setRoles(array('Everyone', 'Administrators'));
         $user2 = new User('USERID_2');
         $user2->setDisplayName('USERID_2 test');
+        $user2->setGivenName('Userid2');
+        $user2->setFamilyName('Test');
         $user2->setPassword('password2');
         $user2->setEmail('userid_2.test@test.com');
         $user2->addRole('Everyone');
         $user2->addRole('Administrators');
-        $user3 = new User('userid1');
-        $user3->setDisplayName('userid1 test');
-        $user3->setPassword('password1');
-        $user3->setEmail('userid1.test@test.com');
-        $user3->setRoles(array('Everyone', 'Administrators'));
         $user1 = $provider->createUser($user1);
         $user2 = $provider->createUser($user2);
 
@@ -69,12 +68,18 @@ class UserProviderTest extends TestCase {
 
         $this->assertEquals('userid1', $user_test1->getUniqueName());
         $this->assertEquals('userid1', $user_test1->getUserName());
+        $this->assertEquals('Userid1', $user_test1->getGivenName());
+        $this->assertEquals('Test', $user_test1->getFamilyName());
         $this->assertEquals('userid1.test@test.com', $user_test1->getEmail());
+        $this->assertEquals(['userid1.test@test.com'], $user_test1->getEmails());
         $this->assertTrue($user_test1->hasRole('Administrators'));
         $this->assertFalse($user_test1->hasRole('Guests'));
         $this->assertEquals('userid_2', $user_test2->getUniqueName());
         $this->assertEquals('userid_2', $user_test2->getUserName());
+        $this->assertEquals('Userid2', $user_test2->getGivenName());
+        $this->assertEquals('Test', $user_test2->getFamilyName());
         $this->assertEquals('userid_2.test@test.com', $user_test2->getEmail());
+        $this->assertEquals(['userid_2.test@test.com'], $user_test2->getEmails());
         $this->assertTrue($user_test2->hasRole('Administrators'));
         $this->assertFalse($user_test2->hasRole('Guests'));
         $this->assertTrue($user_test1->verifyPassword('password1'));
@@ -99,8 +104,10 @@ class UserProviderTest extends TestCase {
 
         $user_test1 = $provider->getUser($user1->getId());
         $user_test1->setDisplayName('userid1 test update');
+        $user_test1->setGivenName('Userid1 update');
+        $user_test1->setFamilyName('Test update');
         $user_test1->setPassword('password1_update');
-        $user_test1->setEmail('userid1.test_update@test.com');
+        $user_test1->setEmails(['userid1.test_update@test.com']);
         $user_test1->removeRole('Administrators');
         if (!$provider->isReadOnly()) {
             $provider->updateUser($user_test1);
@@ -108,6 +115,8 @@ class UserProviderTest extends TestCase {
             $this->assertEquals('userid1', $user_test1->getUniqueName());
             $this->assertEquals('userid1', $user_test1->getUserName());
             $this->assertEquals('userid1 test update', $user_test1->getDisplayName());
+            $this->assertEquals('Userid1 update', $user_test1->getGivenName());
+            $this->assertEquals('Test update', $user_test1->getFamilyName());
             $this->assertEquals('userid1.test_update@test.com', $user_test1->getEmail());
             $this->assertFalse($user_test1->verifyPassword('password1'));
             $this->assertTrue($user_test1->verifyPassword('password1_update'));

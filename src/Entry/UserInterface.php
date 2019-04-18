@@ -8,15 +8,23 @@ interface UserInterface extends EntryInterface {
 
     public function getUserName(): string;
 
+    public function getGivenName(): string;
+
+    public function setGivenName(string $givenName);
+
+    public function getFamilyName(): string;
+
+    public function setFamilyName(string $familyName);
+
     public function verifyPassword(string $password): bool;
 
     public function setPassword(string $password);
 
     public function setPasswordHash(string $passwordHash);
 
-    public function getEmail(): string;
+    public function getEmails(): array;
 
-    public function setEmail(string $email);
+    public function setEmails(array $emails);
 
     public function isActive(): bool;
 

@@ -7,6 +7,8 @@ use \UserAccess\Util\Password;
 
 class User extends AbstractEntry implements UserInterface {
 
+    private $givenName = '';
+    private $familyName = '';
     private $passwordHash = '';
     private $email = '';
     private $active = true;
@@ -16,6 +18,22 @@ class User extends AbstractEntry implements UserInterface {
 
     public function getUserName(): string {
         return parent::getUniqueName();
+    }
+
+    public function getGivenName(): string {
+        return $this->givenName;
+    }
+
+    public function setGivenName(string $givenName) {
+        $this->givenName = \trim($givenName);
+    }
+
+    public function getFamilyName(): string {
+        return $this->familyName;
+    }
+
+    public function setFamilyName(string $familyName) {
+        $this->familyName = \trim($familyName);
     }
 
     public function verifyPassword(string $password): bool {
@@ -49,6 +67,16 @@ class User extends AbstractEntry implements UserInterface {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_EMAIL);
         }
         $this->email = \trim(\strtolower($email));
+    }
+
+    public function getEmails(): array {
+        return [$this->getEmail()];
+    }
+
+    public function setEmails(array $emails) {
+        if (!empty($emails)) {
+            $this->setEmail(current($emails));
+        }
     }
 
     public function isActive(): bool {
@@ -114,8 +142,11 @@ class User extends AbstractEntry implements UserInterface {
     public function getAttributes(): array {
         $attributes = parent::getAttributes();
         $attributes['userName'] = $this->getUniqueName();
+        $attributes['givenName'] = $this->getGivenName();
+        $attributes['familyName'] = $this->getFamilyName();
         $attributes['passwordHash'] = $this->getPasswordHash();
         $attributes['email'] = $this->getEmail();
+        $attributes['emails'] = $this->getEmails();
         $attributes['active'] = $this->isActive();
         $attributes['loginAttempts'] = $this->getLoginAttempts();
         $attributes['groups'] = $this->getGroups();
@@ -128,6 +159,12 @@ class User extends AbstractEntry implements UserInterface {
         // if (array_key_exists('userName', $attributes)) {
         //     $this->setUserName($attributes['userName']);
         // }
+        if (array_key_exists('givenName', $attributes)) {
+            $this->setGivenName($attributes['givenName']);
+        }
+        if (array_key_exists('familyName', $attributes)) {
+            $this->setFamilyName($attributes['familyName']);
+        }
         if (!empty($attributes['passwordHash'])) {
             $this->setPasswordHash($attributes['passwordHash']);
         } else if (!empty($attributes['password'])) {
@@ -135,6 +172,9 @@ class User extends AbstractEntry implements UserInterface {
         }
         if (array_key_exists('email', $attributes)) {
             $this->setEmail($attributes['email']);
+        }
+        if (array_key_exists('emails', $attributes)) {
+            $this->setEmails($attributes['emails']);
         }
         if (array_key_exists('active', $attributes)) {
             $this->setActive($attributes['active']);
