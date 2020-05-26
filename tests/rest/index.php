@@ -24,5 +24,5 @@ if (!$userAccess->getUserProvider()->isUniqueNameExisting('Administrator')){
     $userAccess->getUserProvider()->createUser($admin);
 }
 
-$app = new RestApp($userAccess);
+$app = new RestApp($userAccess, '/tests/rest');
 $app->run();

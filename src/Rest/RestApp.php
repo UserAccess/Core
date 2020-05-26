@@ -23,7 +23,7 @@ class RestApp {
     private $container;
     private $userAccess;
 
-    public function __construct(UserAccess $userAccess) {
+    public function __construct(UserAccess $userAccess, ?String $basePath = null) {
 
         $this->userAccess = $userAccess;
         $this->container = new Container();
@@ -34,7 +34,9 @@ class RestApp {
         // $this->app = new \Slim\App($this->container);
         AppFactory::setContainer($this->container);
         $this->app = AppFactory::create();
-        $this->app->setBasePath('/tests/rest');
+        if (isset($basePath)) {
+            $this->app->setBasePath($basePath);
+        }
         $this->app->addRoutingMiddleware();
         $app = $this->app;
 
