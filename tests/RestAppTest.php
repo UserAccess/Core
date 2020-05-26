@@ -27,7 +27,7 @@ class RestAppTest extends TestCase {
     private $roleName = 'restg1';
     private $roleId = '';
 
-    public function setUp() {
+    public function setUp(): void {
         $userProvider = new FilebaseUserProvider('testdata/users');
         $groupProvider = new FilebaseGroupProvider('testdata/groups');
         $roleProvider = new FilebaseRoleProvider('testdata/roles');
