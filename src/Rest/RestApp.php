@@ -10,40 +10,75 @@ use UserAccess\Entry\Role;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+use Slim\Factory\AppFactory;
+use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\NotFoundException;
+
+use \DI\Container;
+use \DI\Bridge\Slim\Bridge;
+
 class RestApp {
 
     private $app;
     private $container;
+    private $userAccess;
 
     public function __construct(UserAccess $userAccess) {
 
-        $this->container = new \Slim\Container;
+        $this->userAccess = $userAccess;
+        $this->container = new Container();
 
-        $this->container
-            ->get('settings')
-            ->replace([
-                'displayErrorDetails' => true,
-                //'determineRouteBeforeAppMiddleware' => true,
-                'addContentLengthHeader' => true,
-                'debug' => false
-            ]);
+        // $this->container['userAccess'] = $userAccess;
+        $this->container->set('userAccess', $this->userAccess);
 
-        $this->container['errorHandler'] = function ($container) {
-            return function ($request, $response, $exception) use ($container) {
-                return $response->withStatus(404)
-                    ->withHeader('Content-Type', 'text/html')
-                    ->write($exception->getMessage());
-            };
+        // $this->app = new \Slim\App($this->container);
+        AppFactory::setContainer($this->container);
+        $this->app = AppFactory::create();
+        $this->app->setBasePath('/tests/rest');
+        $this->app->addRoutingMiddleware();
+        $app = $this->app;
+
+        // $this->container
+        //     ->get('settings')
+        //     ->replace([
+        //         'displayErrorDetails' => true,
+        //         //'determineRouteBeforeAppMiddleware' => true,
+        //         'addContentLengthHeader' => true,
+        //         'debug' => false
+        //     ]);
+        // $this->container['errorHandler'] = function ($container) {
+        //     return function ($request, $response, $exception) use ($container) {
+        //         return $response->withStatus(404)
+        //             ->withHeader('Content-Type', 'text/html')
+        //             ->write($exception->getMessage());
+        //     };
+        // };
+        $errorMiddleware =  $this->app->addErrorMiddleware(false, false, false);
+        // Define Custom Error Handler
+        $customErrorHandler = function (
+            \Slim\Psr7\Request $request,
+            \Exception $exception,
+            bool $displayErrorDetails,
+            bool $logErrors,
+            bool $logErrorDetails,
+            ?LoggerInterface $logger = null
+        ) use ($app) {
+            // $logger->error($exception->getMessage());
+            $payload = ['error' => $exception->getMessage()];
+            $response = $app->getResponseFactory()->createResponse();
+            $response->getBody()->write(
+                json_encode($payload, JSON_UNESCAPED_UNICODE)
+            );
+            //return $response;
+            return $response->withStatus(404)
+                ->withHeader('Content-Type', 'text/html');
         };
-
-        $this->container['userAccess'] = $userAccess;
-
-        $this->app = new \Slim\App($this->container);
+        $errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 
         //////////////////////////////////////////////////
 
         $this->app->post('/v1/Me/login', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             if (!array_key_exists('id', $attributes) || !array_key_exists('password', $attributes)) {
                 throw new \Exception(UserAccess::EXCEPTION_AUTHENTICATION_FAILED);
@@ -52,30 +87,32 @@ class RestApp {
         });
 
         $this->app->post('/v1/Me/logout', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $userAccess->selfserviceLogout();
         });
 
         //////////////////////////////////////////////////
 
         $this->app->get('/v1/Users', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $entries = $userAccess->getUserProvider()->getUsers();
             $result = [];
             foreach($entries as $entry){
                 $result[] = self::filterPassword($entry->getAttributes());
             }
-            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson($result);
+            $response->getBody()->write(json_encode($result));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(200);
         });
 
         $this->app->get('/v1/Users/{id}', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $entry = $userAccess->getUserProvider()->getUser($args['id']);
-            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson(self::filterPassword($entry->getAttributes()));
+            $response->getBody()->write(json_encode(self::filterPassword($entry->getAttributes())));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(201);
         });
 
         $this->app->post('/v1/Users', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             if (!array_key_exists('userName', $attributes)) {
                 throw new \Exception(UserAccess::EXCEPTION_INVALID_UNIQUE_NAME);
@@ -92,11 +129,12 @@ class RestApp {
             $entry = new User($attributes['userName']);
             $entry->setAttributes($attributes);
             $entry = $userAccess->getUserProvider()->createUser($entry);
-            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson(self::filterPassword($entry->getAttributes()));
+            $response->getBody()->write(json_encode(self::filterPassword($entry->getAttributes())));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(201);
         });
 
         $this->app->post('/v1/Users/{id}', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             $entry = $userAccess->getUserProvider()->getUser($args['id']);
             if (!empty($attributes['email'])) {
@@ -110,11 +148,12 @@ class RestApp {
             }
             $entry->setAttributes($attributes);
             $userAccess->getUserProvider()->updateUser($entry);
-            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson(self::filterPassword($entry->getAttributes()));
+            $response->getBody()->write(json_encode(self::filterPassword($entry->getAttributes())));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(200);
         });
 
         $this->app->delete('/v1/Users/{id}', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $userAccess->getUserProvider()->deleteUser($args['id']);
             return $response->withStatus(204);
         });
@@ -122,41 +161,45 @@ class RestApp {
         //////////////////////////////////////////////////
 
         $this->app->get('/v1/Groups', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $entries = $userAccess->getGroupProvider()->getGroups();
             $result = [];
             foreach($entries as $entry){
                 $result[] = $entry->getAttributes();
             }
-            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson($result);
+            $response->getBody()->write(json_encode($result));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(200);
         });
 
         $this->app->get('/v1/Groups/{id}', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $entry = $userAccess->getGroupProvider()->getGroup($args['id']);
-            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
+            $response->getBody()->write(json_encode($entry->getAttributes()));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(201);
         });
 
         $this->app->post('/v1/Groups', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             $entry = new Group($attributes['uniqueName']);
             $entry->setAttributes($attributes);
             $entry = $userAccess->getGroupProvider()->createGroup($entry);
-            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
+            $response->getBody()->write(json_encode($entry->getAttributes()));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(201);
         });
 
         $this->app->post('/v1/Groups/{id}', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             $entry = $userAccess->getGroupProvider()->getGroup($args['id']);
             $entry->setAttributes($attributes);
             $entry = $userAccess->getGroupProvider()->updateGroup($entry);
-            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
+            $response->getBody()->write(json_encode($entry->getAttributes()));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(200);
         });
 
         $this->app->delete('/v1/Groups/{id}', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $userAccess->getGroupProvider()->deleteGroup($args['id']);
             return $response->withStatus(204);
         });
@@ -164,41 +207,45 @@ class RestApp {
         //////////////////////////////////////////////////
 
         $this->app->get('/v1/Roles', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $entries = $userAccess->getRoleProvider()->getRoles();
             $result = [];
             foreach($entries as $entry){
                 $result[] = $entry->getAttributes();
             }
-            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson($result);
+            $response->getBody()->write(json_encode($result));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(200);
         });
 
         $this->app->get('/v1/Roles/{id}', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $entry = $userAccess->getRoleProvider()->getRole($args['id']);
-            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
+            $response->getBody()->write(json_encode($entry->getAttributes()));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(201);
         });
 
         $this->app->post('/v1/Roles', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             $entry = new Role($attributes['uniqueName']);
             $entry->setAttributes($attributes);
             $entry = $userAccess->getRoleProvider()->createRole($entry);
-            return $response->withStatus(201)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
+            $response->getBody()->write(json_encode($entry->getAttributes()));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(201);
         });
 
         $this->app->post('/v1/Roles/{id}', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
             $entry = $userAccess->getRoleProvider()->getRole($args['id']);
             $entry->setAttributes($attributes);
             $entry = $userAccess->getRoleProvider()->updateRole($entry);
-            return $response->withStatus(200)->withHeader('Content-Type', 'application/scim+json')->withJson($entry->getAttributes());
+            $response->getBody()->write(json_encode($entry->getAttributes()));
+            return $response->withHeader('Content-Type', 'application/scim+json')->withStatus(200);
         });
 
         $this->app->delete('/v1/Roles/{id}', function (Request $request, Response $response, array $args) {
-            $userAccess = $this->userAccess;
+            $userAccess = $this->get('userAccess');
             $userAccess->getRoleProvider()->deleteRole($args['id']);
             return $response->withStatus(204);
         });
@@ -206,7 +253,8 @@ class RestApp {
     }
 
     public function run($silent = false) {
-        return $this->app->run($silent);
+        // return $this->app->run($silent);
+        return $this->app->run();
     }
 
     public function getApp() {
