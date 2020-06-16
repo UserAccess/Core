@@ -15,7 +15,7 @@ class AuditLog {
         $this->logger->addInfo('Logger initialized');
     }
 
-    //User Created By, modified, deleted
+    // User Created By, modified, deleted
 
     // authenticated
 

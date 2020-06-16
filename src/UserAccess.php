@@ -29,9 +29,6 @@ class UserAccess {
     const COMPARISON_EQUAL_IGNORE_CASE = 'COMPARISON_EQUAL_IGNORE_CASE';
     const COMPARISON_LIKE = 'COMPARISON_LIKE';
 
-    const SESSION_USERACCESS_USERID = 'SESSION_USERACCESS_USERID';
-    const SESSION_USERACCESS_AUTHENTICATED = 'SESSION_USERACCESS_AUTHENTICATED';
-
     private $userProvider;
     private $groupProvider;
     private $roleProvider;

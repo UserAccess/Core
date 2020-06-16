@@ -3,6 +3,7 @@
 namespace UserAccess\Rest;
 
 use UserAccess\UserAccess;
+use UserAccess\Auth\SessionAuthenticator;
 use UserAccess\Entry\User;
 use UserAccess\Entry\Group;
 use UserAccess\Entry\Role;
@@ -79,16 +80,32 @@ class RestApp {
 
         //////////////////////////////////////////////////
 
-        $this->app->post('/v1/Me/login', function (Request $request, Response $response, array $args) {
+        $this->app->get('/v1/Session/Login', function (Request $request, Response $response, array $args) {
             $userAccess = $this->get('userAccess');
-            $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
-            if (!array_key_exists('id', $attributes) || !array_key_exists('password', $attributes)) {
-                throw new \Exception(UserAccess::EXCEPTION_AUTHENTICATION_FAILED);
+            $login = SessionAuthenticator::login($userAccess->getUserProvider(), $attributes['username'], $attributes['password']);
+            $response->getBody()->write(json_encode($login));
+            $response->withHeader('Content-Type', 'application/json');
+            if ($login[SessionAuthenticator::SESSION_LOGIN_AUTHENTICATED]) {
+                return $response->withStatus(200);
+            } else {
+                return $response->withStatus(401);
             }
-            $userAccess->selfserviceLogin($attributes['id'], $attributes['password']);
         });
 
-        $this->app->post('/v1/Me/logout', function (Request $request, Response $response, array $args) {
+        $this->app->post('/v1/Session/Login', function (Request $request, Response $response, array $args) {
+            $userAccess = $this->get('userAccess');
+            $attributes = filter_var_array($request->getParsedBody(), FILTER_SANITIZE_STRING);
+            $login = SessionAuthenticator::login($userAccess->getUserProvider(), $attributes['username'], $attributes['password']);
+            $response->getBody()->write(json_encode($login));
+            $response->withHeader('Content-Type', 'application/json');
+            if ($login[SessionAuthenticator::SESSION_LOGIN_AUTHENTICATED]) {
+                return $response->withStatus(200);
+            } else {
+                return $response->withStatus(401);
+            }
+        });
+
+        $this->app->post('/v1/Session/Logout', function (Request $request, Response $response, array $args) {
             $userAccess = $this->get('userAccess');
             $userAccess->selfserviceLogout();
         });
