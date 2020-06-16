@@ -4,7 +4,7 @@ use \PHPUnit\Framework\TestCase;
 
 use \UserAccess\UserAccess;
 use \UserAccess\Provider\RoleProviderInterface;
-use \UserAccess\Provider\FilebaseRoleProvider;
+use \UserAccess\Provider\FileRoleProvider;
 use \UserAccess\Provider\StaticRoleProvider;
 use \UserAccess\Entry\Role;
 
@@ -13,7 +13,7 @@ class RoleProviderTest extends TestCase {
     public function test() {
         $this->performTest(new StaticRoleProvider());
 
-        $roleProvider = new FilebaseRoleProvider('testdata/roles');
+        $roleProvider = new FileRoleProvider('testdata/roles');
         $roleProvider->deleteRoles();
         $this->performTest($roleProvider);
     }
@@ -53,13 +53,13 @@ class RoleProviderTest extends TestCase {
         $this->assertEquals('roleid2 test', $role_test2->getDisplayName());
         $this->assertEquals('roleid2 test description', $role_test2->getDescription());
 
-        $find = $provider->findRoles('displayName', 'roleid1 TEST ', UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
+        $find = $provider->findRoles('displayName', 'roleid1 TEST ');
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
-        $find = $provider->findRoles('description', 'roleid2 test description', UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
+        $find = $provider->findRoles('description', 'roleid2 test description');
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
-        $find = $provider->findRoles('displayName', 'ROLEID', UserAccess::COMPARISON_LIKE);
+        $find = $provider->findRoles('displayName', '*ROLEID*');
         $this->assertNotEmpty($find);
         $this->assertEquals(2, count($find));
 

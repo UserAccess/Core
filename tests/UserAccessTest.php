@@ -6,19 +6,19 @@ use \UserAccess\UserAccess;
 use \UserAccess\Entry\User;
 use \UserAccess\Entry\Group;
 use \UserAccess\Entry\Role;
-use \UserAccess\Provider\FilebaseUserProvider;
-use \UserAccess\Provider\FilebaseGroupProvider;
-use \UserAccess\Provider\FilebaseRoleProvider;
+use \UserAccess\Provider\FileUserProvider;
+use \UserAccess\Provider\FileGroupProvider;
+use \UserAccess\Provider\FileRoleProvider;
 use \UserAccess\Util\AuditLog;
 
 class UserAccessTest extends TestCase {
 
     public function test() {
-        $userProvider = new FilebaseUserProvider('testdata/users');
+        $userProvider = new FileUserProvider('testdata/users');
         $userProvider->deleteUsers();
-        $groupProvider = new FilebaseGroupProvider('testdata/groups');
+        $groupProvider = new FileGroupProvider('testdata/groups');
         $groupProvider->deleteGroups();
-        $roleProvider = new FilebaseRoleProvider('testdata/roles');
+        $roleProvider = new FileRoleProvider('testdata/roles');
         $roleProvider->deleteRoles();
         $userAccess = new UserAccess($userProvider, $groupProvider, $roleProvider);
         $this->assertNotEmpty($userAccess->getUserProvider());
@@ -37,7 +37,7 @@ class UserAccessTest extends TestCase {
         $this->assertEquals('userid1', $user->getUniqueName());
         $this->assertFalse($user->isReadOnly());
 
-        $find = $userAccess->getUserProvider()->findUsers('uniqueName', 's', UserAccess::COMPARISON_LIKE);
+        $find = $userAccess->getUserProvider()->findUsers('uniqueName', '*ser*');
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
 
@@ -52,7 +52,7 @@ class UserAccessTest extends TestCase {
         $this->assertEquals('groupid1', $group->getUniqueName());
         $this->assertFalse($group->isReadOnly());
 
-        $find = $userAccess->getGroupProvider()->findGroups('uniqueName', 'r', UserAccess::COMPARISON_LIKE);
+        $find = $userAccess->getGroupProvider()->findGroups('uniqueName', '*roup*');
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
 
@@ -67,7 +67,7 @@ class UserAccessTest extends TestCase {
         $this->assertEquals('roleid1', $role->getUniqueName());
         $this->assertFalse($role->isReadOnly());
 
-        $find = $userAccess->getRoleProvider()->findRoles('uniqueName', 'r', UserAccess::COMPARISON_LIKE);
+        $find = $userAccess->getRoleProvider()->findRoles('uniqueName', '*ole*');
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
 

@@ -12,7 +12,7 @@ interface GroupProviderInterface extends EntryProviderInterface {
 
     public function getGroups(): ?array;
 
-    public function findGroups(string $attributeName, string $attributeValue, string $comparisonOperator): array;
+    public function findGroups(string $attributeName, string $attributeValue): array;
 
     public function updateGroup(GroupInterface $group): GroupInterface;
 

@@ -6,14 +6,14 @@ require '../../vendor/autoload.php';
 
 use \UserAccess\UserAccess;
 use \UserAccess\Entry\User;
-use \UserAccess\Provider\FilebaseUserProvider;
-use \UserAccess\Provider\FilebaseGroupProvider;
-use \UserAccess\Provider\FilebaseRoleProvider;
+use \UserAccess\Provider\FileUserProvider;
+use \UserAccess\Provider\FileGroupProvider;
+use \UserAccess\Provider\FileRoleProvider;
 use \UserAccess\Rest\RestApp;
 
-$userProvider = new FilebaseUserProvider('../../data/users');
-$groupProvider = new FilebaseGroupProvider('../../data/groups');
-$roleProvider = new FilebaseRoleProvider('../../data/roles');
+$userProvider = new FileUserProvider('../../data/users');
+$groupProvider = new FileGroupProvider('../../data/groups');
+$roleProvider = new FileRoleProvider('../../data/roles');
 $userAccess = new UserAccess($userProvider, $groupProvider, $roleProvider);
 
 if (!$userAccess->getUserProvider()->isUniqueNameExisting('Administrator')){

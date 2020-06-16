@@ -12,7 +12,7 @@ interface UserProviderInterface extends EntryProviderInterface {
 
     public function getUsers(): array;
 
-    public function findUsers(string $attributeName, string $attributeValue, string $comparisonOperator): array;
+    public function findUsers(string $attributeName, string $attributeValue): array;
 
     public function updateUser(UserInterface $user): UserInterface;
 

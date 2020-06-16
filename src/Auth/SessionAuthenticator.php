@@ -61,13 +61,13 @@ class SessionAuthenticator {
     }
 
     public static function login(UserProviderInterface $userProvider, string $userName, string $password): String {
-        $userName = \trim(\strtolower($userName));
-        $password = \trim($password);
+        $userName = trim(strtolower($userName));
+        $password = trim($password);
         if (empty($userName) || empty($password) || !$userProvider->isUniqueNameExisting($userName)) {
             // throw new \Exception(UserAccess::EXCEPTION_AUTHENTICATION_FAILED);
             return echoJsonLogin();
         }
-        $users = $userProvider->findUsers('uniqueName', $uniqueName, UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
+        $users = $userProvider->findUsers('uniqueName', $uniqueName);
         if (empty($users) || \count($users) > 1) {
             // throw new \Exception(UserAccess::EXCEPTION_AUTHENTICATION_FAILED);
             return echoJsonLogin();

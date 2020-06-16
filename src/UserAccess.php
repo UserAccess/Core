@@ -25,10 +25,6 @@ class UserAccess {
     const EXCEPTION_ENTRY_READONLY = 'EXCEPTION_ENTRY_READONLY';
     const EXCEPTION_AUTHENTICATION_FAILED = 'EXCEPTION_AUTHENTICATION_FAILED';
 
-    const COMPARISON_EQUAL = 'COMPARISON_EQUAL';
-    const COMPARISON_EQUAL_IGNORE_CASE = 'COMPARISON_EQUAL_IGNORE_CASE';
-    const COMPARISON_LIKE = 'COMPARISON_LIKE';
-
     private $userProvider;
     private $groupProvider;
     private $roleProvider;

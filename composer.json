@@ -12,13 +12,11 @@
     "type": "project",
     "require": {
         "php": ">=7.2",
-        "tmarois/filebase": "^1",
-        "symfony/yaml": "^5",
         "monolog/monolog": "^1",
         "slim/slim": "^4",
         "slim/psr7": "^1",
         "php-di/php-di": "^6",
-        "pragmaphp/uid": "^1.0"
+        "pragmaphp/filedb": "^1"
     },
     "require-dev": {
         "phpunit/phpunit": "^9"

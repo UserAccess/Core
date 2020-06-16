@@ -4,7 +4,7 @@ use \PHPUnit\Framework\TestCase;
 
 use \UserAccess\UserAccess;
 use \UserAccess\Provider\GroupProviderInterface;
-use \UserAccess\Provider\FilebaseGroupProvider;
+use \UserAccess\Provider\FileGroupProvider;
 use \UserAccess\Provider\StaticGroupProvider;
 use \UserAccess\Entry\Group;
 
@@ -13,7 +13,7 @@ class GroupProviderTest extends TestCase {
     public function test() {
         $this->performTest(new StaticGroupProvider());
 
-        $groupProvider = new FilebaseGroupProvider('testdata/groups');
+        $groupProvider = new FileGroupProvider('testdata/groups');
         $groupProvider->deleteGroups();
         $this->performTest($groupProvider);
     }
@@ -53,13 +53,13 @@ class GroupProviderTest extends TestCase {
         $this->assertEquals('groupid2 test', $group_test2->getDisplayName());
         $this->assertEquals('groupid2 test description', $group_test2->getDescription());
 
-        $find = $provider->findGroups('displayName', 'groupid1 TEST ', UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
+        $find = $provider->findGroups('displayName', 'groupid1 TEST ');
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
-        $find = $provider->findGroups('description', 'groupid2 test description', UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
+        $find = $provider->findGroups('description', 'groupid2 test description');
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
-        $find = $provider->findGroups('displayName', 'GROUPID', UserAccess::COMPARISON_LIKE);
+        $find = $provider->findGroups('displayName', '*GROUPID*');
         $this->assertNotEmpty($find);
         $this->assertEquals(2, count($find));
 

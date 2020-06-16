@@ -4,7 +4,7 @@ use \PHPUnit\Framework\TestCase;
 
 use \UserAccess\UserAccess;
 use \UserAccess\Provider\UserProviderInterface;
-use \UserAccess\Provider\FilebaseUserProvider;
+use \UserAccess\Provider\FileUserProvider;
 use \UserAccess\Provider\StaticUserProvider;
 use \UserAccess\Entry\User;
 
@@ -13,9 +13,9 @@ class UserProviderTest extends TestCase {
     public function test() {
         $this->performTest(new StaticUserProvider());
 
-        $userProvider = new FilebaseUserProvider('testdata/users');
+        $userProvider = new FileUserProvider('testdata/users');
         $userProvider->deleteUsers();
-        $this->performTest(new FilebaseUserProvider('testdata/users'));
+        $this->performTest(new FileUserProvider('testdata/users'));
     }
 
     public function performTest(UserProviderInterface $provider) {
@@ -85,13 +85,13 @@ class UserProviderTest extends TestCase {
         $this->assertTrue($user_test1->verifyPassword('password1'));
         $this->assertTrue($user_test2->verifyPassword('password2'));
 
-        $find = $provider->findUsers('displayName', 'userid1 TEST ', UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
+        $find = $provider->findUsers('displayName', 'userid1 TEST ');
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
-        $find = $provider->findUsers('email', 'userid1.test@test.com', UserAccess::COMPARISON_EQUAL_IGNORE_CASE);
+        $find = $provider->findUsers('email', 'userid1.test@test.com');
         $this->assertNotEmpty($find);
         $this->assertEquals(1, count($find));
-        $find = $provider->findUsers('displayName', 'USERID', UserAccess::COMPARISON_LIKE);
+        $find = $provider->findUsers('displayName', '*USERID*');
         $this->assertNotEmpty($find);
         $this->assertEquals(2, count($find));
 

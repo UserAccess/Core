@@ -16,8 +16,8 @@ abstract class AbstractEntry implements EntryInterface {
         if (empty($uniqueName)) {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_UNIQUE_NAME);
         }
-        $uniqueName = \trim(\strtolower($uniqueName));
-        if(!\preg_match('/^[a-z0-9_\-]{1,32}/', $uniqueName) || \strlen($uniqueName) > 32){
+        $uniqueName = trim(strtolower($uniqueName));
+        if(!preg_match('/^[a-z0-9_\-]{1,32}/', $uniqueName) || strlen($uniqueName) > 32){
             throw new \Exception(UserAccess::EXCEPTION_INVALID_UNIQUE_NAME);
         }
         $this->uniqueName = $uniqueName;
@@ -32,7 +32,7 @@ abstract class AbstractEntry implements EntryInterface {
     }
 
     public function setId(string $id) {
-        $this->id = \trim($id);
+        $this->id = trim($id);
     }
 
     public function getUniqueName(): string {
@@ -40,7 +40,7 @@ abstract class AbstractEntry implements EntryInterface {
     }
 
     public function setUniqueName(string $uniqueName) {
-        $this->uniqueName = \trim($uniqueName);
+        $this->uniqueName = trim($uniqueName);
     }
 
     public function getDisplayName(): string {
@@ -48,7 +48,7 @@ abstract class AbstractEntry implements EntryInterface {
     }
 
     public function setDisplayName(string $displayName) {
-        $this->displayName = \trim($displayName);
+        $this->displayName = trim($displayName);
     }
 
     public function getDescription(): string {
@@ -56,7 +56,7 @@ abstract class AbstractEntry implements EntryInterface {
     }
 
     public function setDescription(string $description) {
-        $this->description = \trim($description);
+        $this->description = trim($description);
     }
 
     public function isReadOnly(): bool {
@@ -80,8 +80,8 @@ abstract class AbstractEntry implements EntryInterface {
 
     public function setAttributes(array $attributes) {
         // type is read only
-        if (array_key_exists('id', $attributes)) {
-            $this->setId($attributes['id']);
+        if (array_key_exists('_id', $attributes)) {
+            $this->setId($attributes['_id']);
         }
         // if (array_key_exists('uniqueName', $attributes)) {
         //     $this->setUniqueName($attributes['uniqueName']);

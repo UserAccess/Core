@@ -23,8 +23,8 @@ class StaticGroupProvider extends AbstractStaticEntryProvider implements GroupPr
         return parent::getEntries();
     }
 
-    public function findGroups(string $attributeName, string $attributeValue, string $comparisonOperator): array {
-        return parent::findEntries($attributeName, $attributeValue, $comparisonOperator);
+    public function findGroups(string $attributeName, string $attributeValue): array {
+        return parent::findEntries($attributeName, $attributeValue);
     }
 
     public function updateGroup(GroupInterface $entry): GroupInterface {

@@ -12,7 +12,7 @@ interface RoleProviderInterface extends EntryProviderInterface {
 
     public function getRoles(): ?array;
 
-    public function findRoles(string $attributeName, string $attributeValue, string $comparisonOperator): array;
+    public function findRoles(string $attributeName, string $attributeValue): array;
 
     public function updateRole(RoleInterface $role): RoleInterface;
 

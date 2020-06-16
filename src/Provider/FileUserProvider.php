@@ -5,14 +5,10 @@ namespace UserAccess\Provider;
 use \UserAccess\UserAccess;
 use \UserAccess\Entry\UserInterface;
 
-use \Filebase\Database;
-use \Filebase\Format\Yaml;
-use \Filebase\Format\Json;
+class FileUserProvider extends AbstractFileEntryProvider implements UserProviderInterface {
 
-class FilebaseUserProvider extends AbstractFilebaseEntryProvider implements UserProviderInterface {
-
-    public function __construct(string $directory = 'data', string $format = 'YAML') {
-        parent::__construct(UserInterface::TYPE, $directory, $format);
+    public function __construct(string $directory = 'data') {
+        parent::__construct(UserInterface::TYPE, $directory);
     }
 
     public function createUser(UserInterface $entry): UserInterface {
@@ -27,8 +23,8 @@ class FilebaseUserProvider extends AbstractFilebaseEntryProvider implements User
         return parent::getEntries();
     }
 
-    public function findUsers(string $attributeName, string $attributeValue, string $comparisonOperator): array {
-        return parent::findEntries($attributeName, $attributeValue, $comparisonOperator);
+    public function findUsers(string $attributeName, string $attributeValue): array {
+        return parent::findEntries($attributeName, $attributeValue);
     }
 
     public function updateUser(UserInterface $entry): UserInterface {

@@ -15,7 +15,7 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
     }
 
     public function isIdExisting(string $id): bool {
-        $id = \trim(\strtolower($id));
+        $id = trim(strtolower($id));
         if (isset($this->entries[$id])) {
             return true;        
         } else {
@@ -28,7 +28,7 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
     }
 
     public function getEntry(string $id): EntryInterface {
-        $id = \trim(\strtolower($id));
+        $id = trim(strtolower($id));
         if ($this->isIdExisting($id)) {
             return $this->entries[$id];
         } else {
@@ -57,34 +57,21 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
         return $this->entries;
     }
 
-    public function findEntries(string $attributeName, string $attributeValue, string $comparisonOperator = UserAccess::COMPARISON_EQUAL_IGNORE_CASE): array {
-        $attributeName = \trim($attributeName);
-        $attributeValue = \trim($attributeValue);
+    public function findEntries(string $search_key, string $search_value): array {
+        $search_key = trim($search_key);
+        $search_value = trim($search_value);
         $result = [];
         foreach($this->entries as $entry){
             $attributes = $entry->getAttributes();
-            if (array_key_exists($attributeName, $attributes)) {
-                switch ($comparisonOperator) {
-                    case UserAccess::COMPARISON_EQUAL:
-                        if (strcmp($attributes[$attributeName], $attributeValue) == 0) {
-                            $result[] = $entry;
-                        }
-                        break;
-                    case UserAccess::COMPARISON_EQUAL_IGNORE_CASE:
-                        if (strcasecmp($attributes[$attributeName], $attributeValue) == 0) {
-                            $result[] = $entry;
-                        }
-                        break;
-                    case UserAccess::COMPARISON_LIKE:
-                        if (stripos($attributes[$attributeName], $attributeValue) !== false) {
-                            $result[] = $entry;
-                        }
-                        break;
-                    default:
-                        if (strcasecmp($attributes[$attributeName], $attributeValue) == 0) {
-                            $result[] = $entry;
-                        }
-                        break;
+            if (array_key_exists($search_key, $attributes)) {
+                if (self::startsWith($search_value, '*') && self::endsWith($search_value, '*') && strlen($search_value) > 3) {
+                    if (stripos($attributes[$search_key], substr($search_value, 1, -1)) !== false) {
+                        $result[] = $entry;
+                    }
+                } else {
+                    if (strcasecmp($attributes[$search_key], $search_value) === 0) {
+                        $result[] = $entry;
+                    }
                 }
             }
         }
@@ -101,6 +88,14 @@ abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
 
     public function deleteEntries() {
         throw new \Exception(UserAccess::EXCEPTION_ENTRY_READONLY);
+    }
+
+    private static function startsWith($haystack, $needle) {
+        return substr_compare($haystack, $needle, 0, strlen($needle)) === 0;
+    }
+
+    private static function endsWith($haystack, $needle) {
+        return substr_compare($haystack, $needle, -strlen($needle)) === 0;
     }
 
 }

@@ -5,14 +5,10 @@ namespace UserAccess\Provider;
 use \UserAccess\UserAccess;
 use \UserAccess\Entry\RoleInterface;
 
-use \Filebase\Database;
-use \Filebase\Format\Yaml;
-use \Filebase\Format\Json;
+class FileRoleProvider extends AbstractFileEntryProvider implements RoleProviderInterface {
 
-class FilebaseRoleProvider extends AbstractFilebaseEntryProvider implements RoleProviderInterface {
-
-    public function __construct(string $directory = 'data', string $format = 'YAML') {
-        parent::__construct(RoleInterface::TYPE, $directory, $format);
+    public function __construct(string $directory = 'data') {
+        parent::__construct(RoleInterface::TYPE, $directory);
     }
 
     public function createRole(RoleInterface $entry): RoleInterface {
@@ -27,8 +23,8 @@ class FilebaseRoleProvider extends AbstractFilebaseEntryProvider implements Role
         return parent::getEntries();
     }
 
-    public function findRoles(string $attributeName, string $attributeValue, string $comparisonOperator): array {
-        return parent::findEntries($attributeName, $attributeValue, $comparisonOperator);
+    public function findRoles(string $attributeName, string $attributeValue): array {
+        return parent::findEntries($attributeName, $attributeValue);
     }
 
     public function updateRole(RoleInterface $entry): RoleInterface {

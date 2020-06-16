@@ -18,7 +18,7 @@ interface EntryProviderInterface {
 
     // public function getEntries(): array;
 
-    // public function findEntries(string $attributeName, string $attributeValue, string $comparisonOperator): array;
+    // public function findEntries(string $attributeName, string $attributeValue): array;
 
     // public function updateEntry(EntryInterface $entry): EntryInterface;
 

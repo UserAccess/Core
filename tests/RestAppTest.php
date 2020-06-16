@@ -6,9 +6,9 @@ use \UserAccess\UserAccess;
 use \UserAccess\Entry\UserInterface;
 use \UserAccess\Entry\GroupInterface;
 use \UserAccess\Entry\RoleInterface;
-use \UserAccess\Provider\FilebaseUserProvider;
-use \UserAccess\Provider\FilebaseGroupProvider;
-use \UserAccess\Provider\FilebaseRoleProvider;
+use \UserAccess\Provider\FileUserProvider;
+use \UserAccess\Provider\FileGroupProvider;
+use \UserAccess\Provider\FileRoleProvider;
 use \UserAccess\Rest\RestApp;
 
 use \Slim\Psr7\Headers;
@@ -28,9 +28,9 @@ class RestAppTest extends TestCase {
     private $roleId = '';
 
     public function setUp(): void {
-        $userProvider = new FilebaseUserProvider('testdata/users');
-        $groupProvider = new FilebaseGroupProvider('testdata/groups');
-        $roleProvider = new FilebaseRoleProvider('testdata/roles');
+        $userProvider = new FileUserProvider('testdata/users');
+        $groupProvider = new FileGroupProvider('testdata/groups');
+        $roleProvider = new FileRoleProvider('testdata/roles');
         $userAccess = new UserAccess($userProvider, $groupProvider, $roleProvider);
         $this->app = new RestApp($userAccess);
     }

@@ -23,8 +23,8 @@ class StaticRoleProvider extends AbstractStaticEntryProvider implements RoleProv
         return parent::getEntries();
     }
 
-    public function findRoles(string $attributeName, string $attributeValue, string $comparisonOperator): array {
-        return parent::findEntries($attributeName, $attributeValue, $comparisonOperator);
+    public function findRoles(string $attributeName, string $attributeValue): array {
+        return parent::findEntries($attributeName, $attributeValue);
     }
 
     public function updateRole(RoleInterface $entry): RoleInterface {

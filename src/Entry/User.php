@@ -25,7 +25,7 @@ class User extends AbstractEntry implements UserInterface {
     }
 
     public function setGivenName(string $givenName) {
-        $this->givenName = \trim($givenName);
+        $this->givenName = trim($givenName);
     }
 
     public function getFamilyName(): string {
@@ -33,7 +33,7 @@ class User extends AbstractEntry implements UserInterface {
     }
 
     public function setFamilyName(string $familyName) {
-        $this->familyName = \trim($familyName);
+        $this->familyName = trim($familyName);
     }
 
     public function verifyPassword(string $password): bool {
@@ -44,8 +44,8 @@ class User extends AbstractEntry implements UserInterface {
         if (empty($password)) {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_PASSWORD);
         }
-        $password = \trim($password);
-        if (\strlen($password) < 7) {
+        $password = trim($password);
+        if (strlen($password) < 7) {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_PASSWORD);
         }
         $this->passwordHash = Password::hash($password);
@@ -55,7 +55,7 @@ class User extends AbstractEntry implements UserInterface {
         if (empty($passwordHash)) {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_PASSWORD);
         }
-        $this->passwordHash = \trim($passwordHash);
+        $this->passwordHash = trim($passwordHash);
     }
 
     public function getEmail(): string {
@@ -66,7 +66,7 @@ class User extends AbstractEntry implements UserInterface {
         if (!empty($email) && !filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
             throw new \Exception(UserAccess::EXCEPTION_INVALID_EMAIL);
         }
-        $this->email = \trim(\strtolower($email));
+        $this->email = trim(strtolower($email));
     }
 
     public function getEmails(): array {

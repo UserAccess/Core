@@ -23,8 +23,8 @@ class StaticUserProvider extends AbstractStaticEntryProvider implements UserProv
         return parent::getEntries();
     }
 
-    public function findUsers(string $attributeName, string $attributeValue, string $comparisonOperator): array {
-        return parent::findEntries($attributeName, $attributeValue, $comparisonOperator);
+    public function findUsers(string $attributeName, string $attributeValue): array {
+        return parent::findEntries($attributeName, $attributeValue);
     }
 
     public function updateUser(UserInterface $entry): UserInterface {

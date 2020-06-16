@@ -1,6 +1,5 @@
 {
   "name": "useraccess",
-  "version": "0.0.1",
   "description": "UserAccess",
   "main": "index.js",
   "directories": {
