@@ -16,7 +16,7 @@ use \Filebase\Document;
 use \Filebase\Format\Yaml;
 use \Filebase\Format\Json;
 
-use \Ramsey\Uuid\Uuid;
+use \PragmaPHP\Uid\Uid;
 
 abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
 
@@ -66,7 +66,7 @@ abstract class AbstractFilebaseEntryProvider implements EntryProviderInterface {
             throw new \Exception(UserAccess::EXCEPTION_ENTRY_ALREADY_EXIST);
         } else {
             $entry->setReadOnly($this->isReadOnly());
-            $id = Uuid::uuid4()->toString();
+            $id = Uid::generate();
             $entry->setId($id);
             $item = $this->db->get($id);
             $item->set($entry->getAttributes())->save();
