@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a5808f26ece6487da1077d4c66114e9e",
+    "content-hash": "97650c290c94ce0195f58087ac1392af",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -183,16 +183,16 @@
         },
         {
             "name": "opis/closure",
-            "version": "3.5.4",
+            "version": "3.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opis/closure.git",
-                "reference": "1d0deef692f66dae5d70663caee2867d0971306b"
+                "reference": "dec9fc5ecfca93f45cd6121f8e6f14457dff372c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opis/closure/zipball/1d0deef692f66dae5d70663caee2867d0971306b",
-                "reference": "1d0deef692f66dae5d70663caee2867d0971306b",
+                "url": "https://api.github.com/repos/opis/closure/zipball/dec9fc5ecfca93f45cd6121f8e6f14457dff372c",
+                "reference": "dec9fc5ecfca93f45cd6121f8e6f14457dff372c",
                 "shasum": ""
             },
             "require": {
@@ -240,7 +240,7 @@
                 "serialization",
                 "serialize"
             ],
-            "time": "2020-06-07T11:41:29+00:00"
+            "time": "2020-06-17T14:59:55+00:00"
         },
         {
             "name": "php-di/invoker",
@@ -287,20 +287,20 @@
         },
         {
             "name": "php-di/php-di",
-            "version": "6.2.0",
+            "version": "6.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-DI/PHP-DI.git",
-                "reference": "5ca8b43f6dff54a30b0cd8bba86f76d8d1fd24c4"
+                "reference": "6875fe557c244b3830862c072c7719ca4ac2efe4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/5ca8b43f6dff54a30b0cd8bba86f76d8d1fd24c4",
-                "reference": "5ca8b43f6dff54a30b0cd8bba86f76d8d1fd24c4",
+                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/6875fe557c244b3830862c072c7719ca4ac2efe4",
+                "reference": "6875fe557c244b3830862c072c7719ca4ac2efe4",
                 "shasum": ""
             },
             "require": {
-                "opis/closure": "^3.5.4",
+                "opis/closure": "^3.5.5",
                 "php": ">=7.2.0",
                 "php-di/invoker": "^2.0",
                 "php-di/phpdoc-reader": "^2.0.1",
@@ -355,7 +355,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-10T16:26:00+00:00"
+            "time": "2020-06-18T09:54:32+00:00"
         },
         {
             "name": "php-di/phpdoc-reader",
@@ -396,16 +396,16 @@
         },
         {
             "name": "pragmaphp/filedb",
-            "version": "1.0.3",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pragmaphp/filedb.git",
-                "reference": "bb8663654a08661f3225f6d161836ad37aa9723d"
+                "reference": "0dafd2ec50805c0b5b0c53d5271e5e5b9ec414df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pragmaphp/filedb/zipball/bb8663654a08661f3225f6d161836ad37aa9723d",
-                "reference": "bb8663654a08661f3225f6d161836ad37aa9723d",
+                "url": "https://api.github.com/repos/pragmaphp/filedb/zipball/0dafd2ec50805c0b5b0c53d5271e5e5b9ec414df",
+                "reference": "0dafd2ec50805c0b5b0c53d5271e5e5b9ec414df",
                 "shasum": ""
             },
             "require": {
@@ -432,7 +432,7 @@
                 }
             ],
             "description": "Flat file DB based on JSON files",
-            "time": "2020-06-16T13:33:41+00:00"
+            "time": "2020-06-19T12:15:49+00:00"
         },
         {
             "name": "pragmaphp/uid",
@@ -1310,16 +1310,16 @@
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "7462d5f123dfc080dfdf26897032a6513644fc95"
+                "reference": "30441f2752e493c639526b215ed81d54f369d693"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/7462d5f123dfc080dfdf26897032a6513644fc95",
-                "reference": "7462d5f123dfc080dfdf26897032a6513644fc95",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/30441f2752e493c639526b215ed81d54f369d693",
+                "reference": "30441f2752e493c639526b215ed81d54f369d693",
                 "shasum": ""
             },
             "require": {
@@ -1333,7 +1333,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.x-dev"
+                    "dev-1.x": "1.x-dev"
                 }
             },
             "autoload": {
@@ -1352,7 +1352,7 @@
                 }
             ],
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
-            "time": "2020-02-18T18:59:58+00:00"
+            "time": "2020-06-19T20:22:09+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -1763,16 +1763,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.2.3",
+            "version": "9.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c1b1d62095ef78427f112a7a1c1502d4607e3c00"
+                "reference": "ad7cc5ec3ab2597b329880e30442d9054526023b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c1b1d62095ef78427f112a7a1c1502d4607e3c00",
-                "reference": "c1b1d62095ef78427f112a7a1c1502d4607e3c00",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ad7cc5ec3ab2597b329880e30442d9054526023b",
+                "reference": "ad7cc5ec3ab2597b329880e30442d9054526023b",
                 "shasum": ""
             },
             "require": {
@@ -1857,7 +1857,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-06-15T10:51:34+00:00"
+            "time": "2020-06-22T07:10:55+00:00"
         },
         {
             "name": "sebastian/code-unit",
@@ -2585,16 +2585,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.17.0",
+            "version": "v1.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "e94c8b1bbe2bc77507a1056cdb06451c75b427f9"
+                "reference": "2edd75b8b35d62fd3eeabba73b26b8f1f60ce13d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/e94c8b1bbe2bc77507a1056cdb06451c75b427f9",
-                "reference": "e94c8b1bbe2bc77507a1056cdb06451c75b427f9",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/2edd75b8b35d62fd3eeabba73b26b8f1f60ce13d",
+                "reference": "2edd75b8b35d62fd3eeabba73b26b8f1f60ce13d",
                 "shasum": ""
             },
             "require": {
@@ -2607,6 +2607,10 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.17-dev"
+                },
+                "thanks": {
+                    "name": "symfony/polyfill",
+                    "url": "https://github.com/symfony/polyfill"
                 }
             },
             "autoload": {
@@ -2639,7 +2643,21 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2020-05-12T16:14:59+00:00"
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-06-06T08:46:27+00:00"
         },
         {
             "name": "theseer/tokenizer",
