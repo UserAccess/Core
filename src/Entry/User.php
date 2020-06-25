@@ -1,9 +1,9 @@
 <?php
 
-namespace UserAccess\Entry;
+namespace PragmaPHP\UserAccess\Entry;
 
-use \UserAccess\UserAccess;
-use \UserAccess\Util\Password;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Util\Password;
 
 class User extends AbstractEntry implements UserInterface {
 

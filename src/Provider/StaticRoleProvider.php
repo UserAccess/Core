@@ -1,9 +1,9 @@
 <?php
 
-namespace UserAccess\Provider;
+namespace PragmaPHP\UserAccess\Provider;
 
-use \UserAccess\UserAccess;
-use \UserAccess\Entry\RoleInterface;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Entry\RoleInterface;
 
 class StaticRoleProvider extends AbstractStaticEntryProvider implements RoleProviderInterface {
 

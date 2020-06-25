@@ -1,15 +1,15 @@
 <?php
 
-namespace UserAccess\Provider;
+namespace PragmaPHP\UserAccess\Provider;
 
-use \UserAccess\UserAccess;
-use \UserAccess\Entry\EntryInterface;
-use \UserAccess\Entry\User;
-use \UserAccess\Entry\UserInterface;
-use \UserAccess\Entry\Group;
-use \UserAccess\Entry\GroupInterface;
-use \UserAccess\Entry\Role;
-use \UserAccess\Entry\RoleInterface;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Entry\EntryInterface;
+use \PragmaPHP\UserAccess\Entry\User;
+use \PragmaPHP\UserAccess\Entry\UserInterface;
+use \PragmaPHP\UserAccess\Entry\Group;
+use \PragmaPHP\UserAccess\Entry\GroupInterface;
+use \PragmaPHP\UserAccess\Entry\Role;
+use \PragmaPHP\UserAccess\Entry\RoleInterface;
 
 use \PragmaPHP\FileDB\FileDB;
 

@@ -2,11 +2,11 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\UserAccess;
-use \UserAccess\Provider\GroupProviderInterface;
-use \UserAccess\Provider\FileGroupProvider;
-use \UserAccess\Provider\StaticGroupProvider;
-use \UserAccess\Entry\Group;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Provider\GroupProviderInterface;
+use \PragmaPHP\UserAccess\Provider\FileGroupProvider;
+use \PragmaPHP\UserAccess\Provider\StaticGroupProvider;
+use \PragmaPHP\UserAccess\Entry\Group;
 
 class GroupProviderTest extends TestCase {
 

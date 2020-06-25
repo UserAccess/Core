@@ -2,7 +2,7 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\Util\Password;
+use \PragmaPHP\UserAccess\Util\Password;
 
 class PasswordTest extends TestCase {
 

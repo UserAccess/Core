@@ -1,9 +1,9 @@
 <?php
 
-namespace UserAccess\Provider;
+namespace PragmaPHP\UserAccess\Provider;
 
-use \UserAccess\UserAccess;
-use \UserAccess\Entry\GroupInterface;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Entry\GroupInterface;
 
 class FileGroupProvider extends AbstractFileEntryProvider implements GroupProviderInterface {
 

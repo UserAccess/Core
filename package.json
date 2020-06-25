@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/useraccess/useraccess.git"
+    "url": "git+https://github.com/pragmaphp/useraccess.git"
   },
   "author": "Jannis Rondorf",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/useraccess/useraccess/issues"
+    "url": "https://github.com/pragmaphp/useraccess/issues"
   },
-  "homepage": "https://github.com/useraccess/useraccess#readme",
+  "homepage": "https://github.com/pragmaphp/useraccess#readme",
   "dependencies": {
     "bootbox": "^5.4.0",
     "bootstrap": "^4.5.0",

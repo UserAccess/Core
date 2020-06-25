@@ -4,12 +4,12 @@ session_start();
 
 require '../../vendor/autoload.php';
 
-use \UserAccess\UserAccess;
-use \UserAccess\Entry\User;
-use \UserAccess\Provider\FileUserProvider;
-use \UserAccess\Provider\FileGroupProvider;
-use \UserAccess\Provider\FileRoleProvider;
-use \UserAccess\Rest\RestApp;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Entry\User;
+use \PragmaPHP\UserAccess\Provider\FileUserProvider;
+use \PragmaPHP\UserAccess\Provider\FileGroupProvider;
+use \PragmaPHP\UserAccess\Provider\FileRoleProvider;
+use \PragmaPHP\UserAccess\Rest\RestApp;
 
 $userProvider = new FileUserProvider('../../data/users');
 $groupProvider = new FileGroupProvider('../../data/groups');

@@ -1,5 +1,5 @@
 {
-    "name": "useraccess/useraccess",
+    "name": "pragmaphp/useraccess",
     "description": "UserAccess",
     "keywords": ["php"],
     "license": "ISC",
@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "UserAccess\\": "src/"
+            "PragmaPHP\\UserAccess\\": "src/"
         }
     }
 }

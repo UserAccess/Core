@@ -1,9 +1,9 @@
 <?php
 
-namespace UserAccess\Provider;
+namespace PragmaPHP\UserAccess\Provider;
 
-use \UserAccess\UserAccess;
-use \UserAccess\Entry\EntryInterface;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Entry\EntryInterface;
 
 abstract class AbstractStaticEntryProvider implements EntryProviderInterface {
 

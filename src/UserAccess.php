@@ -1,16 +1,16 @@
 <?php
 
-namespace UserAccess;
+namespace PragmaPHP\UserAccess;
 
-use \UserAccess\Entry\UserInterface;
-use \UserAccess\Entry\RoleInterface;
-use \UserAccess\Provider\UserProviderInterface;
-use \UserAccess\Provider\StaticUserProvider;
-use \UserAccess\Provider\GroupProviderInterface;
-use \UserAccess\Provider\StaticGroupProvider;
-use \UserAccess\Provider\RoleProviderInterface;
-use \UserAccess\Provider\StaticRoleProvider;
-use \UserAccess\Util\AuditLog;
+use \PragmaPHP\UserAccess\Entry\UserInterface;
+use \PragmaPHP\UserAccess\Entry\RoleInterface;
+use \PragmaPHP\UserAccess\Provider\UserProviderInterface;
+use \PragmaPHP\UserAccess\Provider\StaticUserProvider;
+use \PragmaPHP\UserAccess\Provider\GroupProviderInterface;
+use \PragmaPHP\UserAccess\Provider\StaticGroupProvider;
+use \PragmaPHP\UserAccess\Provider\RoleProviderInterface;
+use \PragmaPHP\UserAccess\Provider\StaticRoleProvider;
+use \PragmaPHP\UserAccess\Util\AuditLog;
 
 class UserAccess {
 

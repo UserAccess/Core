@@ -2,11 +2,11 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\UserAccess;
-use \UserAccess\Provider\UserProviderInterface;
-use \UserAccess\Provider\FileUserProvider;
-use \UserAccess\Provider\StaticUserProvider;
-use \UserAccess\Entry\User;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Provider\UserProviderInterface;
+use \PragmaPHP\UserAccess\Provider\FileUserProvider;
+use \PragmaPHP\UserAccess\Provider\StaticUserProvider;
+use \PragmaPHP\UserAccess\Entry\User;
 
 class UserProviderTest extends TestCase {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace UserAccess\Entry;
+namespace PragmaPHP\UserAccess\Entry;
 
 interface GroupInterface extends EntryInterface {
 

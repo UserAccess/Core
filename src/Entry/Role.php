@@ -1,8 +1,8 @@
 <?php
 
-namespace UserAccess\Entry;
+namespace PragmaPHP\UserAccess\Entry;
 
-use \UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\UserAccess;
 
 class Role extends AbstractEntry implements RoleInterface {
 

@@ -2,11 +2,11 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\UserAccess;
-use \UserAccess\Provider\RoleProviderInterface;
-use \UserAccess\Provider\FileRoleProvider;
-use \UserAccess\Provider\StaticRoleProvider;
-use \UserAccess\Entry\Role;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Provider\RoleProviderInterface;
+use \PragmaPHP\UserAccess\Provider\FileRoleProvider;
+use \PragmaPHP\UserAccess\Provider\StaticRoleProvider;
+use \PragmaPHP\UserAccess\Entry\Role;
 
 class RoleProviderTest extends TestCase {
 

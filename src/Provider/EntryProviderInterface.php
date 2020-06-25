@@ -1,8 +1,8 @@
 <?php
 
-namespace UserAccess\Provider;
+namespace PragmaPHP\UserAccess\Provider;
 
-use \UserAccess\Entry\EntryInterface;
+use \PragmaPHP\UserAccess\Entry\EntryInterface;
 
 interface EntryProviderInterface {
 

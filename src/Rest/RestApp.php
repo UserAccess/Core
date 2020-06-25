@@ -1,12 +1,12 @@
 <?php
 
-namespace UserAccess\Rest;
+namespace PragmaPHP\UserAccess\Rest;
 
-use UserAccess\UserAccess;
-use UserAccess\Auth\SessionAuthenticator;
-use UserAccess\Entry\User;
-use UserAccess\Entry\Group;
-use UserAccess\Entry\Role;
+use PragmaPHP\UserAccess\UserAccess;
+use PragmaPHP\UserAccess\Auth\SessionAuthenticator;
+use PragmaPHP\UserAccess\Entry\User;
+use PragmaPHP\UserAccess\Entry\Group;
+use PragmaPHP\UserAccess\Entry\Role;
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;

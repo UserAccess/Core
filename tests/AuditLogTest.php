@@ -2,7 +2,7 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\Util\AuditLog;
+use \PragmaPHP\UserAccess\Util\AuditLog;
 
 class AuditLogTest extends TestCase {
 

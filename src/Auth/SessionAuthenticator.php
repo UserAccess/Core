@@ -1,9 +1,9 @@
 <?php
 
-namespace UserAccess\Auth;
+namespace PragmaPHP\UserAccess\Auth;
 
-use \UserAccess\UserAccess;
-use \UserAccess\Entry\UserInterface;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Entry\UserInterface;
 
 class SessionAuthenticator {
 

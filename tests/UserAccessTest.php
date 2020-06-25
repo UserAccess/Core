@@ -2,14 +2,14 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\UserAccess;
-use \UserAccess\Entry\User;
-use \UserAccess\Entry\Group;
-use \UserAccess\Entry\Role;
-use \UserAccess\Provider\FileUserProvider;
-use \UserAccess\Provider\FileGroupProvider;
-use \UserAccess\Provider\FileRoleProvider;
-use \UserAccess\Util\AuditLog;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Entry\User;
+use \PragmaPHP\UserAccess\Entry\Group;
+use \PragmaPHP\UserAccess\Entry\Role;
+use \PragmaPHP\UserAccess\Provider\FileUserProvider;
+use \PragmaPHP\UserAccess\Provider\FileGroupProvider;
+use \PragmaPHP\UserAccess\Provider\FileRoleProvider;
+use \PragmaPHP\UserAccess\Util\AuditLog;
 
 class UserAccessTest extends TestCase {
 

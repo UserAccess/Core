@@ -1,8 +1,8 @@
 <?php
 
-namespace UserAccess\Provider;
+namespace PragmaPHP\UserAccess\Provider;
 
-use \UserAccess\Entry\GroupInterface;
+use \PragmaPHP\UserAccess\Entry\GroupInterface;
 
 interface GroupProviderInterface extends EntryProviderInterface {
 

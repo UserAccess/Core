@@ -1,6 +1,6 @@
 <?php
 
-namespace UserAccess\Util;
+namespace PragmaPHP\UserAccess\Util;
 
 class Password {
 

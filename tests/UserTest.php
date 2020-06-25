@@ -2,8 +2,8 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\Entry\User;
-use \UserAccess\Util\Password;
+use \PragmaPHP\UserAccess\Entry\User;
+use \PragmaPHP\UserAccess\Util\Password;
 
 class UserTest extends TestCase {
 

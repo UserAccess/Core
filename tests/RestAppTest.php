@@ -2,14 +2,14 @@
 
 use \PHPUnit\Framework\TestCase;
 
-use \UserAccess\UserAccess;
-use \UserAccess\Entry\UserInterface;
-use \UserAccess\Entry\GroupInterface;
-use \UserAccess\Entry\RoleInterface;
-use \UserAccess\Provider\FileUserProvider;
-use \UserAccess\Provider\FileGroupProvider;
-use \UserAccess\Provider\FileRoleProvider;
-use \UserAccess\Rest\RestApp;
+use \PragmaPHP\UserAccess\UserAccess;
+use \PragmaPHP\UserAccess\Entry\UserInterface;
+use \PragmaPHP\UserAccess\Entry\GroupInterface;
+use \PragmaPHP\UserAccess\Entry\RoleInterface;
+use \PragmaPHP\UserAccess\Provider\FileUserProvider;
+use \PragmaPHP\UserAccess\Provider\FileGroupProvider;
+use \PragmaPHP\UserAccess\Provider\FileRoleProvider;
+use \PragmaPHP\UserAccess\Rest\RestApp;
 
 use \Slim\Psr7\Headers;
 use \Slim\Psr7\Request;
